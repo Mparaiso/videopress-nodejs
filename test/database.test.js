@@ -1,3 +1,4 @@
+/*global describe,it,beforeEach */
 var db=require('../lib').database;
 
 describe("DATABASE",function(){
