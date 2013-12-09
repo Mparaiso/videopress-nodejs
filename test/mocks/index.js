@@ -6,6 +6,9 @@ var _ = require('underscore')
 , fs = require('fs')
 , util=require('util');
 
+/**
+ * @type {Array}
+ */
 var youtubeUrlRequests = [
 	{
 		url:"https://www.googleapis.com/youtube/v3/videos?id=7lCDEYXw3mM&part=snippet,contentDetails",
