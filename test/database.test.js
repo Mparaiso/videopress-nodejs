@@ -1,4 +1,5 @@
 /*global describe,it,beforeEach */
+"use strict";
 var db=require('../lib').database;
 var assert=require('assert');
 
