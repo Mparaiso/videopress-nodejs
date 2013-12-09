@@ -1,7 +1,7 @@
 /*jslint nomen:true,white:true,node:true,es5:true*/
 /*global require,it,describe,beforeEach */
 /**
- *  MOCHA TEST for express video
+ *  test/providers.test.js
  */
  "use strict";
  require('chai').should();
