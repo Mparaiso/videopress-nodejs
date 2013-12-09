@@ -21,7 +21,7 @@ mocks.youtubeRequestMock = function(options,callback){
 	if(f){
 		var file=f.responseFile
 		, json = require(file);
-		return callback(null,null,json);
+		return callback(undefined,undefined,json);
 	}
 	return callback(new Error(util.format("%s not found",url)));
 };
