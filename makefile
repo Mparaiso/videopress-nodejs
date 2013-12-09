@@ -25,6 +25,7 @@ commit:
 	# command || true will ignore command errors
 	@git add .
 	@git commit -am"update" || true
-
+push: commit
+	git push origin -all
 
 .PHONY: install
