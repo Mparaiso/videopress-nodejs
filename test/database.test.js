@@ -22,5 +22,8 @@ describe("DATABASE",function(){
 			assert.equal(this.video.get('title'),'video');
 			assert.equal(this.video.get('duration').minutes,15);
 		});
+		it('can be created from a url',function(){
+
+		});
 	});
 });
