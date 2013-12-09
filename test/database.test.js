@@ -22,8 +22,11 @@ describe("DATABASE",function(){
 			assert.equal(this.video.get('title'),'video');
 			assert.equal(this.video.get('duration').minutes,15);
 		});
-		it('can be created from a url',function(){
-
+		it('can be created from a url',function(done){
+			var url="http://www.youtube.com/watch?v=7lCDEYXw3mM";
+			lib.database.models.Video.fromUrl(url,function(err,video){
+				done();
+			});
 		});
 	});
 });
