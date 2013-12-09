@@ -15,9 +15,9 @@ var youtubeUrlRequests = [
 
 mocks.youtubeRequestMock = function(options,callback){
 	var url = options.url || options.uri
-	, f = _(youtubeUrlRequests).find(function(item){
+	, f = youtubeUrlRequests.filter(function(item){
 		return url.indexOf(item.url)>=0;
-	});
+	})[0];
 	if(f){
 		var file=f.responseFile
 		, json = require(file);
