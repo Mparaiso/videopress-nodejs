@@ -34,7 +34,7 @@
  			this.youtube_provider.getVideoDataFromUrl(youtube_url,function(err,videoDatas){
  				assert.equal(videoDatas.originalId,youtube_video_id);
  				done();
- 			})
+ 			});
  		});
  	});
  });
