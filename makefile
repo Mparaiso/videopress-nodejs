@@ -21,8 +21,8 @@ install:
 	@npm install
 ct:
 	@bin/ci.sh
+# command || true will ignore command errors
 commit:
-	# command || true will ignore command errors
 	@git add .
 	@git commit -am"update `date`" || true
 push: commit
