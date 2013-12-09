@@ -10,6 +10,8 @@
 #
 #ct: continuous testing
 #
+#commit: commit changes
+#
 test: ./test/*.js
 	@node_modules/.bin/mocha -R spec
 	@make commit
