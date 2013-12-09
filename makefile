@@ -24,7 +24,7 @@ ct:
 commit:
 	# command || true will ignore command errors
 	@git add .
-	@git commit -am"update" || true
+	@git commit -am"update `date`" || true
 push: commit
 	git push origin -all
 
