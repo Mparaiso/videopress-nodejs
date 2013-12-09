@@ -20,6 +20,6 @@ ct:
 	@bin/ci.sh
 commit:
 	@git add .
-	@git commit -am"update"
+	@git commit -am"update" || true
 
 .PHONY: install
