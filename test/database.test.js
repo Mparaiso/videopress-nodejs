@@ -25,6 +25,7 @@ describe("DATABASE",function(){
 		it('can be created from a url',function(done){
 			var url="http://www.youtube.com/watch?v=7lCDEYXw3mM";
 			lib.database.models.Video.fromUrl(url,function(err,video){
+					assert.equal(video.get('title'),"Google I/O 101: Q&A On Using Google APIs");
 				done();
 			});
 		});
