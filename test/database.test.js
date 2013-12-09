@@ -20,6 +20,7 @@ describe("DATABASE",function(){
 		});
 		it('should be initalized correctly',function(){
 			assert.equal(this.video.get('title'),'video');
+			assert.equal(this.video.get('duration').minutes,15);
 		});
 	});
 });
