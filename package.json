@@ -11,11 +11,14 @@
     "jade": "*",
     "underscore":"*",
     "mongoose":"3.X",
-    "swig":"1.2.X"
+    "swig":"1.2.X",
+    "less-middleware":"*",
+    "request":"*"
   },
   "devDependencies":{
     "mocha":"*",
     "chai":"*",
-    "supertest":"*"
+    "supertest":"*",
+    "supervisor":"*"
   }
 }

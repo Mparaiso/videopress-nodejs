@@ -1,0 +1,42 @@
+{
+ "kind": "youtube#videoListResponse",
+ "etag": "\"GbgM9_0DKhSLzW6BxAmfOJZH9RI/Xn4jLv9a8eqhB-nApAzAeuO15bk\"",
+ "pageInfo": {
+  "totalResults": 1,
+  "resultsPerPage": 1
+ },
+ "items": [
+  {
+   "kind": "youtube#video",
+   "etag": "\"GbgM9_0DKhSLzW6BxAmfOJZH9RI/i5G9pxQo8JiE4C2dzT_iafKx0ds\"",
+   "id": "7lCDEYXw3mM",
+   "snippet": {
+    "publishedAt": "2012-06-20T23:12:38.000Z",
+    "channelId": "UC_x5XG1OV2P6uZZ5FSM9Ttw",
+    "title": "Google I/O 101: Q&A On Using Google APIs",
+    "description": "Antonio Fuentes speaks to us and takes questions on working with Google APIs and OAuth 2.0.",
+    "thumbnails": {
+     "default": {
+      "url": "https://i1.ytimg.com/vi/7lCDEYXw3mM/default.jpg"
+     },
+     "medium": {
+      "url": "https://i1.ytimg.com/vi/7lCDEYXw3mM/mqdefault.jpg"
+     },
+     "high": {
+      "url": "https://i1.ytimg.com/vi/7lCDEYXw3mM/hqdefault.jpg"
+     }
+    },
+    "channelTitle": "GoogleDevelopers",
+    "categoryId": "28",
+    "liveBroadcastContent": "none"
+   },
+   "contentDetails": {
+    "duration": "PT15M51S",
+    "dimension": "2d",
+    "definition": "hd",
+    "caption": "true",
+    "licensedContent": false
+   }
+  }
+ ]
+}
