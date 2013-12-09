@@ -15,7 +15,7 @@
 #push: push to remote repository
 #
 test: ./test/*.js
-	@node_modules/.bin/mocha -R spec -u tdd
+	@node_modules/.bin/mocha -R markdown -u tdd
 	@make commit
 run: test
 	@node_modules/.bin/node-supervisor -e 'js|less|css|twig' -p 2000 app.js
