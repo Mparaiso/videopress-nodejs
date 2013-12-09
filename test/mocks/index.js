@@ -12,7 +12,12 @@ var youtubeUrlRequests = [
 		responseFile:path.resolve(path.join(__dirname,"../stubs/youtube-video-id-7lCDEYXw3mM.json"))
 	}
 ];
-
+/**
+ * mock for YoutubeProvider.request object for testing purposes
+ * @param  {Object}   options  
+ * @param  {Function} callback 
+ * @return {Object}
+ */
 mocks.youtubeRequestMock = function(options,callback){
 	var url = options.url || options.uri
 	, f = youtubeUrlRequests.filter(function(item){
