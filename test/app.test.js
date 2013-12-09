@@ -74,6 +74,9 @@
         it('should find youtube video datas',function(){
             this.youtube_provider.request = mocks.youtubeRequestMock;
             assert.equal(typeof this.youtube_provider.request,'function');
+            this.youtube_provider.getVideoDataFromUrl(youtube_url,function(err,videoDatas){
+                done();
+            })
         });
     });
 });
