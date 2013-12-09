@@ -27,6 +27,7 @@ describe("DATABASE",function(){
 			lib.database.models.Video.fromUrl(url,function(err,video){
 					assert(!err);
 					assert.equal(video.get('title'),"Google I/O 101: Q&A On Using Google APIs");
+					assert.equal(video.get('originalId'),"7lCDEYXw3mM");
 				done();
 			});
 		});
