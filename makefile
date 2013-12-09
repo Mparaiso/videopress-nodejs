@@ -10,8 +10,9 @@
 #
 #ct: continuous testing
 #
-test: commit ./test/*.js
+test: ./test/*.js
 	@node_modules/.bin/mocha -R spec
+	@make commit
 run: test
 	@node_modules/.bin/node-supervisor -e 'js|less|css|twig' -p 2000 app.js
 install:
