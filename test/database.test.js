@@ -9,7 +9,7 @@ describe("DATABASE",function(){
 		beforeEach(function(){
 			this.video= new db.model('Video');
 			this.video.set({
-				title:'a video',
+				title:'video',
 				description:'description',
 				url:'http://something.web.com',
 				thumbail:'http://web.com/image.png',
@@ -18,6 +18,9 @@ describe("DATABASE",function(){
 				duration:duration.parse('PT15M30S'),
 				publishedAt:new Date('2013-12-11')
 			});
+		});
+		it('should be initalized correctly',function(){
+			assert.equal(this.video.get('title'),'video');
 		});
 	});
 });
