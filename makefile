@@ -12,6 +12,8 @@
 #
 #commit: commit changes
 #
+#push: push to remote repository
+#
 test: ./test/*.js
 	@node_modules/.bin/mocha -R spec
 	@make commit
