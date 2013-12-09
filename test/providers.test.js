@@ -32,6 +32,7 @@
  			this.youtube_provider.request = mocks.youtubeRequestMock;
  			assert.equal(typeof this.youtube_provider.request,'function');
  			this.youtube_provider.getVideoDataFromUrl(youtube_url,function(err,videoDatas){
+ 				assert.equal(videoDatas.originalId,youtube_video_id);
  				done();
  			})
  		});
