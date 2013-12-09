@@ -1,13 +1,12 @@
 /*global describe,it,beforeEach */
 "use strict";
-var db=require('../lib').database;
-var duration = require('../lib').duration;
-var assert=require('assert');
+var lib=require('../lib')
+, assert=require('assert');
 
 describe("DATABASE",function(){
 	describe("Video model",function(){
 		beforeEach(function(){
-			this.video= new db.model('Video');
+			this.video=  new lib.database.models.Video
 			this.video.set({
 				title:'video',
 				description:'description',
@@ -15,7 +14,7 @@ describe("DATABASE",function(){
 				thumbail:'http://web.com/image.png',
 				originalId:'3DFDDFDDFDF',
 				provider:'youtube',
-				duration:duration.parse('PT15M30S'),
+				duration:lib.duration.parse('PT15M30S'),
 				publishedAt:new Date('2013-12-11')
 			});
 		});
