@@ -6,7 +6,7 @@ var lib=require('../lib')
 describe("DATABASE",function(){
 	describe("Video model",function(){
 		beforeEach(function(){
-			this.video=  new lib.database.models.Video
+			this.video=  new lib.database.models.Video();
 			this.video.set({
 				title:'video',
 				description:'description',
