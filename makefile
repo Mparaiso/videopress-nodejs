@@ -22,7 +22,9 @@ install:
 ct:
 	@bin/ci.sh
 commit:
+	# command || true will ignore command errors
 	@git add .
 	@git commit -am"update" || true
+
 
 .PHONY: install
