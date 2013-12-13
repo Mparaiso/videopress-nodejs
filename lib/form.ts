@@ -99,6 +99,10 @@ module widget{
 	export class Select extends Base{
 		data=[];
 		type="select";
+		/**
+		 * a HTML representation
+		 * @return {String}
+		 */
 		toHTML(){
 			var html = "";
 			html+=util.format("<select %s >\n",this.renderAttributes(this.options.attributes));
@@ -108,6 +112,17 @@ module widget{
 				}).join("\n");
 			html+=util.format("</select>\n")
 			return html;
+		}
+		/**
+		 * an JSON representation of the widget
+		 * @return {Object}
+		 */
+		toJSON(){
+			var json = super.toJSON();
+			json.name = this.name;
+			delete json.value;
+			json.options = this.data.map(_.compose(Option.fromData,(option)=>{return this.option.toJSON()}));
+			return json;
 		}
 	}
 }
