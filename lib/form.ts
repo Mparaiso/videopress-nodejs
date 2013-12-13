@@ -1,10 +1,10 @@
 ///<reference path="../ts/node.d.ts"/>
 var util = require('util');
-
+var _ = require('underscore');
 module widget{
 	
 	export class Base{
-		attributes={};
+		attributes:any={};
 		name;
 		data;
 		/**
@@ -28,13 +28,31 @@ module widget{
 			}
 			return result;
 		}
+
+		getDefaults():any{
+			return {
+				value:this.data||this.attributes.value,
+				name:this.name
+			};
+		}
+		toJSON(){
+			return _.extend({},this.attributes,this.getDefaults());
+		}
 		/**
 		 * @return {String}
 		 */
 		toHTML(){
 			return util.format("<input name='%s' %s />",this.name,
-				this.renderAttributes(
-					util._extend({},this.attributes,{value:this.data||this.attributes.value})));
+				this.renderAttributes(this.toJSON()));
+		}
+	}
+
+	export class Text extends Base{
+		type="text";
+		getDefaults():any{
+			var defs=super.getDefaults();
+			var opts={type:this.type};
+			return _.extend({},defs,opts);
 		}
 	}
 }

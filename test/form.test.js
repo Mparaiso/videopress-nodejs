@@ -8,7 +8,7 @@ describe('FORM',function(){
 	var attributes = {
 		value:"a value",
 		required:"true",
-		class:"a class"
+		class:"input-small"
 	};
 	describe("form.widget.Base",function(){
 		var base = new form.widget.Base("base",{'attributes':attributes});
@@ -16,6 +16,14 @@ describe('FORM',function(){
 		it('should render properly',function(){
 			console.log(html);
 			expect(html).to.contain("value");
+		});
+	});
+	describe("form.widget.Text",function(){
+		var text= new form.widget.Text("address",{'attributes':attributes});
+		text.data = "London";
+		it('should render properly',function(){
+			console.log(text.toJSON());
+			expect(text.toHTML()).to.contain(text.data);
 		});
 	});
 });
