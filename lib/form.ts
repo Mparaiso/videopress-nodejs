@@ -8,7 +8,7 @@ var _ = require('underscore');
 module widget{
 	
 	export class Base{
-		attributes:any={};
+		options:any;
 		name;
 		data;
 		/**
@@ -18,9 +18,10 @@ module widget{
 		 */
 		constructor(name,options:any={}){
 			this.name=name;
-			if('attributes' in options){
-				this.attributes=options.attributes;
+			if(! 'attributes' in options){
+				options.attributes = {};
 			}
+			this.options= options;
 		}
 		renderAttr(attr,value){
 			return util.format(" %s='%s' ",attr,value);
@@ -45,7 +46,7 @@ module widget{
 		 * @return {Object}
 		 */
 		toJSON(){
-			return _.extend({},this.attributes,this.getDefaults());
+			return _.extend({},this.options.attributes,this.getDefaults());
 		}
 		/**
 		 * @return {String}
@@ -83,7 +84,8 @@ module widget{
 		static fromData(data,index):Option{
 			var option:Option;
 			if(_.isObject(data)){
-				option = new Option(data.key,{attributes:data.attributes});
+				var attr = data.attributes || {}
+				option = new Option(data.key,{attributes:attr});
 				if(_.has(data,'value')){
 					option.data = data.value;
 				});
@@ -99,7 +101,7 @@ module widget{
 		type="select";
 		toHTML(){
 			var html = "";
-			html+=util.format("<select %s >\n",this.renderAttributes(this.attributes));
+			html+=util.format("<select %s >\n",this.renderAttributes(this.options.attributes));
 			html+=this.data.map(function(data,i){
 				var option = Option.fromData(data,i);
 				return option.toHTML();

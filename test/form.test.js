@@ -14,7 +14,6 @@ describe('FORM',function(){
 		var base = new form.widget.Base("base",{'attributes':attributes});
 		var html = base.toHTML();
 		it('should render properly',function(){
-			console.log(html);
 			expect(html).to.contain("value");
 		});
 	});
@@ -22,11 +21,11 @@ describe('FORM',function(){
 		var text= new form.widget.Text("address",{'attributes':attributes});
 		text.data = "London";
 		it('should render properly',function(){
-			console.log(text.toJSON());
 			expect(text.toHTML()).to.contain(text.data);
 		});
 	});
-	/*describe("form.widget.Select",function(){
+	/*
+	describe("form.widget.Select",function(){
 		var attrs = {
 			required:true
 		};
@@ -35,5 +34,6 @@ describe('FORM',function(){
 		select.data = options;
 		var html = select.toHTML();
 		expect(html).to.contain(options);
-	});*/
+	});
+	*/
 });
