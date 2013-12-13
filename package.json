@@ -13,7 +13,8 @@
     "mongoose":"3.X",
     "swig":"1.2.X",
     "less-middleware":"*",
-    "request":"*"
+    "request":"*",
+    "mpm.duration":"*"
   },
   "devDependencies":{
     "mocha":"*",
