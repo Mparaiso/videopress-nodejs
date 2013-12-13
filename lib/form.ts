@@ -18,7 +18,7 @@ module widget{
 		 */
 		constructor(name,options:any={}){
 			this.name=name;
-			if(! 'attributes' in options){
+			if(!('attributes' in options)){
 				options.attributes = {};
 			}
 			this.options= options;
@@ -38,7 +38,7 @@ module widget{
 		 */
 		getDefaults():any{
 			return {
-				value:this.data||this.attributes.value,
+				value:this.data||this.options.attributes.value,
 				name:this.name
 			};
 		}
@@ -88,7 +88,7 @@ module widget{
 				option = new Option(data.key,{attributes:attr});
 				if(_.has(data,'value')){
 					option.data = data.value;
-				});
+				}
 			}else{
 				option = new Option(data);
 				if(index)option.data=index;
