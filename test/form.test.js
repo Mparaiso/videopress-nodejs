@@ -1,4 +1,4 @@
-/*global describe */
+/*global describe,it */
 "use strict";
 
 var expect = require('chai').expect;
@@ -15,6 +15,8 @@ describe('FORM',function(){
 		var html = base.toHTML();
 		console.log(base.renderAttributes(base.attributes));
 		//expect(html).to.contain("value");
-		expect(true).to.be.true;
+		it('should render properly',function(){
+			expect(true).to.be.true;
+		});
 	});
 });
