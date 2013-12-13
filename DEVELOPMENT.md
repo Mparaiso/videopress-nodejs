@@ -5,14 +5,17 @@ API
 
 <code>
 GET    /
-GET    /video
+GET    /video : list videos
 GET    /video?q=search%20terms
-POST   /video
-GET    /video/(?P<id>\d+) 
-PUT    /video/(?P<id>\d+)
-DELETE /video/(?P<id>\d+)
-GET    /playlist
-POST   /playlist
-GET    /playlist/(?P<id>\d+)
-PUT    /playlist/(?P<id>\d+)
+GET    /video/new : new video form
+POST   /video/new : post new video
+GET    /video/(?P<id>\d+) : get video
+GET    /video/edit/(?P<id>\d+) : edit video form
+POST   /video/edit/(?P<id>\d+) : put video
+DELETE /video/(?P<id>\d+) : delete video
+GET    /playlist : list playlists
+GET    /playlist/new : new playlist form
+POST   /playlist/new : post new playlist
+GET    /playlist/edit/(?P<id>\d+) : show playlist
+POST   /playlist/edit/(?P<id>\d+) : post playlist
 </code>
