@@ -24,7 +24,6 @@ describe('FORM',function(){
 			expect(text.toHTML()).to.contain(text.data);
 		});
 	});
-	/*
 	describe("form.widget.Select",function(){
 		var attrs = {
 			required:true
@@ -33,7 +32,8 @@ describe('FORM',function(){
 		var select = new form.widget.Select("towns",{attributes:attrs});
 		select.data = options;
 		var html = select.toHTML();
-		expect(html).to.contain(options);
+		options.forEach(function(option){
+			expect(html).to.contain(option);
+		});
 	});
-*/
 });
