@@ -11,6 +11,7 @@ module widget{
 		options:any;
 		name;
 		data;
+		type="base";
 		/**
 		 * @constructor
 		 * @param {String} name
@@ -54,6 +55,9 @@ module widget{
 		toHTML(){
 			return util.format("<input name='%s' %s />",this.name,
 				this.renderAttributes(this.toJSON()));
+		}
+		toString(){
+			return util.format("[object form.widget.%s]",this.type);
 		}
 	}
 
@@ -110,7 +114,7 @@ module widget{
 				var option = Option.fromData(data,i);
 				return option.toHTML();
 				}).join("\n");*/
-			html+=this.data.map(_.compose(Option.fromData,(options)=>{return option.toHTML(); })).join("\n");
+			html+=this.data.map(Option.fromData).map((option)=>{return option.toHTML(); }).join("\n");
 			html+=util.format("</select>\n")
 			return html;
 		}
