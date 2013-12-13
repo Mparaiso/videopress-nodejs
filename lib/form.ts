@@ -106,10 +106,11 @@ module widget{
 		toHTML(){
 			var html = "";
 			html+=util.format("<select %s >\n",this.renderAttributes(this.options.attributes));
-			html+=this.data.map(function(data,i){
+			/*html+=this.data.map(function(data,i){
 				var option = Option.fromData(data,i);
 				return option.toHTML();
-				}).join("\n");
+				}).join("\n");*/
+			html+=this.data.map(_.compose(Option.fromData,(options)=>{return option.toHTML(); })).join("\n");
 			html+=util.format("</select>\n")
 			return html;
 		}
@@ -121,7 +122,7 @@ module widget{
 			var json = super.toJSON();
 			json.name = this.name;
 			delete json.value;
-			json.options = this.data.map(_.compose(Option.fromData,(option)=>{return this.option.toJSON()}));
+			json.options = this.data.map(_.compose(Option.fromData,(option)=>{return option.toJSON()}));
 			return json;
 		}
 	}
