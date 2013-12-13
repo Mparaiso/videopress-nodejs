@@ -26,4 +26,14 @@ describe('FORM',function(){
 			expect(text.toHTML()).to.contain(text.data);
 		});
 	});
+	/*describe("form.widget.Select",function(){
+		var attrs = {
+			required:true
+		};
+		var options = ['London','Paris','Moscow','Zurich'];
+		var select = new form.widget.Select("towns",{attributes:attrs});
+		select.data = options;
+		var html = select.toHTML();
+		expect(html).to.contain(options);
+	});*/
 });
