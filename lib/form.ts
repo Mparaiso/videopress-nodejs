@@ -114,7 +114,7 @@ module widget{
 				var option = Option.fromData(data,i);
 				return option.toHTML();
 				}).join("\n");*/
-			html+=this.data.map(Option.fromData).map((option)=>{return option.toHTML(); }).join("\n");
+			html+=this.data.map(_.compose(Option.fromData,(option)=>{return option.toHTML(); }).join("\n");
 			html+=util.format("</select>\n")
 			return html;
 		}
