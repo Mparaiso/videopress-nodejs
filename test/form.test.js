@@ -33,13 +33,16 @@ describe('FORM',function(){
 			var select = new form.widget.Select("towns",{attributes:attrs});
 			select.data = options;
 			var html = select.toHTML();
+			it('should contain a select tag',function(){
+				expect(html).to.contain("select");
+			});
 			options.forEach(function(option,i){
 				it('should contain the right key : '+option,function(){
 					expect(html).to.contain(option);
-				})
+				});
 				it('should contain the right value : '+i,function(){
 					expect(html).to.contain(option);
-				})
+				});
 			});
 		})
 	});
