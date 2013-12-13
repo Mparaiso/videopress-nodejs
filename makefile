@@ -18,7 +18,7 @@ test: ./test/*.js
 	@node_modules/.bin/mocha -R spec -u tdd
 	@make commit
 run: test
-	@node_modules/.bin/node-supervisor -e 'js|less|css|twig' -p 2000 app.js
+	@node_modules/.bin/node-supervisor -e 'js|less|css|twig' -p 2000 app.js &
 install:
 	@npm install
 ct:
