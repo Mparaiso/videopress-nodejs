@@ -28,6 +28,6 @@ commit:
 	@git add .
 	@git commit -am"update `date`" || true
 push: commit
-	git push origin -all
+	@git push origin --all
 
 .PHONY: install
