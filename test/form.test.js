@@ -57,6 +57,7 @@ describe('FORM',function(){
 			];
 			select.data=options;
 			var html = select.toHTML();
+			var json = select.toJSON();
 			it('should render properly',function(){
 				expect(html).to.contain('male');
 				expect(html).to.contain('m');
@@ -64,6 +65,9 @@ describe('FORM',function(){
 				expect(html).to.contain('f');
 				expect(html).to.contain('other');
 				expect(html).to.contain('o');
+			});
+			it('should return a proper json',function(){
+				expect(json).to.have.property('options');
 			});
 		});
 	});

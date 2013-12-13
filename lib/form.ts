@@ -122,7 +122,7 @@ module widget{
 			var json = super.toJSON();
 			json.name = this.name;
 			delete json.value;
-			json.options = this.data.map(_.compose(Option.fromData,(option)=>{return option.toJSON()}));
+			json.options = this.data.map(Option.fromData).map((option)=>{return option.toJSON()});
 			return json;
 		}
 	}
