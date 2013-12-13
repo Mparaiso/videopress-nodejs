@@ -25,15 +25,22 @@ describe('FORM',function(){
 		});
 	});
 	describe("form.widget.Select",function(){
-		var attrs = {
-			required:true
-		};
-		var options = ['London','Paris','Moscow','Zurich'];
-		var select = new form.widget.Select("towns",{attributes:attrs});
-		select.data = options;
-		var html = select.toHTML();
-		options.forEach(function(option){
-			expect(html).to.contain(option);
-		});
+		describe('A select widget',function(){
+			var attrs = {
+				required:true
+			};
+			var options = ['London','Paris','Moscow','Zurich'];
+			var select = new form.widget.Select("towns",{attributes:attrs});
+			select.data = options;
+			var html = select.toHTML();
+			options.forEach(function(option,i){
+				it('should contain the right key : '+option,function(){
+					expect(html).to.contain(option);
+				})
+				it('should contain the right value : '+i,function(){
+					expect(html).to.contain(option);
+				})
+			});
+		})
 	});
 });
