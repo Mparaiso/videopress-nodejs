@@ -13,8 +13,8 @@ describe('FORM',function(){
 	describe("form.widget.Base",function(){
 		var base = new form.widget.Base("base",{'attributes':attributes});
 		var html = base.toHTML();
-		console.log(base.renderAttributes(base.attributes));
 		it('should render properly',function(){
+			console.log(html);
 			expect(html).to.contain("value");
 		});
 	});
