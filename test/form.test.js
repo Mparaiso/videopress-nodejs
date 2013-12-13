@@ -25,7 +25,7 @@ describe('FORM',function(){
 		});
 	});
 	describe("form.widget.Select",function(){
-		describe('A select widget',function(){
+		describe('A select widget with a simple data list',function(){
 			var attrs = {
 				required:true
 			};
@@ -36,6 +36,9 @@ describe('FORM',function(){
 			it('should contain a select tag',function(){
 				expect(html).to.contain("select");
 			});
+			it('should be required',function(){
+				expect(html).to.contain("required");
+			});
 			options.forEach(function(option,i){
 				it('should contain the right key : '+option,function(){
 					expect(html).to.contain(option);
@@ -44,6 +47,24 @@ describe('FORM',function(){
 					expect(html).to.contain(option);
 				});
 			});
-		})
+		});
+		describe('A select widget with a complex data list',function(){
+			var select = new form.widget.Select('sex',{attributes:{required:'true'}});
+			var options=[
+				{key:"male",value:"m"},
+				{key:'female',value:'f'},
+				{key:'other',value:'o'}
+			];
+			select.data=options;
+			var html = select.toHTML();
+			it('should render properly',function(){
+				expect(html).to.contain('male');
+				expect(html).to.contain('m');
+				expect(html).to.contain('female');
+				expect(html).to.contain('f');
+				expect(html).to.contain('other');
+				expect(html).to.contain('o');
+			});
+		});
 	});
 });
