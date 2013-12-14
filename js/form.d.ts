@@ -90,12 +90,15 @@ declare module form {
         getWidget(type, name, options): widget.Base;
     }
     class WidgetLoader implements IWidgetLoader {
-        public getWidget(type, name, options): widget.Base;
+        public getWidget(type: string, name: string, options): widget.Base;
     }
     class FormBuilder {
         public widgets: widget.Base[];
         public widgetLoaders: IWidgetLoader[];
         public name: string;
+        constructor();
+        public addWidgetLoader(widgetLoader): void;
+        public resolveWidget(type, name, options);
         public bound: boolean;
         public add(widget, name, options): FormBuilder;
         public toHTML(): string;

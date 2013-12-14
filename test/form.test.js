@@ -4,7 +4,7 @@
 var expect = require('chai').expect;
 
 describe('FORM',function(){
-	var form = require('../lib/form');
+	var form = require('../js/form');
 	var attributes = {
 		value:"a value",
 		required:"true",

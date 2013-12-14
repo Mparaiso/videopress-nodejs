@@ -269,12 +269,25 @@ var form;
             this.widgets = [];
             this.widgetLoaders = [];
             this.bound = false;
+            this.addWidgetLoader(new WidgetLoader());
         }
+        FormBuilder.prototype.addWidgetLoader = function (widgetLoader) {
+            this.widgetLoaders.push(widgetLoader);
+        };
+        FormBuilder.prototype.resolveWidget = function (type, name, options) {
+            var i = 0, widget;
+            while (!widget || i < this.widgetLoaders.length) {
+                widget = this.widgetLoaders[i].getWidget(type, name, options);
+                i += 1;
+            }
+            return widget;
+        };
+
         FormBuilder.prototype.add = function (widget, name, options) {
             if (widget instanceof widget.Base) {
                 this.widgets.push(widget);
             } else {
-                //this.resolve
+                this.resolveWidget(widget, name, options);
             }
             return this;
         };

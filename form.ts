@@ -197,7 +197,7 @@ module form{
 		getWidget(type,name,options):widget.Base;
 	}
 	export class WidgetLoader implements IWidgetLoader{
-		getWidget(type,name,options):widget.Base{
+		getWidget(type:string,name:string,options):widget.Base{
 			switch(type){
 				case "choice":
 					return new widget.Select(name,options);
@@ -214,12 +214,26 @@ module form{
 		widgets:Array<widget.Base>=[];
 		widgetLoaders:Array<IWidgetLoader>=[];
 		name:string;
+		constructor(){
+			this.addWidgetLoader(new WidgetLoader);
+		}
+		addWidgetLoader(widgetLoader){
+			this.widgetLoaders.push(widgetLoader);
+		}
+		resolveWidget(type,name,options){
+			var i=0,widget;
+			while(!widget || i<this.widgetLoaders.length){
+				widget = this.widgetLoaders[i].getWidget(type,name,options);
+				i+=1;
+			}
+			return widget;
+		}
 		bound=false;
 		add(widget,name,options){
 			if(widget instanceof widget.Base){
 				this.widgets.push(widget);
 			}else{
-				//this.resolve
+				this.resolveWidget(widget,name,options);
 			}
 			return this;
 		}
