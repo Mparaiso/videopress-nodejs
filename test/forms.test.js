@@ -2,23 +2,23 @@
 "use strict";
 
 var expect = require('chai').expect;
+var forms = require('../js/forms');
 
 describe('FORM',function(){
-	var form = require('../js/form');
 	var attributes = {
 		value:"a value",
 		required:"true",
 		class:"input-small"
 	};
 	describe("form.widget.Base",function(){
-		var base = new form.widget.Base("base",{'attributes':attributes});
+		var base = new forms.widget.Base("base",{'attributes':attributes});
 		var html = base.toHTML();
 		it('should render properly',function(){
 			expect(html).to.contain("value");
 		});
 	});
 	describe("form.widget.Text",function(){
-		var text= new form.widget.Text("address",{'attributes':attributes});
+		var text= new forms.widget.Text("address",{'attributes':attributes});
 		text.data = "London";
 		it('should render properly',function(){
 			expect(text.toHTML()).to.contain(text.data);
@@ -30,7 +30,7 @@ describe('FORM',function(){
 				required:true
 			};
 			var options = ['London','Paris','Moscow','Zurich'];
-			var select = new form.widget.Select("towns",{attributes:attrs});
+			var select = new forms.widget.Select("towns",{attributes:attrs});
 			select.options.options = options;
 			var html = select.toHTML();
 			it('should contain a select tag',function(){
@@ -49,7 +49,7 @@ describe('FORM',function(){
 			});
 		});
 		describe('A select widget with a complex data list',function(){
-			var select = new form.widget.Select('sex',{attributes:{required:'true'}});
+			var select = new forms.widget.Select('sex',{attributes:{required:'true'}});
 			var options=[
 				{key:"male",value:"m"},
 				{key:'female',value:'f'},
@@ -73,3 +73,7 @@ describe('FORM',function(){
 		});
 	});
 });
+
+describe("forms..form.createFormBuilder",function  () {
+	// body...
+})
