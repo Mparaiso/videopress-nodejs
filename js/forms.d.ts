@@ -1,5 +1,9 @@
 declare var util;
 declare var _;
+declare module utils {
+    var isDefined: (value: any) => boolean;
+    var returnDefined: (...values: any[]) => any;
+}
 /**
 * @namespace
 */
@@ -11,24 +15,22 @@ declare module widget {
         data;
         toJSON();
         toHTML();
+        getAttributes();
     }
     class Base implements IBase {
         public options: any;
         public name;
         public data;
         public type: string;
+        public template;
         /**
         * @constructor
         * @param {String} name
         * @param {Object} options
         */
         constructor(name, options?: any);
-        public renderAttr(attr, value);
-        public renderAttributes(attrs: Object): string;
-        /**
-        * @return {Object}
-        */
-        public getDefaults(): any;
+        public renderAttributes(attrs: Object);
+        public getAttributes();
         /**
         * @return {Object}
         */
@@ -41,21 +43,22 @@ declare module widget {
     }
     class Text extends Base {
         public type: string;
-        public getDefaults(): any;
     }
     class Check extends Text {
         public type: string;
+        public template;
         static fromData(data, value): Check;
     }
     class Label extends Base {
         public type: string;
+        public template;
         public defaults: {};
         public getAttributes();
         public toHTML();
     }
     class Radio extends Text {
         public type: string;
-        static fromData(option, value): Radio;
+        static fromData(data, value): Radio;
     }
     class Button extends Text {
         public type: string;
@@ -72,6 +75,18 @@ declare module widget {
         static fromData(data, index): Option;
     }
     class Select extends Base {
+        public type: string;
+        public toHTML(): string;
+    }
+    class CheckboxGroup extends Base {
+        public type: string;
+        public toHTML();
+    }
+    class RadioGroup extends Base {
+        public type: string;
+        public toHTML();
+    }
+    class Choice extends Base {
         public type: string;
         /**
         * a HTML representation
@@ -96,7 +111,6 @@ declare module form {
         public widgets: widget.Base[];
         public widgetLoaders: IWidgetLoader[];
         public name: string;
-        constructor();
         public addWidgetLoader(widgetLoader): void;
         public resolveWidget(type, name, options);
         public bound: boolean;

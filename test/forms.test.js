@@ -32,7 +32,7 @@ describe('FORM',function(){
 			};
 			var options = ['London','Paris','Moscow','Zurich'];
 			var select = new forms.widget.Select("towns",{attributes:attrs});
-			select.options.options = options;
+			select.options.choices = options;
 			var html = select.toHTML();
 			it('should contain a select tag',function(){
 				expect(html).to.contain("select");
@@ -56,7 +56,7 @@ describe('FORM',function(){
 				{key:'female',value:'f'},
 				{key:'other',value:'o'}
 			];
-			select.options.options=options;
+			select.options.choices=options;
 			var html = select.toHTML();
 			var json = select.toJSON();
 			it('should render properly',function(){
@@ -68,8 +68,7 @@ describe('FORM',function(){
 				expect(html).to.contain('o');
 			});
 			it('should return a proper json',function(){
-				expect(json).to.have.property('options');
-				expect(json.options).to.have.length(3);
+				expect(json.options.choices).to.have.length(3);
 			});
 		});
 	});
@@ -82,11 +81,10 @@ describe("forms.createFormBuilder",function  () {
 		describe("has fields",function  () {
 			form.add('text','firstname')
 				.add('text','lastname')
-				.add('choice','gender',{options:gender_options,attributes:{required:true}})
+				.add('choice','gender',{choices:gender_options,attributes:{required:true}})
 				.add('submit','submit',{attributes:{value:'submit'}});
 			it('renders properly',function(){
 				var html = form.toHTML();
-				console.error(html);
 				assert.equal(typeof html,'string');
 			});
 		});
