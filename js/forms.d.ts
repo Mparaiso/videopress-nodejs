@@ -13,7 +13,7 @@ declare module widget {
         options;
         type;
         data;
-        toJSON();
+        toJSON(): any;
         toHTML();
         getAttributes();
     }
@@ -34,7 +34,7 @@ declare module widget {
         /**
         * @return {Object}
         */
-        public toJSON();
+        public toJSON(): any;
         /**
         * @return {String}
         */
@@ -68,6 +68,7 @@ declare module widget {
     }
     class Option extends Base {
         public type: string;
+        public template;
         /**
         * @return {String}
         */
@@ -76,7 +77,8 @@ declare module widget {
     }
     class Select extends Base {
         public type: string;
-        public toHTML(): string;
+        public template;
+        public toHTML();
     }
     class CheckboxGroup extends Base {
         public type: string;
@@ -86,7 +88,7 @@ declare module widget {
         public type: string;
         public toHTML();
     }
-    class Choice extends Base {
+    class Choices extends Base {
         public type: string;
         /**
         * a HTML representation

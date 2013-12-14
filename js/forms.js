@@ -175,14 +175,13 @@ var widget;
         function Option() {
             _super.apply(this, arguments);
             this.type = "option";
+            this.template = _.template("<option <%=attributes%> ><%-label%></option>\n");
         }
         /**
         * @return {String}
         */
         Option.prototype.toHTML = function () {
-            var data = this.toJSON();
-            delete data.name;
-            return util.format("<option %s >%s</option>", this.renderAttributes(this.toJSON()), _.escape(this.name));
+            return this.template({ attributes: this.renderAttributes(this.getAttributes()), label: this.name });
         };
         Option.fromData = function (data, index) {
             var option;
@@ -206,15 +205,13 @@ var widget;
         function Select() {
             _super.apply(this, arguments);
             this.type = "select";
+            this.template = _.template("<select <%=attributes%> >\n<% _.each(options,function(o){print(o.toHTML());}) %></select>");
         }
         Select.prototype.toHTML = function () {
-            var html = "", self = this;
-            html += util.format("<select %s >\n", this.renderAttributes(this.getAttributes()));
-            html += this.options.choices.map(Option.fromData).map(function (option) {
-                return option.toHTML();
-            }).join("\n");
-            html += util.format("\r\n</select>\n");
-            return html;
+            return this.template({
+                attributes: this.renderAttributes(this.getAttributes()),
+                options: this.options.choices.map(Option.fromData)
+            });
         };
         return Select;
     })(Base);
@@ -260,9 +257,9 @@ var widget;
         return RadioGroup;
     })(Base);
     widget.RadioGroup = RadioGroup;
-    var Choice = (function (_super) {
-        __extends(Choice, _super);
-        function Choice() {
+    var Choices = (function (_super) {
+        __extends(Choices, _super);
+        function Choices() {
             _super.apply(this, arguments);
             this.type = "choice";
         }
@@ -270,7 +267,7 @@ var widget;
         * a HTML representation
         * @return {String}
         */
-        Choice.prototype.toHTML = function () {
+        Choices.prototype.toHTML = function () {
             var html = "", self = this, _widget;
             if (this.options.multiple == true) {
                 if (_.isUndefined(this.options.extended) || this.options.extended === true) {
@@ -294,16 +291,16 @@ var widget;
         * an JSON representation of the widget
         * @return {Object}
         */
-        Choice.prototype.toJSON = function () {
+        Choices.prototype.toJSON = function () {
             var json = _super.prototype.toJSON.call(this);
             json.choices = this.options.choices.map(function (choice) {
                 return choice.toJSON();
             });
             return json;
         };
-        return Choice;
+        return Choices;
     })(Base);
-    widget.Choice = Choice;
+    widget.Choices = Choices;
 })(widget || (widget = {}));
 
 var form;
@@ -313,9 +310,10 @@ var form;
         }
         WidgetLoader.prototype.getWidget = function (type, name, options) {
             switch (type) {
+                case "choices":
+                    return new widget.Choices(name, options);
                 case "select":
-                case "choice":
-                    return new widget.Choice(name, options);
+                    return new widget.Select(name, options);
                 case "button":
                     return new widget.Button(name, options);
                 case "submit":

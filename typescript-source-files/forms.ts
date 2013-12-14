@@ -18,7 +18,7 @@ module widget{
 		options;
 		type;
 		data;
-		toJSON();
+		toJSON():any;
 		toHTML();
 		getAttributes();
 	}
@@ -57,7 +57,7 @@ module widget{
 		/**
 		 * @return {Object}
 		 */
-		toJSON(){
+		toJSON():any{
 			return {
 				options:this.options,
 				name:this.name,
@@ -128,14 +128,12 @@ module widget{
 	}
 	export class Option extends Base{
 		type="option";
+		template=_.template("<option <%=attributes%> ><%-label%></option>\n");
 		/**
 		 * @return {String}
 		 */
 		toHTML(){
-			var data = this.toJSON();
-			delete data.name;
-			return util.format("<option %s >%s</option>",
-				this.renderAttributes(this.toJSON()),_.escape(this.name));
+			return this.template({attributes:this.renderAttributes(this.getAttributes()),label:this.name})
 		}
 		static fromData(data,index):Option{
 			var option:Option;
@@ -154,12 +152,12 @@ module widget{
 	}
 	export class Select extends Base{
 		type="select";
+		template=_.template("<select <%=attributes%> >\n<% _.each(options,function(o){print(o.toHTML());}) %></select>")
 		toHTML(){
-			var html = "",self=this;
-			html+=util.format("<select %s >\n",this.renderAttributes(this.getAttributes()));
-			html+=this.options.choices.map(Option.fromData).map((option)=>{return option.toHTML()}).join("\n");
-			html+=util.format("\r\n</select>\n")
-			return html;
+			return this.template({
+				attributes:this.renderAttributes(this.getAttributes())
+				,options:this.options.choices.map(Option.fromData)
+			});
 		}
 	}
 	export class CheckboxGroup extends Base{
@@ -189,7 +187,7 @@ module widget{
 			}).join('\n');
 		}
 	}
-	export class Choice extends Base{
+	export class Choices extends Base{
 		type="choice";
 		/**
 		 * a HTML representation
@@ -219,7 +217,7 @@ module widget{
 		 * @return {Object}
 		 */
 		toJSON(){
-			var json = super.toJSON();
+			var json:any = super.toJSON();
 			json.choices = this.options.choices.map(choice=>choice.toJSON());
 			return json;
 		}
@@ -233,9 +231,10 @@ module form{
 	export class WidgetLoader implements IWidgetLoader{
 		getWidget(type:string,name:string,options):widget.Base{
 			switch(type){
+				case "choices":
+					return new widget.Choices(name,options);
 				case "select":
-				case "choice":
-					return new widget.Choice(name,options);
+					return new widget.Select(name,options);
 				case "button":
 					return new widget.Button(name,options);
 				case "submit":
