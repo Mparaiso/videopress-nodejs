@@ -100,11 +100,12 @@ declare module form {
         public addWidgetLoader(widgetLoader): void;
         public resolveWidget(type, name, options);
         public bound: boolean;
-        public add(widget, name, options): FormBuilder;
+        public add(type, name, options): FormBuilder;
         public toHTML(): string;
         public toJSON(): any[];
         public bindRequest(): void;
         public setData(): void;
         public getData(): void;
     }
+    var createFormBuilder: () => FormBuilder;
 }

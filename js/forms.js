@@ -269,7 +269,6 @@ var form;
             this.widgets = [];
             this.widgetLoaders = [];
             this.bound = false;
-            this.addWidgetLoader(new WidgetLoader());
         }
         FormBuilder.prototype.addWidgetLoader = function (widgetLoader) {
             this.widgetLoaders.push(widgetLoader);
@@ -283,11 +282,11 @@ var form;
             return widget;
         };
 
-        FormBuilder.prototype.add = function (widget, name, options) {
-            if (widget instanceof widget.Base) {
-                this.widgets.push(widget);
+        FormBuilder.prototype.add = function (type, name, options) {
+            if (type instanceof widget.Base) {
+                this.widgets.push(type);
             } else {
-                this.resolveWidget(widget, name, options);
+                this.resolveWidget(type, name, options);
             }
             return this;
         };
@@ -310,6 +309,11 @@ var form;
         return FormBuilder;
     })();
     form.FormBuilder = FormBuilder;
+    form.createFormBuilder = function () {
+        var form = new FormBuilder();
+        form.addWidgetLoader(new WidgetLoader());
+        return form;
+    };
 })(form || (form = {}));
 
 module.exports = {

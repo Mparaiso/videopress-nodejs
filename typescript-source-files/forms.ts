@@ -215,7 +215,6 @@ module form{
 		widgetLoaders:Array<IWidgetLoader>=[];
 		name:string;
 		constructor(){
-			this.addWidgetLoader(new WidgetLoader);
 		}
 		addWidgetLoader(widgetLoader){
 			this.widgetLoaders.push(widgetLoader);
@@ -229,11 +228,11 @@ module form{
 			return widget;
 		}
 		bound=false;
-		add(widget,name,options){
-			if(widget instanceof widget.Base){
-				this.widgets.push(widget);
+		add(type,name,options){
+			if(type instanceof widget.Base){
+				this.widgets.push(type);
 			}else{
-				this.resolveWidget(widget,name,options);
+				this.resolveWidget(type,name,options);
 			}
 			return this;
 		}
@@ -252,6 +251,11 @@ module form{
 		getData(){
 
 		}
+	}
+	export var createFormBuilder=function(){
+		var form=new FormBuilder();
+		form.addWidgetLoader(new WidgetLoader);
+		return form;
 	}
 }
 

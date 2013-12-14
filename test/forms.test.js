@@ -2,6 +2,7 @@
 "use strict";
 
 var expect = require('chai').expect;
+var assert = require('assert');
 var forms = require('../js/forms');
 
 describe('FORM',function(){
@@ -74,6 +75,19 @@ describe('FORM',function(){
 	});
 });
 
-describe("forms..form.createFormBuilder",function  () {
-	// body...
-})
+describe("forms.createFormBuilder",function  () {
+	describe("A form",function(){
+		var form = forms.form.createFormBuilder();
+		var gender_options = ['male','female','other'];
+		describe("has fields",function  () {
+			form.add('text','firstname')
+				.add('text','lastname')
+				.add('choice','gender',{options:gender_options,attributes:{required:true}})
+				.add('submit','submit',{attributes:{value:'submit'}});
+			it('renders properly',function(){
+				var html = form.toHTML();
+				assert.equal(typeof html,'string');
+			});
+		});
+	});
+});
