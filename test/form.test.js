@@ -31,7 +31,7 @@ describe('FORM',function(){
 			};
 			var options = ['London','Paris','Moscow','Zurich'];
 			var select = new form.widget.Select("towns",{attributes:attrs});
-			select.data = options;
+			select.options.options = options;
 			var html = select.toHTML();
 			it('should contain a select tag',function(){
 				expect(html).to.contain("select");
@@ -55,7 +55,7 @@ describe('FORM',function(){
 				{key:'female',value:'f'},
 				{key:'other',value:'o'}
 			];
-			select.data=options;
+			select.options.options=options;
 			var html = select.toHTML();
 			var json = select.toJSON();
 			it('should render properly',function(){
@@ -68,6 +68,7 @@ describe('FORM',function(){
 			});
 			it('should return a proper json',function(){
 				expect(json).to.have.property('options');
+				expect(json.options).to.have.length(3);
 			});
 		});
 	});
