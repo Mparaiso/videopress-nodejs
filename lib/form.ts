@@ -76,6 +76,11 @@ module widget{
 	}
 	export class Check extends Text{
 		type="check";
+		static fromData(data,value){
+			var check = new Check(_.isUndefined(data.key)?data:data.key,{attributes:data.attributes});
+			check.options.attributes.value = _.isUndefined(data.value)?value:data.value;
+			return check;
+		}
 	}
 	export class Label extends Base{
 		type="label";
@@ -144,15 +149,23 @@ module widget{
 		toHTML(){
 
 			var html = "";
-			if(this.options.multiple==true){
+			if(this.options.multiple==true){ // checkbox group
 				if(this.options.extended===true){
-
+					html+=this.options.options.map((o,i)=>{
+						var check = Check.fromData(o,i);
+						var label = new Label(o.key||o);
+						return check.toHTML()+label.toHTML();
+					}).join('\n');
+				}else{ //multi select
+					html+=util.format("<select %s >\n",this.renderAttributes(_.extend({multiple:true},this.options.attributes)));
+					html+=this.options.options.map(Option.fromData).map((option)=>{return option.toHTML()}).join("\n");
+					html+=util.format("</select>\n")
 				}
 			}else{ // radio group
 				if(this.options.extended===true){
 					html+=this.options.options.map((option,index)=>{
 						var radio = Radio.fromData(option,index);
-						radio.option.name = this.name;
+						radio.options.attributes.name = this.name;
 						var label = new widget.Label(option.key||option);
 						return radio.toHTML()+label.toHTML();
 					}).join('\n');
