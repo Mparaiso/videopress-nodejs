@@ -87,6 +87,7 @@ describe("forms.createFormBuilder",function  () {
 			it('renders properly',function(){
 				var html = form.toHTML();
 				assert.equal(typeof html,'string');
+				console.log(html);
 			});
 		});
 	});
