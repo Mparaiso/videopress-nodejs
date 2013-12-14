@@ -78,7 +78,17 @@ module widget{
 		type="check";
 	}
 	export class Label extends Base{
-
+		type="label";
+		defaults = {};
+		getAttributes(){
+			return _.extend({},this.options.attributes,this.defaults);
+		}
+		toHTML(){
+			return util.format("<label %s >%s</label>"
+				,this.options.value||this.name
+				,this.renderAttributes(
+					this.getAttributes()));
+		}
 	}
 	export class Radio extends Text{
 		type="radio";
@@ -138,9 +148,14 @@ module widget{
 				if(this.options.extended===true){
 
 				}
-			}else{
+			}else{ // radio group
 				if(this.options.extended===true){
-					html+=this.options.options.map(Radio.fromData).map((option)=>option.toHTML()).join('\n');
+					html+=this.options.options.map((option,index)=>{
+						var radio = Radio.fromData(option,index);
+						radio.option.name = this.name;
+						var label = new widget.Label(option.key||option);
+						return radio.toHTML()+label.toHTML();
+					}).join('\n');
 				}else{ // select
 					html+=util.format("<select %s >\n",this.renderAttributes(this.options.attributes));
 					html+=this.options.options.map(Option.fromData).map((option)=>{return option.toHTML()}).join("\n");
