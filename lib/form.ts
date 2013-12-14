@@ -6,8 +6,15 @@ var _ = require('underscore');
  * @namespace
  */
 module widget{
-	
-	export class Base{
+	export interface IBase{
+		name;
+		options;
+		type;
+		data;
+		toJSON();
+		toHTML();
+	}
+	export class Base implements IBase{
 		options:any;
 		name;
 		data;
@@ -71,7 +78,7 @@ module widget{
 		type="check";
 	}
 	export class Label extends Base{
-		
+
 	}
 	export class Radio extends Text{
 		type="radio";
@@ -81,9 +88,9 @@ module widget{
 				_option=new Radio(option.key,{attributes:option.attributes});
 				_option.attributes.value = option.value;
 			}else{
-				_op=new Radio(option,{attributes:{value:value}});
+				_option=new Radio(option,{attributes:{value:value}});
 			}
-			return _op
+			return _option
 		}
 	}
 	export class Button extends Text{
