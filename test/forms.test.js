@@ -86,8 +86,8 @@ describe("forms.createFormBuilder",function  () {
 				.add('submit','submit',{attributes:{value:'submit'}});
 			it('renders properly',function(){
 				var html = form.toHTML();
+				console.error(html);
 				assert.equal(typeof html,'string');
-				console.log(html);
 			});
 		});
 	});
