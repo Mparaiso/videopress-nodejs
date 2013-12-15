@@ -17,15 +17,17 @@ module widget{
 		name;
 		options;
 		type;
-		data;
+		_data;
 		toJSON():any;
 		toHTML();
 		getAttributes();
+		setData(_data);
+		getData();
 	}
 	export class Base implements IBase{
 		options:any;
 		name;
-		data;
+		_data;
 		type="base";
 		template=_.template('<%=label%> <input <%=attributes%> />');
 		/**
@@ -50,9 +52,15 @@ module widget{
 		getAttributes(){
 			var attrs = _.extend({},this.options.attributes);
 			attrs.name=this.name;
-			attrs.value = utils.returnDefined(this.data,attrs.value,"");
+			attrs.value = utils.returnDefined(this._data,attrs.value,"");
 			attrs.type=utils.returnDefined(this.type,attrs.type);
 			return attrs;
+		}
+		setData(data){
+			this._data=data;
+		}
+		getData(){
+			return this._data;
 		}
 		/**
 		 * @return {Object}
@@ -62,7 +70,7 @@ module widget{
 				options:this.options,
 				name:this.name,
 				type:this.type,
-				data:this.data
+				data:this.getData()
 			};
 		}
 		/**
@@ -85,9 +93,9 @@ module widget{
 	export class Check extends Text{
 		type="check";
 		template=_.template("<input <%=attributes%> /> <%=label %>");
-		static fromData(data,value){
-			var check = new Check(utils.returnDefined(data.key,data),{attributes:data.attributes});
-			check.options.attributes.value = utils.returnDefined(data.value,value);
+		static fromData(data){
+			var check = new Check(data.key,{attributes:data.attributes});
+			check.options.attributes.value = data.value;
 			check.options.label = utils.returnDefined(data.key,data);
 			return check;
 		}
@@ -108,15 +116,11 @@ module widget{
 	}
 	export class Radio extends Text{
 		type="radio";
-		static fromData(data,value):Radio{
+		static fromData(data):Radio{
 			var radio;
-			if(_.isObject(data)){
-				radio=new Radio(data.key,{attributes:data.attributes});
-				radio.attributes.value = data.value;
-			}else{
-				radio=new Radio(data,{attributes:{value:value}});
-			}
-			radio.options.label = utils.returnDefined(data.key,data);
+			radio=new Radio(data.key,{attributes:data.attributes});
+			radio.attributes.value = data.value;
+			radio.options.label = data.key;
 			return radio
 		}
 	}
@@ -135,91 +139,126 @@ module widget{
 		toHTML(){
 			return this.template({attributes:this.renderAttributes(this.getAttributes()),label:this.name})
 		}
-		static fromData(data,index):Option{
+		static fromData(data):Option{
 			var option:Option;
-			if(_.isObject(data)){
-				var attr = utils.returnDefined(data.attributes,{});
-				option = new Option(data.key,{attributes:attr});
-				if(_.has(data,'value')){
-					option.data = data.value;
-				}
-			}else{
-				option = new Option(data);
-				option.data=index;
-			}
+			var attr = utils.returnDefined(data.attributes,{});
+			option = new Option(data.key,{attributes:attr});
+			option.options.attributes.value=data.value;
 			return option;
 		}
 	}
-	export class Select extends Base{
+	export interface Choice{
+		key:string;
+		value;
+		attributes;
+	}
+
+	export class Choices extends Base{
+		type="choices";
+		_choices:Array<Choice>;
+		constructor(name,options){
+			super(name,options);
+			this.choices = this.options.choices||[];
+		}
+		get choices(){return this._choices;}
+		set choices(value){ this._choices=this.normaLizeChoices(value);}
+		normaLizeChoices(choices:Array){
+			return choices.map((choice,i)=>{
+				var o;
+				if(_.isString(choice)){
+					o={};
+					o.key=choice,o.value=i;
+					o.attributes={};
+				}else{
+					o=choice;
+					o.attributes=o.attributes || {};
+				}
+				return o;
+			});
+		}
+		toJSON(){
+			var json:any = super.toJSON();
+			json.choices=this.choices;
+			json.data=this.getData();
+			return json;
+		}
+	}
+	export class Select extends Choices{
 		type="select";
 		template=_.template("<select <%=attributes%> >\n<% _.each(options,function(o){print(o.toHTML());}) %></select>")
+		getAttributes(){
+			var attrs=super.getAttributes();
+			delete attrs.type;
+			delete attrs.value;
+			return attrs;
+		}
 		toHTML(){
 			return this.template({
 				attributes:this.renderAttributes(this.getAttributes())
-				,options:this.options.choices.map(Option.fromData)
+				,options:this.choices.map(Option.fromData)
 			});
 		}
-	}
-	export class CheckboxGroup extends Base{
-		type="checkbox-group";
-		toHTML(){
-			return this.options.choices.map((o,i)=>{
-				var check,label;
-				if(typeof o === 'string'){
-					check = Check.fromData(o,i);
-					check.options.label=o;
+		setData(data:Array){
+			this._data=_.isArray(data)?data:[data];
+			this._choices.forEach(c=>{
+				if(c.value in this._data){
+					c.attributes.selected="selected";
 				}else{
-					check = Check.fromData(_.extend({},o,{key:this.name}),i);
-					check.options.label=o.key;
+					delete c.attributes.selected;
 				}
-						return check.toHTML();
-			}).join('\n');
+			});
+		}
+		getData(){
+			return this.choices
+				.filter(c=>c.attributes.selected).map(c=>c.value);
 		}
 	}
-	export class RadioGroup extends Base{
+	export class CheckboxGroup extends Choices{
+		type="checkboxgroup";
+		toHTML(){
+			return this.choices.map((o)=>{
+				var check,label;
+				check = Check.fromData(o);
+				check.options.label=o.key;
+				return check.toHTML();
+			}).join('\n');
+		}
+		setData(data){
+			this._data=_.isArray(data)?data:[data];
+			this.choices.forEach(c=>{
+				if(_.contains(this._data,c.value)){
+					c.attributes.checked="checked";
+				}else{
+					delete c.attributes.checked;
+				}
+			});
+		}
+		getData(){
+			return this.choices.filter(c=>c.attributes.checked).map(c=>c.value);
+		}
+	}
+	export class RadioGroup extends Choices{
 		type="radio-group";
 		toHTML(){
-			return this.options.choices.map((choice,index)=>{
-						var radio = Radio.fromData(choice,index);
-						radio.options.attributes.name = this.name;
-						radio.options.label= choice.key;
-						return radio.toHTML();
+			return this.choices.map((choice)=>{
+				var radio = Radio.fromData(choice);
+				radio.options.attributes.name = this.name;
+				radio.options.label= choice.key;
+				return radio.toHTML();
 			}).join('\n');
 		}
-	}
-	export class Choices extends Base{
-		type="choice";
-		/**
-		 * a HTML representation
-		 * @return {String}
-		 */
-		toHTML(){
-			var html = "",self=this,_widget:Base;
-			if(this.options.multiple==true){ // checkbox group
-				if(_.isUndefined(this.options.extended) || this.options.extended===true){
-					_widget = new CheckboxGroup(this.name,this.options);
-				}else{ //multi select
-					_widget = new Select(this.name,this.options);
-					_widget.options.attributes.multiple=true;
+		setData(data){
+			this._data=data;
+			this.choices.forEach(c=>{
+				if(c.value in this._data){
+					c.attributes.checked="checked";
+				}else{
+					delete c.attributes.checked;
 				}
-			}else{ // radio group
-				if(this.options.extended===true){
-					_widget=new RadioGroup(this.name,this.options);
-				}else{ // select
-					_widget = new Select(this.name,this.options);
-				}
-			}
-			html+=_widget.toHTML();
-			return html;
+			});
 		}
-		/**
-		 * an JSON representation of the widget
-		 * @return {Object}
-		 */
-		toJSON(){
-			var json:any = super.toJSON();
-			json.choices = this.options.choices.map(choice=>choice.toJSON());
-			return json;
+		getData(){
+			return this.choices.filter(c=>c.attributes.checked)
 		}
 	}
 }
@@ -231,8 +270,10 @@ module form{
 	export class WidgetLoader implements IWidgetLoader{
 		getWidget(type:string,name:string,options):widget.Base{
 			switch(type){
-				case "choices":
-					return new widget.Choices(name,options);
+				case "checkboxgroup":
+					return new widget.CheckboxGroup(name,options);
+				case "radiogroup":
+					return new widget.RadioGroup(name,options);
 				case "select":
 					return new widget.Select(name,options);
 				case "button":
@@ -245,6 +286,7 @@ module form{
 		}
 	}
 	export class FormBuilder{
+		_model:any;
 		widgets:Array<widget.Base>=[];
 		widgetLoaders:Array<IWidgetLoader>=[];
 		name:string;
@@ -269,20 +311,36 @@ module form{
 			}
 			return this;
 		}
-		toHTML(){
-			return this.widgets.map((w)=>w.toHTML()).join("\n");
+		toHTML(iterator){
+			if(_.isUndefined(iterator)){
+				iterator=(w)=>w.toHTML()
+			}
+			return this.widgets.map(iterator).join("\n");
 		}
 		toJSON(){
 			return this.widgets.map((w)=>w.toJSON());
 		}	
-		bindRequest(){
-
-		}
-		setData(){
-
+		setModel(value){this._model=value;}
+		getModel(){return this._model;}
+		/**
+		 * @chainable
+		 * @param {Object} data
+		 */
+		setData(data){
+			var widget,key;
+			for(key in data){
+				widget = this.getByName(key);
+				if(widget) widget.setData(data[key]);
+				if(this._model) this._model[key] = data[key];
+			}
 		}
 		getData(){
-
+			var datas={};
+			this.widgets.forEach((w)=>datas[w.name]=w.getData(),{})
+			return datas;
+		}
+		getByName(name):widget.Base{
+			return _.find(this.widgets,(widget)=>widget.name===name);
 		}
 	}
 	export var createFormBuilder=function(){

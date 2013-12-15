@@ -20,9 +20,9 @@ describe('FORM',function(){
 	});
 	describe("form.widget.Text",function(){
 		var text= new forms.widget.Text("address",{'attributes':attributes});
-		text.data = "London";
+		text.setData("London");
 		it('should render properly',function(){
-			expect(text.toHTML()).to.contain(text.data);
+			expect(text.toHTML()).to.contain(text.getData());
 		});
 	});
 	describe("form.widget.Select",function(){
@@ -31,8 +31,7 @@ describe('FORM',function(){
 				required:true
 			};
 			var options = ['London','Paris','Moscow','Zurich'];
-			var select = new forms.widget.Select("towns",{attributes:attrs});
-			select.options.choices = options;
+			var select = new forms.widget.Select("towns",{attributes:attrs,choices:options});
 			var html = select.toHTML();
 			it('should contain a select tag',function(){
 				expect(html).to.contain("select");
@@ -50,13 +49,12 @@ describe('FORM',function(){
 			});
 		});
 		describe('A select widget with a complex data list',function(){
-			var select = new forms.widget.Select('sex',{attributes:{required:'true'}});
 			var options=[
 				{key:"male",value:"m"},
 				{key:'female',value:'f'},
 				{key:'other',value:'o'}
 			];
-			select.options.choices=options;
+			var select = new forms.widget.Select('sex',{choices:options,attributes:{required:'true'}});
 			var html = select.toHTML();
 			var json = select.toJSON();
 			it('should render properly',function(){

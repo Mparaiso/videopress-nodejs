@@ -17,7 +17,7 @@
 test: ./test/*.js
 	@node_modules/.bin/mocha -u tdd
 	@make commit
-run: test
+run: 
 	@node_modules/.bin/node-supervisor -e 'js|less|css|twig' -p 2000 app.js &
 install:
 	@npm install
@@ -30,4 +30,4 @@ commit:
 push: commit
 	@git push origin --all
 
-.PHONY: install
+.PHONY: install run
