@@ -9,4 +9,4 @@ run:
 	@DEBUG=express:* supervisor index.js &
 ct:
 	@./bin/ct.sh &
-.PHONY: run test ct test-rest
+.PHONY: run test ct commit push
