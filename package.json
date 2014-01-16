@@ -1,37 +1,26 @@
 {
-    "name": "mpm.video",
-    "version": "0.0.1",
-    "description": "Users can now mashup videos from several hosts with mpm.video",
-    "main": "index.js",
-    "dependencies": {
-        "mongoose": "~3.8.3",
-        "express": "3.4.7",
-        "jade": "1.0.1",
-        "stylus": "0.41.3",
-        "less-middleware":"~0.1",
-        "request":"~2.3"
-    },
-    "devDependencies": {
-        "mocha": "~1.12.0",
-        "chai": "~1.8.1",
-        "supertest": "0.8.2"
-    },
-    "scripts": {
-        "test": "mocha"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:Mparaiso/mpm.video.git"
-    },
-    "keywords": [
-        "video",
-        "express",
-        "website",
-        "playlists"
-    ],
-    "author": "mparaiso",
-    "license": "LGPL",
-    "bugs": {
-        "url": "https://github.com/Mparaiso/mpm.video/issues"
-    }
+  "name": "silex-video",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "test":"mocha"
+  },
+  "dependencies": {
+    "express": "3.3.1",
+    "jade": "*",
+    "underscore":"*",
+    "mongoose":"3.X",
+    "swig":"1.2.X",
+    "less-middleware":"*",
+    "request":"*",
+    "mpm.duration":"*"
+  },
+  "devDependencies":{
+    "mocha":"*",
+    "chai":"*",
+    "supertest":"*",
+    "supervisor":"*"
+  }
 }
+
