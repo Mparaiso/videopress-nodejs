@@ -3,7 +3,7 @@ test:
 commit:
 	@git add .
 	@git commit -am"autocommit `date`" | : 
-push:
+push: commit
 	@git push origin --all 
 run:
 	@DEBUG=express:* supervisor index.js &
