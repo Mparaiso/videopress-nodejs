@@ -1,7 +1,10 @@
 test:
 	@NODE_ENV=testing mocha  -R spec
-test-debug:
-	@DEBUG=express:* NODE_ENV=testing mocha  -R spec
+commit:
+	@git add .
+	@git commit -am"autocommit `date`" | : 
+push:
+	@git push origin --all 
 run:
 	@DEBUG=express:* supervisor index.js &
 ct:
