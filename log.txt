@@ -1,0 +1,15 @@
+  1 failing
+
+  1) app /api/video.fromUrl should be ok:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Test.assert (C:\Users\mark prades\AppData\Roaming\npm\node_modules\supertest\lib\test.js:145:15)
+      at C:\Users\mark prades\AppData\Roaming\npm\node_modules\supertest\lib\test.js:120:10
+      at Test.Request.callback (C:\Users\mark prades\AppData\Roaming\npm\node_modules\supertest\node_modules\superagent\lib\node\index.js:628:30)
+      at Test.<anonymous> (C:\Users\mark prades\AppData\Roaming\npm\node_modules\supertest\node_modules\superagent\lib\node\index.js:131:10)
+      at Test.EventEmitter.emit (events.js:95:17)
+      at IncomingMessage.<anonymous> (C:\Users\mark prades\AppData\Roaming\npm\node_modules\supertest\node_modules\superagent\lib\node\index.js:773:12)
+      at IncomingMessage.EventEmitter.emit (events.js:117:20)
+      at _stream_readable.js:920:16
+      at process._tickCallback (node.js:415:13)
+
+

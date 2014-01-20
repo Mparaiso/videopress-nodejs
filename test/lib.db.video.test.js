@@ -16,7 +16,7 @@ before(function(done){
 });
 
 describe('db',function(){
-    describe('video',function(){
+    describe('Video',function(){
         beforeEach(function(){
             this.url = "http://www.youtube.com/watch?v=fwyZqyGEPNk";
         });
