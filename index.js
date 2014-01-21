@@ -1,5 +1,3 @@
-// test express
-//@NOTE @NODE @EXPRESS import du module
 "use strict";
 
 var express = require("express"),

@@ -14,12 +14,16 @@
     "swig":"1.2.X",
     "less-middleware":"*",
     "request":"*",
-    "mpm.duration":"*"
+    "mpm.duration":"*",
+    "monolog":"~0.x",
+    "commander":"*"
   },
   "devDependencies":{
     "mocha":"*",
     "chai":"*",
     "supertest":"*",
-    "supervisor":"*"
+    "supervisor":"*",
+    "sinon":"*",
+    "istanbul":"0.2.4"
   }
 }
