@@ -7,6 +7,7 @@
 # cover: test coverage
 # push: push to repository
 # run: run app server on localhost:3000
+# af: push to app fog
 # 
 test:
 	@NODE_ENV=testing mocha  -R list
@@ -17,6 +18,8 @@ commit:
 	@git commit -am"autocommit `date`" | : 
 push: commit
 	@git push origin --all 
+af:
+	af update mpm-video
 run:
-	@DEBUG=express:* NODE_ENV=development supervisor index.js &
+	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  index.js &
 .PHONY: run test ct commit push

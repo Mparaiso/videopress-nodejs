@@ -4,3 +4,6 @@ body {
   color: #222;
   background-color: #FAFAFA;
 }
+ul {
+  list-style: none;
+}

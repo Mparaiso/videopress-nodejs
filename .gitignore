@@ -16,7 +16,7 @@ results
 build
 temp
 node_modules
-
+coverage
 # workspace files are user-specific
 *.sublime-workspace
 

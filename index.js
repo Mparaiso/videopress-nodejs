@@ -10,15 +10,18 @@ var express = require("express"),
     db = require('./lib/db'),
     Video = db.model('Video');
 
-
+/**
+ * app
+ * @type {http.Server}
+ */
 var app = express();
 
+/*
 app.on("error", function(err) {
     if (app.get('logger')) {
         app.get('logger').error(err instanceof Error ? err.stack : err);
     }
 });
-
 app.configure('testing', function() {
     app.use(logger.middleware(app, "testing"));
 });
@@ -44,9 +47,9 @@ app.configure(function() {
     app.locals(config.locals);
 });
 
-/**
- * ROUTES
- */
+//
+// ROUTES
+//
 //create a video record from a video url
 app.post("/api/video.fromUrl", function(req, res, next) {
     Video.fromUrl(req.query.url, function(err, result) {
@@ -64,11 +67,10 @@ app.use("/api/playlist", routes.playlist);
 app.get('/', function(req, res) {
     res.render('index');
 });
+*/
 
+app.get('/',function(req,res){
+    res.end('OK!');
+});
 module.exports = app;
 
-if (!module.parent) {
-    http.createServer(app).listen(app.get('port'), function() {
-        console.log('Express server listening on port ' + app.get('port'));
-    });
-}

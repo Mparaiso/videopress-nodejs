@@ -1,9 +1,8 @@
 {
-  "name": "silex-video",
+  "name": "mpm.video",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js",
     "test":"mocha"
   },
   "dependencies": {
