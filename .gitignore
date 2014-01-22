@@ -9,6 +9,7 @@ temp
 *.out
 *.pid
 *.gz
+manifest.yml
 doc
 pids
 logs

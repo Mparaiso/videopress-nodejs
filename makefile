@@ -19,7 +19,9 @@ commit:
 push: commit
 	@git push origin --all 
 af:
-	af update mpm-video
+	af update --runtime=node10 mpm-video
+af-log:
+	af logs --all mpm-video
 run:
 	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  index.js &
 .PHONY: run test ct commit push
