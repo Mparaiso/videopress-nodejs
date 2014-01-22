@@ -8,4 +8,4 @@ app.use(express.favicon());
 app.get('/', function(req, res) {
 	res.end('OK!');
 });
-app.listen(process.env.VCAP_APP_PORT || 3000);
+app.listen(process.env.VCAP_APP_PORT || process.env.PORT || 3000);

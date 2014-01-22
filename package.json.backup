@@ -7,7 +7,16 @@
     "start":"node server.js"
   },
   "dependencies": {
-    "express": "3.3.X"
+    "express": "3.3.1",
+    "jade": "*",
+    "underscore":"*",
+    "mongoose":"3.X",
+    "swig":"1.2.X",
+    "less-middleware":"*",
+    "request":"*",
+    "mpm.duration":"*",
+    "monolog":"~0.x",
+    "commander":"*"
   },
   "devDependencies":{
     "mocha":"*",
