@@ -19,7 +19,7 @@ commit: compile
 	@git add .
 	@git commit -am"$(message) `date`" | : 
 push: commit
-	@git push origin --all --tags
+	@git push origin master --tags
 run:
 	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  app.js &
 .PHONY: run test ct commit push
