@@ -1,18 +1,17 @@
+/*jslint es5: true, white: true ,plusplus: true,nomen: true, sloppy: true */
 /**
  * command line tool for mpm.video
  * @todo create command playlist:create
  * @todo create command user:create
  */
 "use strict";
-var commander, db, connect, config, fs, exit;
+var commander,container, db, connect, config, fs, exit;
 
 commander = require('commander');
-db = require('./lib/db');
+container = require('./js/container');
+db = container.db;
 fs = require('fs');
-config = require('./lib/config');
-connect = function() {
-	db.connect(config.db.connection_string);
-};
+
 exit = function(code) {
 	if (!module.parent) {
 		process.exit(code);

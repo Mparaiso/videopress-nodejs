@@ -1,13 +1,19 @@
 {
   "name": "mpm.video",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
+  "main":"app.js",
   "scripts": {
     "test":"mocha",
-    "start":"node server.js"
+    "start":"node app.js"
   },
   "dependencies": {
-    "express": "3.3.X"
+    "express": "3.3.x",
+    "pimple":"0.x",
+    "swig":"*",
+    "mpm.express.rest":"0.x",
+    "mpm.duration":"0.x",
+    "monolog":"0.x"
   },
   "devDependencies":{
     "mocha":"*",
@@ -18,6 +24,6 @@
     "istanbul":"0.2.4"
   },
   "engines": {
-    "node": ">=0.10.x"
+    "node": "0.10.x"
   }
 }

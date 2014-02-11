@@ -9,19 +9,17 @@
 # run: run app server on localhost:3000
 # af: push to app fog
 # 
-test:
-	@NODE_ENV=testing mocha  -R list
+test: compile
+	@NODE_ENV=testing mocha  -R spec 
 cover:
 	@NODE_ENV=testing node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- -R spec  
-commit:
+compile: 
+	@coffee -c -m -b -o js coffee
+commit: compile
 	@git add .
-	@git commit -am"autocommit `date`" | : 
+	@git commit -am"$(message) `date`" | : 
 push: commit
-	@git push origin --all 
-af:
-	af update --runtime=node10 mpm-video
-af-log:
-	af logs --all mpm-video
+	@git push origin --all --tags
 run:
-	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  index.js &
+	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  app.js &
 .PHONY: run test ct commit push
