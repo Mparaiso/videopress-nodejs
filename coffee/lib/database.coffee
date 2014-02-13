@@ -7,7 +7,7 @@ YoutubeVideo = parsers.YoutubeVideo
 
 connection = mongoose.connect config.connection_string
 
-connection.set('debug',true)
+connection.set('debug',config.mongoose_debug)
 
 UserSchema = mongoose.Schema(nickname: String)
 

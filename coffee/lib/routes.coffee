@@ -1,6 +1,7 @@
 Rest = require 'mpm.express.rest'
 express = require 'express'
 database = require './database'
+players = require './players'
 Video = database.model('Video')
 Playlist = database.model('Playlist')
 
@@ -32,7 +33,9 @@ routes =
         get:(req,res,next)->
             Video.findOne {_id:req.params.id},(err,video)->
                 if err then res.status(500);next(err) #error
-                else if video then res.render('video',{video})
+                else if video 
+                    player = new players.Youtube(video.originalId)
+                    res.render('video',{video,player:player.render()})
                 else res.status(404);next() #not found
 
 
