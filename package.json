@@ -17,7 +17,8 @@
     "async":"*",
     "source-map-support":"*",
     "mongoose":"*",
-    "underscore":"*"
+    "underscore":"*",
+    "request":"*"
   },
   "devDependencies":{
     "mocha":"*",
