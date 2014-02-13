@@ -14,7 +14,8 @@
     "mpm.express.rest":"0.x",
     "mpm.duration":"0.x",
     "monolog":"0.x",
-    "async":"*"
+    "async":"*",
+    "source-map-support":"*"
   },
   "devDependencies":{
     "mocha":"*",
