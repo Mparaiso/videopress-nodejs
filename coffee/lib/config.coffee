@@ -8,6 +8,7 @@ util = require 'util'
 config = 
 	connection_string : process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
 	youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY
+	port: process.env.PORT
 ###
 	STAGING
 ###

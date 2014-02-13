@@ -13,7 +13,8 @@
     "swig":"*",
     "mpm.express.rest":"0.x",
     "mpm.duration":"0.x",
-    "monolog":"0.x"
+    "monolog":"0.x",
+    "async":"*"
   },
   "devDependencies":{
     "mocha":"*",
@@ -21,8 +22,7 @@
     "supertest":"*",
     "supervisor":"*",
     "sinon":"*",
-    "istanbul":"0.2.4",
-    "async"
+    "istanbul":"0.2.4"
   },
   "engines": {
     "node": "0.10.x"
