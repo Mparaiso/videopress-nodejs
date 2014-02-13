@@ -4,13 +4,12 @@
 # 
 # test: test
 # commit: commit to repository
-# cover: test coverage
+# compile: build project
 # push: push to repository
 # run: run app server on localhost:3000
-# af: push to app fog
-# 
+# @DEBUG=express:* 
 test: compile
-	@NODE_ENV=testing mocha  -R spec 
+	@NODE_ENV=testing mocha -R spec 
 cover:
 	@NODE_ENV=testing node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- -R spec  
 compile: 
@@ -20,6 +19,6 @@ commit: compile
 	@git commit -am"$(message) `date`" | : 
 push: commit
 	@git push origin master --tags
-run:
-	@DEBUG=express:* NODE_ENV=development supervisor -i public/*  app.js &
-.PHONY: run test ct commit push
+run: compile
+	NODE_ENV=development supervisor -w 'js,views' -e 'less|js|html' app.js &
+.PHONY: run test commit push compile

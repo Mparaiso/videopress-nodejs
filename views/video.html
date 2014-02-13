@@ -1,11 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<!-- <h1>{{title}}</h1> -->
-{% for page in paginate(videos,6) %}
 <section class="row">
-	{%for video in page %}
 	<article class="col-md-2 video">
-		<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
+		<img src="{{video.thumbnail}}" alt="{{video.title}}">
 		<div class="info">
 			<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
 			<br>
@@ -13,7 +10,5 @@
 		</div>
 		<div>&nbsp;</div>
 	</article>
-	{% endfor %}
 </section>
-{% endfor %}
 {% endblock %}

@@ -127,20 +127,34 @@ parsers.BaseVideo = (function() {
 parsers.YoutubeVideo = (function(_super) {
   __extends(YoutubeVideo, _super);
 
+
+  /*
+   * @param  {String} apikey Youtube api key
+   */
+
   function YoutubeVideo(apikey) {
     YoutubeVideo.__super__.constructor.call(this, "youtube");
-    this.regexp = /((http|https):\/\/)?(www\.)?youtube\.com\/watch\?v=(\w+)/;
+    this.regexp = /((http|https):\/\/)?(www\.)?youtube\.com\/watch\?v=([a-z A-Z 0-9 \- _]+)/;
     this.setApiKey(apikey);
   }
+
+
+  /*get api key */
 
   YoutubeVideo.prototype.getApiKey = function() {
     return this._apiKey;
   };
 
+
+  /*set api key */
+
   YoutubeVideo.prototype.setApiKey = function(_apiKey) {
     this._apiKey = _apiKey;
     return this;
   };
+
+
+  /*extract id from url */
 
   YoutubeVideo.prototype.getIdFromUrl = function(url) {
     var match;
@@ -150,19 +164,31 @@ parsers.YoutubeVideo = (function(_super) {
     }
   };
 
+
+  /*can url  be handled by parser */
+
   YoutubeVideo.prototype.isValidUrl = function(url) {
     return this.regexp.test(url);
   };
 
+
+  /*get api url */
+
   YoutubeVideo.prototype.getApiUrl = function(videoId, apiKey) {
     return "https://www.googleapis.com/youtube/v3/videos?id=" + videoId + "&part=snippet,contentDetails&key=" + apiKey;
   };
+
+
+  /*get videodata from url */
 
   YoutubeVideo.prototype.getVideoDataFromUrl = function(url, callback) {
     var id;
     id = this.getIdFromUrl(url);
     return this.getVideoDataFromId(id, callback);
   };
+
+
+  /*get videodata from id */
 
   YoutubeVideo.prototype.getVideoDataFromId = function(id, callback) {
     var options;
@@ -179,8 +205,8 @@ parsers.YoutubeVideo = (function(_super) {
         return callback(err, new parsers.VideoData({
           title: item.snippet.title,
           description: item.snippet.description,
-          thumbnail: item.snippet.thumbnails["default"].url,
-          _duration: duration.parse(item.contentDetails.duration),
+          thumbnail: item.snippet.thumbnails.medium.url,
+          duration: duration.parse(item.contentDetails.duration),
           publishedAt: new Date(item.snippet.publishedAt),
           originalId: item.id,
           provider: "youtube",

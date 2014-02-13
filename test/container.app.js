@@ -38,3 +38,23 @@ describe('app', function() {
 			.end(done);
 	});
 });
+describe('app.locals', function() {
+	describe('#paginate', function() {
+		[
+			{
+				array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+				length: 3,
+				expected: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]
+			},
+			{
+				array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+				length: 6,
+				expected: [[1, 2, 3, 4, 5, 6], [7, 8, 9, 10]]
+			}
+		].forEach(function(data) {
+			it('should return '+JSON.stringify(data.expected), function() {
+				assert.deepEqual(app.locals.paginate(data.array, data.length), data.expected);
+			});
+		});
+	});
+});

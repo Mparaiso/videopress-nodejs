@@ -1,9 +1,22 @@
-body {
-  font-size: 100%;
-  font-family: sans-serif;
-  color: #222;
-  background-color: #FAFAFA;
+*{
+	border-radius: 0 !important;
 }
-ul {
-  list-style: none;
+body{
+	font-family: "PT sans",sans-serif;
+}
+.video{
+	word-break:break-all;
+}
+.video img{
+	vertical-align: top;
+}
+.video .owner{
+	font-size: 0.8em;
+	color:gray;
+}
+.video .info{
+	display: inline-block;
+}
+.video .thumb{
+	width:165px;
 }

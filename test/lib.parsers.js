@@ -10,20 +10,24 @@ var assert = require('assert'),
 
 describe("YoutubeVideo", function() {
     var youtube_url = 'http://www.youtube.com/watch?v=7lCDEYXw3mM',
-        youtube_video_id = '7lCDEYXw3mM';
-
+        youtube_video_id = '7lCDEYXw3mM',
+        youtubeUrls = ['http://www.youtube.com/watch?v=rFxcsgVwmTM',
+            'http://www.youtube.com/watch?v=7lCDEYXw3mM',
+            "http://www.youtube.com/watch?v=F3wpq-i150c",
+            "http://www.youtube.com/watch?v=-0YGTX-26WE"
+        ];
     beforeEach(function() {
         this.YoutubeVideo = new YoutubeVideo(youtube_api_key);
-        this.youtubeUrls = ['http://www.youtube.com/watch?v=rFxcsgVwmTM', 'http://www.youtube.com/watch?v=7lCDEYXw3mM'];
+
     });
 
     it('has an api key', function() {
         assert(this.YoutubeVideo.getApiKey());
     });
-    it('should validate url', function() {
-        this.youtubeUrls.forEach(function(url) {
+    youtubeUrls.forEach(function(url) {
+        it('should validate url : ' + url, function() {
             assert(this.YoutubeVideo.isValidUrl(url), url + " should be a valid url");
-        }, this);
+        });
     });
     it('should find youtube video datas', function(done) {
         this.YoutubeVideo.parse(youtube_url, function(err, result) {

@@ -6,6 +6,7 @@ _ = require('underscore')
 https = require('https')
 request = require('request')
 parsers =  exports
+
 ###
  * VideoData
  * @param {String|Object} title | params : title or a param object with all constructor params
@@ -29,6 +30,7 @@ class parsers.VideoData
         @originalId = params.originalId
         @provider = params.provider
         @meta = params.meta
+
 ###
  * Provide access to a website video apiUrl
  * @constructor
@@ -72,21 +74,31 @@ class parsers.BaseVideo
  * @param {string} apikey
 ###
 class parsers.YoutubeVideo extends parsers.BaseVideo
+    ###
+    # @param  {String} apikey Youtube api key
+    ###
     constructor: (apikey)->
         super("youtube")
-        @regexp = /((http|https):\/\/)?(www\.)?youtube\.com\/watch\?v=(\w+)/
+        @regexp = /((http|https):\/\/)?(www\.)?youtube\.com\/watch\?v=([a-z A-Z 0-9 \- _]+)/
         @setApiKey(apikey)
+    ###get api key###
     getApiKey:->this._apiKey
+    ###set api key###
     setApiKey:(@_apiKey)->this
+    ###extract id from url ###
     getIdFromUrl:(url)->
         if this.isValidUrl(url)
             match = url.match(this.regexp)
             match[match.length - 1]
+    ###can url  be handled by parser###
     isValidUrl:(url)->this.regexp.test(url)
+    ###get api url###
     getApiUrl:(videoId, apiKey)->"https://www.googleapis.com/youtube/v3/videos?id=#{videoId}&part=snippet,contentDetails&key=#{apiKey}"
+    ###get videodata from url###
     getVideoDataFromUrl:(url, callback)->
         id = this.getIdFromUrl(url)
         @getVideoDataFromId(id,callback)
+    ###get videodata from id###
     getVideoDataFromId:(id, callback)->
         options = 
             url: this.getApiUrl(id, this.getApiKey())
@@ -99,8 +111,8 @@ class parsers.YoutubeVideo extends parsers.BaseVideo
                 callback err,new parsers.VideoData 
                     title : item.snippet.title
                     description : item.snippet.description
-                    thumbnail : item.snippet.thumbnails.default.url
-                    _duration : duration.parse(item.contentDetails.duration)
+                    thumbnail : item.snippet.thumbnails.medium.url
+                    duration : duration.parse(item.contentDetails.duration)
                     publishedAt : new Date(item.snippet.publishedAt)
                     originalId : item.id
                     provider : "youtube"

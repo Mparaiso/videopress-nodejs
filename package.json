@@ -21,7 +21,8 @@
     "supertest":"*",
     "supervisor":"*",
     "sinon":"*",
-    "istanbul":"0.2.4"
+    "istanbul":"0.2.4",
+    "async"
   },
   "engines": {
     "node": "0.10.x"

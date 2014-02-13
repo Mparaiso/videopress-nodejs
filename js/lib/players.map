@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "players.js",
+  "sourceRoot": "..\\..",
+  "sources": [
+    "coffee\\lib\\players.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAsH+B"
+}

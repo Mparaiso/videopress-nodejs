@@ -1,13 +1,14 @@
 "use strict"
 
-Rest = require 'mpm.express.rest'
 express = require 'express'
 Pimple = require 'pimple'
 swig = require 'swig' 
-mongoose = require 'mongoose'
-mongolog = require 'monolog'
+monolog = require 'monolog'
 util = require 'util'
-YoutubeVideo = require('./lib/parsers').YoutubeVideo
+database = require './lib/database'
+routes = require './lib/routes'
+path = require 'path'
+CONFIG_PATH = path.join __dirname,"..","config"
 
 container = new Pimple
     port: process.env.PORT || 3000
@@ -17,102 +18,104 @@ container = new Pimple
 
 container.set "app",container.share ->
     app = express()
-
+    
     app.configure ->
-        app.use(express.json())
-        app.engine('html',swig.renderFile)
+        app.engine('html',container.swig.renderFile)
         app.set('view engine','html')
         app.locals(container.locals)
+        app.use(express.static(path.join(__dirname,"..","public")))
+        app.use(express.json())
+        app.use(express.favicon())
+        app.disable("verbose errors")
 
     app.configure 'development',->
-        app.use(express.logger())
+        app.use(express.logger("dev"))
         app.use(container.logger.middleware(app))
+        app.enable('verbose errors')
 
     app.configure 'testing',->
         container.set 'connection_string',process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING_TEST
-    app.use('/api/video',container.routes.videoApi)
-    app.post('/api/video.fromUrl',container.routes.fromUrl)
-    app.use('/api/playlist',container.routes.playlistApi)
-    app.get('/',container.routes.index)
+
+    ###
+    route map mixin
+    mount routes with a single object
+    @param routes
+    @param prefix
+    ###
+    app.map = (routes, prefix="")->
+        for key,value of routes 
+            switch typeof value
+                when "object" 
+                    if (value instanceof Array and value.every (r)-> r instanceof Function) #value is an array of functions
+                        value.unshift(prefix)
+                        this[key](value...)
+                    else this.map(value, prefix + key) #value is a hash of value definitions
+                when "function"
+                    this[key]([prefix,value]...) # value is a controller , key is a verb or use
+        return this
+    ###
+        basic caching
+    ###
+    app.use (req,res,next)->
+        if req.method is "GET"
+            res.header('Cache-Control',"max-age=#{120}")
+            res.header('X-Powered-By','mparaiso mparaiso@online.fr')
+        next()
+
+    app.map container.routes
+
+    ### 
+        error handlers 
+        @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
+    ###
+    app.use (req,res,next)->
+        res.status(404)
+        res.render('404',{code:res.statusCode})
+    app.use (err,req,res,next)->
+        res.status(err.status||500)
+        res.render('500')
+
+    return app
 
 container.set "locals",container.share ->
     title:"mpm.video"
+    paginate:(array,length,start=0)->
+        divisions = Math.ceil(array.length/length)
+        [start...divisions].map (i)->
+            array.slice(i*length,i*length+length)
+        
+###
+    TEMPLATE
+###
+container.set "swig",container.share ->
+    swig.setDefaults {cache:'memory'}
+    return swig
 
+    
+###
+    CONFIG
+###
+container.set "config", container.share -> require CONFIG_PATH
 ###
     ROUTING
 ###
-container.set "routes", container.share -> 
-    routes = 
-        videoApi : do ->
-            controller = new Rest.Controller(express())
-            controller.setAdapter(new Rest.adapter.MongooseAdapter(container.Video))
-            controller.handle()
-        playlistApi: do ->
-            controller = new Rest.Controller(express())
-            controller.setAdapter(new Rest.adapter.MongooseAdapter(container.Playlist))
-            controller.handle()
-        fromUrl:(req,res,next)->
-            url = req.query.url
-            if not url then  res.json(500,{error:"url query parameter not found"})
-            else container.Video.fromUrl url,(err,result)->
-                if err then res.json(500,{error:"video for url #{url} not found"}) 
-                else res.json(result)
-        index:(req,res)-> #default page
-            res.end(container.app.locals.title)
+container.set "routes", container.share -> routes
 
 ###
     DATABASE
 ###
 container.set "db", container.share ->
-    mongoose.set("debug",container.debug)
-    mongoose.connect(container.connection_string)
-    return mongoose
-
-container.set "UserSchema", container.share ->
-    container.db.Schema(nickname: String)
+    database.set("debug",container.debug)
+    return database
 
 container.set "User",container.share ->
-    container.db.model('User', container.UserSchema)
-
-container.set "VideoSchema",container.share ->
-    VideoSchema = container.db.Schema
-        url: {type: String},
-        owner: {type: container.db.Schema.Types.ObjectId, ref: 'User'},
-        title: String,
-        description: String,
-        duration: Object,
-        publishedAt: { type: Date, default: Date.now},
-        originalId: String,
-        provider: String,
-        thumbnail: String,
-        meta: Object
-
-    ### create video from video url ###
-    VideoSchema.statics.fromUrl = (url, callback)->
-        youtubeVideo = new YoutubeVideo(process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY)
-        if youtubeVideo.isValidUrl(url)
-            youtubeVideo.getVideoDataFromUrl url, (err, res)->
-                if err
-                    return callback(new Error(util.format("Video with url %s not found", url)))
-        
-                video = new container.Video(res)
-                video.save(callback)
-        else
-            callback(new Error(util.format("Video with url %s not found", url)))
-
-    return VideoSchema
+    container.db.model('User')
 
 container.set "Video",container.share ->
-    container.db.model('Video', container.VideoSchema)
-
-container.set "PlaylistSchema",container.share ->
-    container.db.Schema
-        title: String,
-        description: String,
-        videos: [container.VideoSchema]
+    container.db.model('Video')
 
 container.set "Playlist",container.share ->
-    container.db.model('Playlist', container.PlaylistSchema)
+    container.db.model('Playlist')
 
 ###
     LOGGER
@@ -124,7 +127,7 @@ container.set "logger",container.share ->
         logger.addProcessor(new monolog.processor.ExpressProcessor(app))
         app.set('logger', logger)
         F =  (req, res, next)->
-            logger.debug(message)
+            logger.debug("#{message} #{req.method} #{req.path}")
             next()
         F.logger = logger
         return F
