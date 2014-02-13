@@ -21,4 +21,6 @@ push: commit
 	@git push origin master --tags
 run: compile
 	NODE_ENV=development supervisor -w 'js,views' -e 'less|js|html' app.js &
-.PHONY: run test commit push compile
+deploy: test commit
+	@git push heroku master
+.PHONY: run test commit push compile deploy
