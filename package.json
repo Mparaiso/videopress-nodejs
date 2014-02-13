@@ -16,7 +16,8 @@
     "monolog":"0.x",
     "async":"*",
     "source-map-support":"*",
-    "mongoose":"*"
+    "mongoose":"*",
+    "underscore":"*"
   },
   "devDependencies":{
     "mocha":"*",
