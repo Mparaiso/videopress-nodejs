@@ -15,7 +15,8 @@
     "mpm.duration":"0.x",
     "monolog":"0.x",
     "async":"*",
-    "source-map-support":"*"
+    "source-map-support":"*",
+    "mongoose":"*"
   },
   "devDependencies":{
     "mocha":"*",
