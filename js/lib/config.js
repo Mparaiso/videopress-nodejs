@@ -13,7 +13,8 @@ config = {
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   port: process.env.PORT,
-  mongoose_debug: false
+  mongoose_debug: false,
+  session_secret: process.env.SESSION_SECRET
 };
 
 

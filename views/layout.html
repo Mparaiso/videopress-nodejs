@@ -3,7 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{{title}}</title>
-	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+	<!--bootstrap-->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="/stylesheets/styles.css">
 	<!-- fonts -->
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -23,13 +25,12 @@
 				<a class="navbar-brand" href="/">{{title}}</a>
 			</div>
 			<div class="navbar-collapse collapse">
-				<form class="navbar-form navbar-right" role="form">
-					<button type="submit" class="btn btn-info">Sign in</button>
-				</form>
 				<ul class="navbar-nav nav navbar-right">
 					<li class="active"><a href="#">Home</a></li>
 					<li><a href="#about">About</a></li>
 					<li><a href="#contact">Contact</a></li>
+					<li><a href="/signin">Sign in</a></li>
+					<li><a href="/signup">Sign up</a></li>
 				</ul>
 				<form class="navbar-form navbar-right" role="form">
 					<div class="form-group">
@@ -45,8 +46,10 @@
 	</div>
 	<footer class="container">
 		{% block footer %}
-			{% include 'footer.html' %}
+		{% include 'footer.html' %}
 		{% endblock %}
 	</footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
 </html>

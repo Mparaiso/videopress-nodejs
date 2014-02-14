@@ -9,8 +9,8 @@ Express-video is a cms allowing users to create playlists from various video web
 
 #### API 
 
-	GET    /
-	GET    /video : list videos
+	GET    / : homepage
+	GET    /video : display a video
 	GET    /video?q=search%20terms
 	GET    /video/new : new video form
 	POST   /video/new : post new video

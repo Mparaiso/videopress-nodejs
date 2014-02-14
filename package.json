@@ -18,7 +18,14 @@
     "source-map-support":"*",
     "mongoose":"*",
     "underscore":"*",
-    "request":"*"
+    "request":"*",
+    "passport":"0.1.x",
+    "passport-local":"0.1.x",
+    "passport-facebook":"1.x",
+    "passport-twitter":"1.x",
+    "passport-google-oauth":"0.1.x",
+    "connect-flash":"0.1.x",
+    "bcrypt-nodejs":"*"
   },
   "devDependencies":{
     "mocha":"*",

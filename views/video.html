@@ -11,5 +11,18 @@
 		</div>
 		<div>&nbsp;</div>
 	</article>
+	<aside class="col-md-4">
+		{% for video in videos %}
+		<div class='row'>
+			<div class="col-md-6">
+				<a href="/video/{{video.id}}">
+					<img width="100%" class="thumbnail" src="{{video.thumbnail}}" alt="{{video.title}}"/>
+				</a>
+			</div>
+			<div class="col-md-6">{{video.title}}</div>
+			<div>&nbsp;</div>
+		</div>
+		{% endfor %}
+	</aside>
 </section>
 {% endblock %}

@@ -1,4 +1,5 @@
 "use strict";
+require('source-map-support').install();
 var app, container;
 container = require('./js/container');
 module.exports = app = container.app;

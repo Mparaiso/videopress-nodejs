@@ -16,20 +16,13 @@ parsers =  exports
  * @param {String} publishedAt
  * @param {String} originalId
  * @param {String} provider
+ * @param {Number} categoryId
  * @param {String} meta
 ###
 class parsers.VideoData
- constructor:(@title, @description, @thumbnail, @duration, @publishedAt, @originalId, @provider, @meta)->
+ constructor:(@title, @description, @thumbnail, @duration, @publishedAt, @originalId, @provider,@categoryId, @meta)->
     if typeof @title == 'object'
-        params = @title
-        @title = params.title
-        @description = params.description
-        @thumbnail = params.thumbnail
-        @duration = params.duration
-        @publishedAt = params.publishedAt
-        @originalId = params.originalId
-        @provider = params.provider
-        @meta = params.meta
+        {@title,@description,@thumbnail,@duration,@publishedAt,@originalId,@categoryId,@provider,@meta}=@title
 
 ###
  * Provide access to a website video apiUrl
@@ -115,6 +108,7 @@ class parsers.YoutubeVideo extends parsers.BaseVideo
                     duration : duration.parse(item.contentDetails.duration)
                     publishedAt : new Date(item.snippet.publishedAt)
                     originalId : item.id
+                    categoryId: item.snippet.categoryId
                     provider : "youtube"
                     meta : item
 

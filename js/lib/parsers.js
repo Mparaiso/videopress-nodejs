@@ -28,12 +28,13 @@ parsers = exports;
  * @param {String} publishedAt
  * @param {String} originalId
  * @param {String} provider
+ * @param {Number} categoryId
  * @param {String} meta
  */
 
 parsers.VideoData = (function() {
-  function VideoData(title, description, thumbnail, duration, publishedAt, originalId, provider, meta) {
-    var params;
+  function VideoData(title, description, thumbnail, duration, publishedAt, originalId, provider, categoryId, meta) {
+    var _ref;
     this.title = title;
     this.description = description;
     this.thumbnail = thumbnail;
@@ -41,17 +42,10 @@ parsers.VideoData = (function() {
     this.publishedAt = publishedAt;
     this.originalId = originalId;
     this.provider = provider;
+    this.categoryId = categoryId;
     this.meta = meta;
     if (typeof this.title === 'object') {
-      params = this.title;
-      this.title = params.title;
-      this.description = params.description;
-      this.thumbnail = params.thumbnail;
-      this.duration = params.duration;
-      this.publishedAt = params.publishedAt;
-      this.originalId = params.originalId;
-      this.provider = params.provider;
-      this.meta = params.meta;
+      _ref = this.title, this.title = _ref.title, this.description = _ref.description, this.thumbnail = _ref.thumbnail, this.duration = _ref.duration, this.publishedAt = _ref.publishedAt, this.originalId = _ref.originalId, this.categoryId = _ref.categoryId, this.provider = _ref.provider, this.meta = _ref.meta;
     }
   }
 
@@ -209,6 +203,7 @@ parsers.YoutubeVideo = (function(_super) {
           duration: duration.parse(item.contentDetails.duration),
           publishedAt: new Date(item.snippet.publishedAt),
           originalId: item.id,
+          categoryId: item.snippet.categoryId,
           provider: "youtube",
           meta: item
         }));

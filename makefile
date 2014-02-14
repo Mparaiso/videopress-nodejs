@@ -14,6 +14,8 @@ cover:
 	@NODE_ENV=testing node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- -R spec  
 compile: 
 	@coffee -c -m -b -o js coffee
+compile-watch:
+	@coffee -c -m -b -w -o js coffee &
 commit: compile
 	@git add .
 	@git commit -am"$(message) `date`" | : 
