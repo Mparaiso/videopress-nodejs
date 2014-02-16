@@ -9,7 +9,7 @@
 # run: run app server on localhost:3000
 # @DEBUG=express:* 
 test: compile
-	@NODE_ENV=testing mocha -R spec 
+	@NODE_ENV=testing mocha -R spec $(extra)
 cover:
 	@NODE_ENV=testing node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- -R spec  
 compile: 
@@ -22,7 +22,7 @@ commit: compile
 push: commit
 	@git push origin master --tags
 run: compile
-	NODE_ENV=development supervisor -w 'js,views' -e 'less|js|html' app.js &
+	NODE_ENV=development supervisor -w 'js,views' -e 'less|js|html|twig' app.js &
 deploy: test commit
 	@git push heroku master
 .PHONY: run test commit push compile deploy

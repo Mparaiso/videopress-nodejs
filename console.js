@@ -41,7 +41,7 @@ commander
 	.command('video:create [video]')
 	.description('create a video')
 	.option('-u, --from-url <url>', 'create a video from a videosite url')
-	.option('-d, --from-file <file>', 'create a video from a json file')
+	.option('-f, --from-file <file>', 'create a video from a json file')
 	.action(function(video, options) {
 		var Video, json;
 		Video = container.db.models.Video;

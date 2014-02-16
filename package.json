@@ -25,7 +25,8 @@
     "passport-twitter":"1.x",
     "passport-google-oauth":"0.1.x",
     "connect-flash":"0.1.x",
-    "bcrypt-nodejs":"*"
+    "bcrypt-nodejs":"*",
+    "mpm.form":"0.x"
   },
   "devDependencies":{
     "mocha":"*",
