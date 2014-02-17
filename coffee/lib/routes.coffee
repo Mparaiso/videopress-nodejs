@@ -7,10 +7,13 @@ Playlist = database.model('Playlist')
 async = require 'async'
 forms = require "./forms"
 csrf = express.csrf()
-### SOME MIDDLEWARES ###
 
+routes = exports
+
+### SOME MIDDLEWARES ###
+user = (req,res,next)-> res.locals.user = req.user ; next()
 ### route middleware to check user status ###
-isLoggedIn= (req,res,next)->
+isLoggedIn = (req,res,next)->
     if req.isAuthenticated() then do next else res.redirect('/login')
 
 cache = (req, res, next)-> # basic caching
@@ -18,31 +21,47 @@ cache = (req, res, next)-> # basic caching
         res.header('Cache-Control', "max-age=#{120}")
         res.header('X-Powered-By', 'mparaiso mparaiso@online.fr')
     next()
+
+validateSignupForm = (req,res,next)->
+    form = forms.SignUp(req.csrfToken())
+    form.bind(req.body)
+    if form.validateSync()
+        console.log('form is valid')
+        req.body.password = req.body.password[0]
+        next()
+    else
+        console.log('form is not valid')
+        res.render('signup',{form:form})
+#set flash local variable
+flash = (req,res,next)->
+    res.locals.flash = req.flash()
+    next()
+
 ###
  A map of routes
 ###
-routes = 
-    "/api":
-        ### video api ###
-        "/video":
-            use: do ->
-                controller = new Rest.Controller(express())
-                controller.setAdapter(new Rest.adapter.MongooseAdapter(Video))
-                controller.handle()
-            ### create resource from url ###
-            ".fromUrl":
-                post:(req,res,next)->
-                    url = req.query.url
-                    if not url then  res.json(500,{error:"url query parameter not found"})
-                    else Video.fromUrl url,(err,result)->
-                        if err then res.json(500,{error:"video for url #{url} not found"}) 
-                        else res.json(result)
-        ### playlist api ###
-        "/playlist":
-            use: do ->
-                controller = new Rest.Controller(express())
-                controller.setAdapter(new Rest.adapter.MongooseAdapter(Playlist))
-                controller.handle()
+routes._getMap = ->
+    use:[user,flash],
+    #video api
+    "/api/video":
+        use: do ->
+            controller = new Rest.Controller(express())
+            controller.setAdapter(new Rest.adapter.MongooseAdapter(Video))
+            controller.handle()
+    #create resource from url
+    "/api/video.fromUrl":
+        post:(req,res,next)->
+            url = req.query.url
+            if not url then  res.json(500,{error:"url query parameter not found"})
+            else Video.fromUrl url,(err,result)->
+                if err then res.json(500,{error:"video for url #{url} not found"}) 
+                else res.json(result)
+    #playlist api 
+    "/api/playlist":
+        use: do ->
+            controller = new Rest.Controller(express())
+            controller.setAdapter(new Rest.adapter.MongooseAdapter(Playlist))
+            controller.handle()
     ### index page ###
     "/": 
         get:[cache,(req,res,next)-> #default page
@@ -64,31 +83,42 @@ routes =
                     res.render('video',{video:result.video,videos:result.videos,player:player.render()})
                 else
                     res.status(404)
-                    next()] #not found
+                    next()]
+    #user accounts
     "/login":
-        get:(req,res)->
-            res.render('login',{message:req.flash('loginMessage')})
+        get:[csrf,(req,res,next)->
+            form = forms.Login(req.csrfToken())
+            res.render('login',{form:form})]
+        post:this.passport.authenticate('local-login',{
+            successRedirect:'/profile',
+            failureRedirect:'/login',
+            failureFlash:true
+            })
     "/signup":
-        all:[csrf,(req,res)->
+        get:[csrf,(req,res)->
             _csrf = req.csrfToken()
             form = forms.SignUp(_csrf)
-            if req.method=="POST"
-                form.bind(req.body)
-                form.validate (err,isValid)->
-                    if isValid then console.log('form is valid')
-            res.render('signup',{form:form,message:req.flash('signupMessage')})]
+            res.render('signup',{form:form})]
+        post:[csrf,validateSignupForm,@passport.authenticate('local-signup',{
+            successRedirect:'/profile',
+            failureRedirect:'/signup',
+            failureFlash:true
+        })]
     "/profile":
-        get: [isLoggedIn,(req,res)->res.render('profile',{user:req.user})]
+        get: [isLoggedIn,(req,res)->res.render('profile')]
+    #erase user credentials
     "/logout":
         get:(req,res)-> req.logout() ; res.redirect('/')
 
 
+Object.defineProperty routes,'map',
+    get:->this._getMap()
+
+Object.defineProperty routes,'passport',
+    get:->this._passport
+    set:(p)->this._passport=p
 
 
 
 
-            
-
-
-module.exports = routes
 

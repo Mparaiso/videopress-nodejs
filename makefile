@@ -21,8 +21,8 @@ commit: compile
 	@git commit -am"$(message) `date`" | : 
 push: commit
 	@git push origin master --tags
-run: compile
-	NODE_ENV=development supervisor -w 'js,views' -e 'less|js|html|twig' app.js &
+run:
+	NODE_ENV=development supervisor -w 'js,coffee,views' -e 'coffee|less|js|html|twig' app.js &
 deploy: test commit
 	@git push heroku master
 .PHONY: run test commit push compile deploy

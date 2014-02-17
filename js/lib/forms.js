@@ -11,7 +11,7 @@ forms = exports;
  */
 
 forms.SignUp = function(csrf) {
-  return form.create('sign-up').add('username', "text", {
+  return form.create('sign_up').add('username', "text", {
     validators: form.validation.Required(),
     attributes: {
       "class": 'form-control',
@@ -30,12 +30,40 @@ forms.SignUp = function(csrf) {
       required: true
     }
   }).add('_csrf', 'hidden', {
-    "default": csrf,
+    'default': csrf,
     attributes: {
       id: "_csrf"
     }
   }).add('submit', 'submit', {
-    "default": "submit"
+    'default': "Sign Up"
+  });
+};
+
+
+/*
+    Login Form
+ */
+
+forms.Login = function(csrf) {
+  return form.create('login').add('email', 'text', {
+    validators: form.validation.Required(),
+    attributes: {
+      "class": 'form-control',
+      required: true
+    }
+  }).add('password', 'password', {
+    validators: form.validation.Required(),
+    attributes: {
+      "class": 'form-control',
+      required: true
+    }
+  }).add('login', 'submit', {
+    'default': "Login"
+  }).add('_csrf', 'hidden', {
+    'default': csrf,
+    attributes: {
+      id: '_csrf'
+    }
   });
 };
 

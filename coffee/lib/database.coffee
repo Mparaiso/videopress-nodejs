@@ -1,16 +1,53 @@
+"use strict"
+
 mongoose = require 'mongoose'
 parsers = require './parsers'
 util = require 'util'
 config = require './config'
 async = require 'async'
+bcrypt = require 'bcrypt-nodejs'
 
 YoutubeVideo = parsers.YoutubeVideo
 
-connection = mongoose.connect config.connection_string
+SessionSchema = mongoose.Schema
+    sid:String
+    session:Object
 
-connection.set('debug',config.mongoose_debug)
+Session = mongoose.model('Session',SessionSchema)
 
-UserSchema = mongoose.Schema(nickname: String)
+# define the user schema
+UserSchema = mongoose.Schema
+    roles:{type:Array,default:['user']}
+    username:String
+    isAccountNonExpired:{type:Boolean,default:true}
+    isEnabled:{type:Boolean:default:true}
+    isCredentialsNonExpired:{type:Boolean,default:true}
+    isAccountNonLocked:{type:Boolean,default:true}
+    local:
+        email:String
+        password:String
+    facebook:
+        id:String
+        token:String
+        email:String
+        name:String
+    twitter:
+        id:String
+        token:String
+        displayName:String
+        username:String
+    google:
+        id:String
+        token:String
+        email:String
+        name:String
+
+### Hash generation ###
+UserSchema.methods.generateHash = (password)->
+    bcrypt.hashSync(password,bcrypt.genSaltSync(8),null)
+### check password ###
+UserSchema.methods.validPassword = (password)->
+    bcrypt.compareSync(password,this.local.password)
 
 User = mongoose.model('User', UserSchema)
 
@@ -21,9 +58,9 @@ VideoSchema = mongoose.Schema
     description: String,
     categoryId:Number,
     duration: Object,
-    created_at:{type:Date,default:Date.now},
-    updated_at:{type:Date,default:Date.now},
-    publishedAt: { type: Date, default: Date.now},
+    created_at:{type:Date,'default':Date.now},
+    updated_at:{type:Date,'default':Date.now},
+    publishedAt: { type: Date, 'default': Date.now},
     originalId: String,
     provider: String,
     thumbnail: String,

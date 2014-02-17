@@ -12,6 +12,8 @@ passport = require 'passport'
 flash = require 'connect-flash'
 config = require './lib/config'
 forms = require './lib/forms'
+events = require 'events'
+sessionStores = require './lib/session-stores'
 
 container = pimple
     port: process.env.PORT || 3000
@@ -22,11 +24,11 @@ container = pimple
 container.set "app", container.share ->
     app = express()
     app.configure ->
-        app.engine('twig', renderFile = container.swig.renderFile)
+        app.engine('twig',container.swig.renderFile)
         app.set('view engine', 'twig')
         app.locals(container.locals)
         app.use(express.cookieParser("secret sentence"))
-        app.use(express.session())
+        app.use(express.session({store:container.sessionStore}))
         app.use(flash())
         app.use(express.bodyParser())
         app.use(container.passport.initialize())
@@ -34,6 +36,7 @@ container.set "app", container.share ->
         # persistent session login
         app.use(express.static(path.join(__dirname, "..", "public")))
         app.use(express.favicon())
+        app.use(express.compress())
         app.use(container.monolog.middleware())
         app.disable("verbose errors")
 
@@ -41,8 +44,9 @@ container.set "app", container.share ->
         app.use(express.logger("dev"))
         app.enable('verbose errors')
 
+
     app.configure 'testing', ->
-        container.set 'connection_string', process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING_TEST
+        app.disable("verbose errors")
 
     ###
     route map mixin
@@ -62,7 +66,7 @@ container.set "app", container.share ->
                     this[key]([prefix, value]...) # value is a function , key is a verb or use
         return this
 
-    app.map(container.routes)
+    app.map(container.routes.map)
 
     ###
         error handlers
@@ -75,6 +79,7 @@ container.set "app", container.share ->
         app.get('monolog').error(err)
         res.status(err.status || 500)
         res.render('500')
+
     return app
 
 container.set "locals", container.share ->
@@ -89,10 +94,12 @@ container.set "swig", container.share ->
     return swig
 
 container.set "routes", container.share ->
-    routes
+    routes.passport = container.passport
+    return routes
 
 container.set "db", container.share ->
     database.set("debug", container.debug)
+    database.connect config.connection_string
     return database
 
 container.set "User", container.share ->
@@ -103,6 +110,12 @@ container.set "Video", container.share ->
 
 container.set "Playlist", container.share ->
     container.db.model('Playlist')
+
+container.set "Session",container.share ->
+    container.db.model('Session')
+
+container.set "sessionStore",container.share ->
+    new sessionStores.MongooseSessionStore({},container.Session)
 
 container.set "monolog", container.share ->
     logger = new monolog.Logger("express logger")
@@ -119,6 +132,40 @@ container.set "monolog", container.share ->
 
     return logger
 
-container.set "passport", passport
+container.set "passport", container.share ->
+    LocalStrategy = require('passport-local').Strategy
+    User = container.User
+    passport.serializeUser (user,done)->done(null,user.id)
+    passport.deserializeUser (id,done)->User.findById(id,done)
+    passport.use 'local-signup', new LocalStrategy({
+        usernameField:'email',
+        passwordField:'password',
+        passReqToCallback:true
+    },(req,email,password,done)->
+        process.nextTick ->
+            User.findOne 'local.email':email,(err,user)->
+                if err  then done(err)
+                if user
+                    done(null,false,req.flash('signupMessage','That email is already taken'))
+                else
+                    newUser = new User
+                    newUser.local.email = email
+                    newUser.local.password = newUser.generateHash(password)
+                    newUser.save(done)
+    )
+    passport.use 'local-login',new LocalStrategy({
+        usernameField:'email',
+        passwordField:'password',
+        passReqToCallback:true
+    },(req,email,password,done)->
+        User.findOne {'local.email':email},(err,user)->
+            if err then return done(err)
+            if user 
+                if user.validPassword(password)
+                    return done(null,user)
+            return done(null,false,req.flash('loginMessage','Invalid credentials!'))
+    )
+    return passport
+
 container.set "forms", forms
 module.exports = container

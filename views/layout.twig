@@ -13,35 +13,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<div class="navbar" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">{{title}}</a>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="navbar-nav nav navbar-right">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
-					<li><a href="/signin">Sign in</a></li>
-					<li><a href="/signup">Sign up</a></li>
-				</ul>
-				<form class="navbar-form navbar-right" role="form">
-					<div class="form-group">
-						<input type="search" class="form-control"></button>
-						<input type="button" class="btn" value="search">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	{% include 'top-nav.twig' %}
 	<div class="container">
+		{% include 'flash.twig' %}
 		{% block content %}{% endblock %}
 	</div>
 	<footer class="container">

@@ -42,7 +42,8 @@ if (process.env.NODE_ENV === "development") {
 
 if (process.env.NODE_ENV === "testing") {
   util._extend(config, {
-    connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING_TEST
+    connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING_TEST,
+    mongoose_debug: false
   });
 }
 

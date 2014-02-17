@@ -1,9 +1,15 @@
 "use strict";
 require('source-map-support').install();
 var app, container;
-container = require('./js/container'),
-    app = container.app;
 
+if (process.env.NODE_ENV == "production" || process.env.NODE_ENV == "testing") {
+    container = require('./js/container');
+} else {
+    require('coffee-script').register();
+    container = require('./coffee/container');
+}
+
+app = container.app;
 app.set('container', container);
 if (!module.parent) {
     app.listen(container.port, function () {

@@ -1,0 +1,8 @@
+<!-- flash messages -->
+{% for messages in flash %}
+    <span class="list-unstyled text-{{ loop.key }}">
+        {% for message in messages %}
+            <p class="bg-warning">{{ message }}</p>
+        {% endfor %}
+    </span>
+{% endfor %}

@@ -8,6 +8,9 @@
                   name="registration_form">
                 {% for field in form.getFields() %}
                     <div class="form-group">
+                        {% if field.hasError() %}
+                            <p class="text-danger">{{field.getError()}}</p>
+                        {% endif %}
                         {% autoescape false %}
                         {{ field.toHTML() }}
                         {% endautoescape %}
