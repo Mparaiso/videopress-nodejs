@@ -15,7 +15,7 @@ forms = require './lib/forms'
 events = require 'events'
 sessionStores = require './lib/session-stores'
 
-container = pimple
+container = new pimple
     port: process.env.PORT || 3000
     youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY
     connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING
