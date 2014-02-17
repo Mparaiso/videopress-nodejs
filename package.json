@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "3.3.x",
-    "pimple":"0.x",
+    "pimple":"~0.0.4",
     "swig":"*",
     "mpm.express.rest":"0.x",
     "mpm.duration":"0.x",
