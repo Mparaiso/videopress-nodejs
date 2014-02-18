@@ -57,6 +57,10 @@ container.set("app", container.share(function() {
   });
   app.map = container.mixins.map;
   app.param('videoId', middlewares.video);
+
+  /* protect profile pages */
+  app.use('/profile', middlewares.isLoggedIn);
+  app.use('/profile', middlewares.csrf);
   app.map({
     use: [middlewares.user, middlewares.flash],
     "/api/video": {
@@ -75,18 +79,18 @@ container.set("app", container.share(function() {
       get: controllers.videoById
     },
     "/profile": {
-      all: [middlewares.isLoggedIn, controllers.profile],
+      all: controllers.profile,
       "/video/new": {
-        all: [middlewares.isLoggedIn, middlewares.csrf, controllers.videoCreate]
+        all: controllers.videoCreate
       },
       "/video": {
-        get: [middlewares.isLoggedIn, middlewares.csrf, controllers.videoList]
+        all: controllers.videoList
       },
       "/video/:videoId/update": {
-        all: [middlewares.isLoggedIn, middlewares.belongsToUser(container.Video, 'video'), middlewares.csrf, controllers.videoUpdate]
+        all: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoUpdate]
       },
       '/video/:videoId/remove': {
-        post: [middlewares.isLoggedIn, middlewares.belongsToUser(container.Video, 'video'), middlewares.csrf, controllers.videoRemove]
+        post: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoRemove]
       }
     },
     "/login": {
@@ -152,7 +156,7 @@ container.set("db", container.share(function() {
   var database;
   database = require('./lib/database');
   database.set("debug", false);
-  database.connect(config.connection_string);
+  database.connect(container.config.connection_string);
   return database;
 }));
 
@@ -272,6 +276,14 @@ container.set("controllers", container.share(function() {
 
 container.set("mixins", container.share(function() {
   return require('./lib/mixins');
+}));
+
+container.set("parsers", container.share(function() {
+  return require('./lib/parsers');
+}));
+
+container.set("config", container.share(function() {
+  return require('./lib/config');
 }));
 
 module.exports = container;

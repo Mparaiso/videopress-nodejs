@@ -29,6 +29,7 @@
     "mpm.form":"0.x"
   },
   "devDependencies":{
+    "should":"*",
     "mocha":"*",
     "chai":"*",
     "supertest":"*",

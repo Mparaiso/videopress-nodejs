@@ -35,7 +35,7 @@ middlewares.video = (req,res,next,id)->
         if err 
             err.status = 500 
             next(err)
-        if not video 
+        else if not video 
             err = new Error('Video not found')
             err.status = 404
             next(err)

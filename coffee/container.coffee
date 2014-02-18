@@ -47,6 +47,9 @@ container.set "app", container.share ->
     app.map = container.mixins.map
     
     app.param('videoId',middlewares.video)
+    ### protect profile pages ###
+    app.use('/profile',middlewares.isLoggedIn)
+    app.use('/profile',middlewares.csrf)
 
     app.map 
         use:[middlewares.user,middlewares.flash],
@@ -61,20 +64,16 @@ container.set "app", container.share ->
         "/video/:videoId":
             get:controllers.videoById
         "/profile":
-            all:[middlewares.isLoggedIn,controllers.profile]
+            all:controllers.profile
             "/video/new":
-                all:[middlewares.isLoggedIn,middlewares.csrf,controllers.videoCreate]
+                all:controllers.videoCreate
             "/video":
-                get:[middlewares.isLoggedIn,middlewares.csrf,controllers.videoList]
+                all:controllers.videoList
             "/video/:videoId/update":
-                all:[middlewares.isLoggedIn,
-                    middlewares.belongsToUser(container.Video,'video'),
-                    middlewares.csrf,
+                all:[middlewares.belongsToUser(container.Video,'video'),
                     controllers.videoUpdate]
             '/video/:videoId/remove':
-                post:[middlewares.isLoggedIn,
-                    middlewares.belongsToUser(container.Video,'video')
-                    middlewares.csrf,
+                post:[middlewares.belongsToUser(container.Video,'video')
                     controllers.videoRemove]
         "/login":
             get:[middlewares.csrf,controllers.login]
@@ -118,7 +117,7 @@ container.set "swig", container.share ->
 container.set "db", container.share ->
     database = require './lib/database'
     database.set("debug", false) #container.debug 
-    database.connect config.connection_string
+    database.connect(container.config.connection_string)
     return database
 
 container.set "User", container.share ->
@@ -193,5 +192,6 @@ container.set "forms", container.share -> require './lib/forms'
 container.set "middlewares", container.share -> require './lib/middlewares'
 container.set "controllers", container.share -> require './lib/controllers'
 container.set "mixins", container.share -> require './lib/mixins'
-
+container.set "parsers",container.share -> require './lib/parsers'
+container.set "config",container.share -> require './lib/config'
 module.exports = container

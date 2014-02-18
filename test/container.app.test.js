@@ -121,6 +121,9 @@ describe('container.app', function() {
                             });
                         });
                     });
+                    describe("the user delete the previously created video",function(){
+                        
+                    });
                     describe("the user then logs out", function() {
                         it('should be 302', user.getLogout);
                         it('should be redirected to login', user.getProfile302);

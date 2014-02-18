@@ -47,9 +47,8 @@ middlewares.video = function(req, res, next, id) {
   return Video.findById(id).select('title description duration thumbnail owner originalId categoryId').populate('owner').exec(function(err, video) {
     if (err) {
       err.status = 500;
-      next(err);
-    }
-    if (!video) {
+      return next(err);
+    } else if (!video) {
       err = new Error('Video not found');
       err.status = 404;
       return next(err);

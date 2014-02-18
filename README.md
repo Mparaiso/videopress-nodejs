@@ -5,6 +5,7 @@ author : mparaiso
 
 version : 0.0.3
 
+###LIVE DEMO : http://mpm-video.herokuapp.com
 
 Express-video is a cms allowing users to create playlists from various video web sites such as Youtube. It is built on nodejs with express framework and mongodb.
 
@@ -12,6 +13,8 @@ Express-video is a cms allowing users to create playlists from various video web
 
 ### FEATURES
 
+- blazing fast thanks to nodejs
+- mongodb backend
 - membership
 - import and display videos from : 
 	- Youtube
