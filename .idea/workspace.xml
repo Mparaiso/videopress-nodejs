@@ -45,10 +45,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="routes.coffee" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coffee/lib/routes.coffee">
+      <file leaf-file-name="flash.twig" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/flash.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="63" selection-start="3587" selection-end="3587" vertical-scroll-proportion="0.0">
+            <state line="7" column="12" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -57,37 +57,12 @@
       <file leaf-file-name="container.coffee" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coffee/container.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="52" selection-start="4303" selection-end="4303" vertical-scroll-proportion="0.39679715">
+            <state line="146" column="52" selection-start="5008" selection-end="5008" vertical-scroll-proportion="0.053380784">
               <folding>
-                <element signature="e#378#617#1" expanded="false" />
-                <element signature="e#663#2544#0" expanded="false" />
-                <element signature="e#708#1304#0" expanded="false" />
-                <element signature="e#1350#1417#0" expanded="false" />
-                <element signature="e#1494#1599#0" expanded="false" />
-                <element signature="e#1646#2128#0" expanded="false" />
-                <element signature="e#1682#2063#0" expanded="false" />
-                <element signature="e#1752#1954#0" expanded="false" />
-                <element signature="e#1834#1899#0" expanded="false" />
-                <element signature="e#2169#2297#0" expanded="false" />
-                <element signature="e#2331#2396#0" expanded="false" />
-                <element signature="e#2435#2528#0" expanded="false" />
-                <element signature="e#2663#2802#0" expanded="false" />
-                <element signature="e#2849#2899#0" expanded="false" />
-                <element signature="e#2948#3002#0" expanded="false" />
-                <element signature="e#3430#3983#0" expanded="false" />
-                <element signature="e#3619#3964#0" expanded="false" />
-                <element signature="e#3678#3964#0" expanded="false" />
-                <element signature="e#3706#3849#0" expanded="false" />
+                <element signature="e#4308#4653#0" expanded="false" />
+                <element signature="e#4367#4653#0" expanded="false" />
+                <element signature="e#4395#4538#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="flash.twig" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/flash.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="12" selection-start="240" selection-end="240" vertical-scroll-proportion="-4.75">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -112,12 +87,12 @@
         <option value="$PROJECT_DIR$/views/signup.twig" />
         <option value="$PROJECT_DIR$/js/lib/routes.js" />
         <option value="$PROJECT_DIR$/coffee/lib/database.coffee" />
-        <option value="$PROJECT_DIR$/coffee/container.coffee" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/makefile" />
         <option value="$PROJECT_DIR$/coffee/lib/routes.coffee" />
         <option value="$PROJECT_DIR$/public/stylesheets/styles.css" />
         <option value="$PROJECT_DIR$/views/flash.twig" />
+        <option value="$PROJECT_DIR$/coffee/container.coffee" />
       </list>
     </option>
   </component>
@@ -142,7 +117,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -153,103 +128,17 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stylesheets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coffee" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mpm.video" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coffee" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.sourceCode.CoffeeScript" />
+    <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="$PROJECT_DIR$">
@@ -287,23 +176,23 @@
     <frame x="90" y="67" width="1171" height="636" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959481" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2072227" sideWeight="0.67121214" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287879" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287879" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -371,252 +260,83 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="12" selection-start="227" selection-end="227" vertical-scroll-proportion="0.10674157">
-          <folding />
-        </state>
+        <state line="12" column="12" selection-start="227" selection-end="227" vertical-scroll-proportion="0.10674157" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/lib/forms.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="46" selection-start="280" selection-end="280" vertical-scroll-proportion="0.30427048">
-          <folding />
-        </state>
+        <state line="9" column="46" selection-start="280" selection-end="280" vertical-scroll-proportion="0.30427048" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mpm.form/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="20" selection-start="44" selection-end="44" vertical-scroll-proportion="0.07116105">
-          <folding />
-        </state>
+        <state line="2" column="20" selection-start="44" selection-end="44" vertical-scroll-proportion="0.07116105" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mpm.form/node_modules/mpm.validation/test/validation.test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="187" column="66" selection-start="5650" selection-end="5650" vertical-scroll-proportion="0.69572955">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
+        <state line="187" column="66" selection-start="5650" selection-end="5650" vertical-scroll-proportion="0.69572955" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/lib/routes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="8" selection-start="5212" selection-end="5212" vertical-scroll-proportion="5.124555">
-          <folding>
-            <element signature="e#468#490#0" expanded="false" />
-            <element signature="e#493#536#0" expanded="false" />
-            <element signature="e#576#679#0" expanded="false" />
-            <element signature="e#607#631#0" expanded="false" />
-            <element signature="e#637#677#0" expanded="false" />
-            <element signature="e#715#922#0" expanded="false" />
-            <element signature="e#784#903#0" expanded="false" />
-            <element signature="e#971#1271#0" expanded="false" />
-            <element signature="e#1075#1133#0" expanded="false" />
-            <element signature="e#1139#1269#0" expanded="false" />
-            <element signature="e#1211#1263#0" expanded="false" />
-            <element signature="e#1275#1298#0" expanded="false" />
-            <element signature="e#5454#5615#0" expanded="false" />
-            <element signature="e#5467#5609#0" expanded="false" />
-            <element signature="e#5508#5601#0" expanded="false" />
-            <element signature="e#5782#5836#0" expanded="false" />
-            <element signature="e#5802#5834#0" expanded="false" />
-            <element signature="e#5882#5993#0" expanded="false" />
-            <element signature="e#5902#5934#0" expanded="false" />
-            <element signature="e#5955#5991#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="208" column="8" selection-start="5212" selection-end="5212" vertical-scroll-proportion="5.124555" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/makefile">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="33" selection-start="379" selection-end="379" vertical-scroll-proportion="0.5191257">
-          <folding />
-        </state>
+        <state line="15" column="33" selection-start="379" selection-end="379" vertical-scroll-proportion="0.5191257" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/console.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="7" selection-start="163" selection-end="163" vertical-scroll-proportion="0.27686703">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
+        <state line="8" column="7" selection-start="163" selection-end="163" vertical-scroll-proportion="0.27686703" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="1" selection-start="298" selection-end="298" vertical-scroll-proportion="0.30427048">
-          <folding />
-        </state>
+        <state line="9" column="1" selection-start="298" selection-end="298" vertical-scroll-proportion="0.30427048" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/signup.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="49" selection-start="464" selection-end="464" vertical-scroll-proportion="0.39138576">
-          <folding />
-        </state>
+        <state line="11" column="49" selection-start="464" selection-end="464" vertical-scroll-proportion="0.39138576" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/layout.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="30" selection-start="1679" selection-end="1679" vertical-scroll-proportion="0.40115163">
-          <folding />
-        </state>
+        <state line="44" column="30" selection-start="1679" selection-end="1679" vertical-scroll-proportion="0.40115163" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/lib/database.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="35" selection-start="217" selection-end="217" vertical-scroll-proportion="-0.20765027">
-          <folding />
-        </state>
+        <state line="9" column="35" selection-start="217" selection-end="217" vertical-scroll-proportion="-0.20765027" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mpm.form/node_modules/mpm.validation/validation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="209" column="2" selection-start="5966" selection-end="5966" vertical-scroll-proportion="0.37704918">
-          <folding>
-            <element signature="e#0#91#0" expanded="false" />
-            <element signature="e#160#293#0" expanded="false" />
-            <element signature="e#341#464#0" expanded="false" />
-            <element signature="e#515#536#0" expanded="false" />
-            <element signature="e#565#621#0" expanded="false" />
-            <element signature="e#663#666#0" expanded="false" />
-            <element signature="e#707#1542#0" expanded="false" />
-            <element signature="e#713#837#0" expanded="false" />
-            <element signature="e#879#928#0" expanded="false" />
-            <element signature="e#934#1029#0" expanded="false" />
-            <element signature="e#1065#1268#0" expanded="false" />
-            <element signature="e#1168#1237#0" expanded="false" />
-            <element signature="e#1303#1341#0" expanded="false" />
-            <element signature="e#1371#1408#0" expanded="false" />
-            <element signature="e#1441#1477#0" expanded="false" />
-            <element signature="e#1505#1540#0" expanded="false" />
-            <element signature="e#1544#1584#0" expanded="false" />
-            <element signature="e#1628#1652#0" expanded="false" />
-            <element signature="e#1787#1850#0" expanded="false" />
-            <element signature="e#1926#2151#0" expanded="false" />
-            <element signature="e#2005#2106#0" expanded="false" />
-            <element signature="e#2153#2193#0" expanded="false" />
-            <element signature="e#2237#2261#0" expanded="false" />
-            <element signature="e#2396#2458#0" expanded="false" />
-            <element signature="e#2534#2759#0" expanded="false" />
-            <element signature="e#2613#2714#0" expanded="false" />
-            <element signature="e#2761#2801#0" expanded="false" />
-            <element signature="e#2851#2875#0" expanded="false" />
-            <element signature="e#3022#3100#0" expanded="false" />
-            <element signature="e#3182#3400#0" expanded="false" />
-            <element signature="e#3248#3328#0" expanded="false" />
-            <element signature="e#3402#3451#0" expanded="false" />
-            <element signature="e#3501#3525#0" expanded="false" />
-            <element signature="e#3672#3749#0" expanded="false" />
-            <element signature="e#3831#4069#0" expanded="false" />
-            <element signature="e#3919#4022#0" expanded="false" />
-            <element signature="e#4071#4115#0" expanded="false" />
-            <element signature="e#4167#4199#0" expanded="false" />
-            <element signature="e#4342#4409#0" expanded="false" />
-            <element signature="e#4489#4720#0" expanded="false" />
-            <element signature="e#4574#4675#0" expanded="false" />
-            <element signature="e#4722#4748#0" expanded="false" />
-            <element signature="e#4794#4797#0" expanded="false" />
-            <element signature="e#4942#4984#0" expanded="false" />
-            <element signature="e#5065#5326#0" expanded="false" />
-            <element signature="e#5180#5281#0" expanded="false" />
-            <element signature="e#5328#5371#0" expanded="false" />
-            <element signature="e#5421#5451#0" expanded="false" />
-            <element signature="e#5592#5652#0" expanded="false" />
-            <element signature="e#5731#5965#0" expanded="false" />
-            <element signature="e#5819#5920#0" expanded="false" />
-            <element signature="e#5967#5993#0" expanded="false" />
-            <element signature="e#6309#6352#0" expanded="false" />
-            <element signature="e#6399#6429#0" expanded="false" />
-            <element signature="e#6564#6638#0" expanded="false" />
-            <element signature="e#6714#6990#0" expanded="false" />
-            <element signature="e#6806#6841#0" expanded="false" />
-            <element signature="e#6844#6945#0" expanded="false" />
-            <element signature="e#6992#7035#0" expanded="false" />
-            <element signature="e#7083#7113#0" expanded="false" />
-            <element signature="e#7250#7328#0" expanded="false" />
-            <element signature="e#7405#7680#0" expanded="false" />
-            <element signature="e#7496#7531#0" expanded="false" />
-            <element signature="e#7534#7635#0" expanded="false" />
-            <element signature="e#7682#7708#0" expanded="false" />
-            <element signature="e#7760#7813#0" expanded="false" />
-            <element signature="e#7973#8005#0" expanded="false" />
-            <element signature="e#8092#8625#0" expanded="false" />
-            <element signature="e#8165#8445#0" expanded="false" />
-            <element signature="e#8184#8266#0" expanded="false" />
-            <element signature="e#8329#8379#0" expanded="false" />
-            <element signature="e#8518#8585#0" expanded="false" />
-            <element signature="e#8627#8698#0" expanded="false" />
-            <element signature="e#8699#9102#0" expanded="false" />
-            <element signature="e#9103#9157#0" expanded="false" />
-            <element signature="e#9209#9387#0" expanded="false" />
-            <element signature="e#9541#9603#0" expanded="false" />
-            <element signature="e#9605#9659#0" expanded="false" />
-            <element signature="e#9710#9876#0" expanded="false" />
-            <element signature="e#10028#10090#0" expanded="false" />
-            <element signature="e#10092#10172#0" expanded="false" />
-            <element signature="e#10211#10267#0" expanded="false" />
-            <element signature="e#10307#10363#0" expanded="false" />
-            <element signature="e#10405#10463#0" expanded="false" />
-            <element signature="e#10505#10563#0" expanded="false" />
-            <element signature="e#10599#10651#0" expanded="false" />
-            <element signature="e#10685#10735#0" expanded="false" />
-            <element signature="e#10769#10819#0" expanded="false" />
-            <element signature="e#10860#10917#0" expanded="false" />
-            <element signature="e#10957#11013#0" expanded="false" />
-            <element signature="e#11046#11095#0" expanded="false" />
-            <element signature="e#11132#11185#0" expanded="false" />
-            <element signature="e#11223#11277#0" expanded="false" />
-            <element signature="e#11310#11442#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="209" column="2" selection-start="5966" selection-end="5966" vertical-scroll-proportion="0.37704918" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/styles.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="19" selection-start="343" selection-end="343" vertical-scroll-proportion="0.7775801">
-          <folding />
-        </state>
+        <state line="30" column="19" selection-start="343" selection-end="343" vertical-scroll-proportion="0.7775801" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/flash.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="12" selection-start="240" selection-end="240" vertical-scroll-proportion="-4.75">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/lib/routes.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="63" selection-start="3587" selection-end="3587" vertical-scroll-proportion="0.0">
+        <state line="7" column="12" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/container.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="52" selection-start="4303" selection-end="4303" vertical-scroll-proportion="0.39679715">
+        <state line="146" column="52" selection-start="5008" selection-end="5008" vertical-scroll-proportion="0.053380784">
           <folding>
-            <element signature="e#378#617#1" expanded="false" />
-            <element signature="e#663#2544#0" expanded="false" />
-            <element signature="e#708#1304#0" expanded="false" />
-            <element signature="e#1350#1417#0" expanded="false" />
-            <element signature="e#1494#1599#0" expanded="false" />
-            <element signature="e#1646#2128#0" expanded="false" />
-            <element signature="e#1682#2063#0" expanded="false" />
-            <element signature="e#1752#1954#0" expanded="false" />
-            <element signature="e#1834#1899#0" expanded="false" />
-            <element signature="e#2169#2297#0" expanded="false" />
-            <element signature="e#2331#2396#0" expanded="false" />
-            <element signature="e#2435#2528#0" expanded="false" />
-            <element signature="e#2663#2802#0" expanded="false" />
-            <element signature="e#2849#2899#0" expanded="false" />
-            <element signature="e#2948#3002#0" expanded="false" />
-            <element signature="e#3430#3983#0" expanded="false" />
-            <element signature="e#3619#3964#0" expanded="false" />
-            <element signature="e#3678#3964#0" expanded="false" />
-            <element signature="e#3706#3849#0" expanded="false" />
+            <element signature="e#4308#4653#0" expanded="false" />
+            <element signature="e#4367#4653#0" expanded="false" />
+            <element signature="e#4395#4538#0" expanded="false" />
           </folding>
         </state>
       </provider>

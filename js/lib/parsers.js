@@ -45,7 +45,7 @@ parsers.VideoData = (function() {
     this.categoryId = categoryId;
     this.meta = meta;
     if (typeof this.title === 'object') {
-      _ref = this.title, this.title = _ref.title, this.description = _ref.description, this.thumbnail = _ref.thumbnail, this.duration = _ref.duration, this.publishedAt = _ref.publishedAt, this.originalId = _ref.originalId, this.categoryId = _ref.categoryId, this.provider = _ref.provider, this.meta = _ref.meta;
+      _ref = this.title, this.title = _ref.title, this.description = _ref.description, this.thumbnail = _ref.thumbnail, this.duration = _ref.duration, this.publishedAt = _ref.publishedAt, this.originalId = _ref.originalId, this.categoryId = _ref.categoryId, this.provider = _ref.provider, this.meta = _ref.meta, this.url = _ref.url;
     }
   }
 
@@ -178,14 +178,17 @@ parsers.YoutubeVideo = (function(_super) {
   YoutubeVideo.prototype.getVideoDataFromUrl = function(url, callback) {
     var id;
     id = this.getIdFromUrl(url);
-    return this.getVideoDataFromId(id, callback);
+    return this.getVideoDataFromId(id, callback, url);
   };
 
 
   /*get videodata from id */
 
-  YoutubeVideo.prototype.getVideoDataFromId = function(id, callback) {
+  YoutubeVideo.prototype.getVideoDataFromId = function(id, callback, url) {
     var options;
+    if (url == null) {
+      url = "";
+    }
     options = {
       url: this.getApiUrl(id, this.getApiKey()),
       json: true
@@ -197,6 +200,7 @@ parsers.YoutubeVideo = (function(_super) {
         return callback(new Error("Video with id " + id + " not found"));
       } else {
         return callback(err, new parsers.VideoData({
+          url: url,
           title: item.snippet.title,
           description: item.snippet.description,
           thumbnail: item.snippet.thumbnails.medium.url,

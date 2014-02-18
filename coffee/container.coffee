@@ -2,16 +2,10 @@
 
 express = require 'express'
 pimple = require 'pimple'
-swig = require 'swig'
-monolog = require 'monolog'
 util = require 'util'
-database = require './lib/database'
-routes = require './lib/routes'
 path = require 'path'
-passport = require 'passport'
 flash = require 'connect-flash'
 config = require './lib/config'
-forms = require './lib/forms'
 events = require 'events'
 sessionStores = require './lib/session-stores'
 
@@ -23,6 +17,8 @@ container = new pimple
 
 container.set "app", container.share ->
     app = express()
+    middlewares = container.middlewares
+    controllers = container.controllers
     app.configure ->
         app.engine('twig',container.swig.renderFile)
         app.set('view engine', 'twig')
@@ -48,37 +44,58 @@ container.set "app", container.share ->
     app.configure 'testing', ->
         app.disable("verbose errors")
 
-    ###
-    route map mixin
-    mount routes with a single object
-    @param routes
-    @param prefix
-    ###
-    app.map = (routes, prefix = "")->
-        for key,value of routes
-            switch typeof value
-                when "object"
-                    if value instanceof Array #value is an array of functions
-                        value.unshift(prefix)
-                        this[key](value...)
-                    else this.map(value, prefix + key) #value is a hash of value definitions
-                else
-                    this[key]([prefix, value]...) # value is a function , key is a verb or use
-        return this
+    app.map = container.mixins.map
+    
+    app.param('videoId',middlewares.video)
 
-    app.map(container.routes.map)
+    app.map 
+        use:[middlewares.user,middlewares.flash],
+        "/api/video":
+            use: middlewares.videoApi
+        "/api/video.fromUrl": 
+            post: controllers.videoFromUrl
+        "/api/playlist":
+            use: middlewares.playlistApi
+        "/": 
+            get:controllers.index
+        "/video/:videoId":
+            get:controllers.videoById
+        "/profile":
+            all:[middlewares.isLoggedIn,controllers.profile]
+            "/video/new":
+                all:[middlewares.isLoggedIn,middlewares.csrf,controllers.videoCreate]
+            "/video":
+                get:[middlewares.isLoggedIn,controllers.videoList]
+            "/video/:videoId/update":
+                all:[middlewares.isLoggedIn,
+                    middlewares.belongsToUser(container.Video,'video'),
+                    middlewares.csrf,
+                    controllers.videoUpdate
+                ]
+        "/login":
+            get:[middlewares.csrf,controllers.login]
+            post:container.passport.authenticate('local-login',{
+                successRedirect:'/profile',
+                failureRedirect:'/login',
+                failureFlash:true
+                })
+        "/signup":
+            get:[middlewares.csrf,controllers.signup]
+            post:[middlewares.csrf,controllers.signupPost,container.passport.authenticate('local-signup',{
+                successRedirect:'/profile',
+                failureRedirect:'/signup',
+                failureFlash:true
+            })]
 
-    ###
-        error handlers
-        @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
-    ###
-    app.use (req, res)->
-        res.status(404)
-        res.render('404', {code: res.statusCode})
-    app.use (err, req, res)->
-        app.get('monolog').error(err)
-        res.status(err.status || 500)
-        res.render('500')
+        #erase user credentials
+        "/logout":
+            get:controllers.logout
+
+    app.use(middlewares.notFound)
+    app.use(middlewares.serverError)
+
+    app.on 'error',(err)->
+        container.mongolog.error(err)
 
     return app
 
@@ -90,15 +107,13 @@ container.set "locals", container.share ->
             array.slice(i * length, i * length + length)
 
 container.set "swig", container.share ->
+    swig = require 'swig'
     swig.setDefaults {cache: 'memory'}
     return swig
 
-container.set "routes", container.share ->
-    routes.passport = container.passport
-    return routes
-
 container.set "db", container.share ->
-    database.set("debug", container.debug)
+    database = require './lib/database'
+    database.set("debug", false) #container.debug 
     database.connect config.connection_string
     return database
 
@@ -118,6 +133,7 @@ container.set "sessionStore",container.share ->
     new sessionStores.MongooseSessionStore({},container.Session)
 
 container.set "monolog", container.share ->
+    monolog = require 'monolog'
     logger = new monolog.Logger("express logger")
     logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt"))
     logger.middleware = (message = "debug")->
@@ -133,6 +149,7 @@ container.set "monolog", container.share ->
     return logger
 
 container.set "passport", container.share ->
+    passport = require 'passport'
     LocalStrategy = require('passport-local').Strategy
     User = container.User
     passport.serializeUser (user,done)->done(null,user.id)
@@ -148,7 +165,8 @@ container.set "passport", container.share ->
                 if user
                     done(null,false,req.flash('signupMessage','That email is already taken'))
                 else
-                    newUser = new User
+                    newUser = new User()
+                    newUser.username = req.body.username
                     newUser.local.email = email
                     newUser.local.password = newUser.generateHash(password)
                     newUser.save(done)
@@ -167,5 +185,9 @@ container.set "passport", container.share ->
     )
     return passport
 
-container.set "forms", forms
+container.set "forms", container.share -> require './lib/forms'
+container.set "middlewares", container.share -> require './lib/middlewares'
+container.set "controllers", container.share -> require './lib/controllers'
+container.set "mixins", container.share -> require './lib/mixins'
+
 module.exports = container

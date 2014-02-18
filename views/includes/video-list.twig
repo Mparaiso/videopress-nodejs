@@ -1,0 +1,25 @@
+{% if videos %}
+	{% for page in paginate(videos,row_length||6) %}
+	<section class="row">
+		{%for video in page %}
+		<article class="col-md-3 video">
+			<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
+			<div class="info">
+				<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
+				<br>
+				<span class="owner">
+					{% if video.owner %}
+					{{video.owner.username}}
+					{%else%}
+					anonymous
+					{% endif %}
+				</span>
+			</div>
+			<div>&nbsp;</div>
+		</article>
+		{% endfor %}
+	</section>
+	{% endfor %}
+{% else %}
+<h3>No video found.</h3>
+{% endif %}

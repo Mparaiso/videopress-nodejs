@@ -22,7 +22,7 @@ parsers =  exports
 class parsers.VideoData
  constructor:(@title, @description, @thumbnail, @duration, @publishedAt, @originalId, @provider,@categoryId, @meta)->
     if typeof @title == 'object'
-        {@title,@description,@thumbnail,@duration,@publishedAt,@originalId,@categoryId,@provider,@meta}=@title
+        {@title,@description,@thumbnail,@duration,@publishedAt,@originalId,@categoryId,@provider,@meta,@url}=@title
 
 ###
  * Provide access to a website video apiUrl
@@ -90,9 +90,9 @@ class parsers.YoutubeVideo extends parsers.BaseVideo
     ###get videodata from url###
     getVideoDataFromUrl:(url, callback)->
         id = this.getIdFromUrl(url)
-        @getVideoDataFromId(id,callback)
+        @getVideoDataFromId(id,callback,url)
     ###get videodata from id###
-    getVideoDataFromId:(id, callback)->
+    getVideoDataFromId:(id, callback,url="")->
         options = 
             url: this.getApiUrl(id, this.getApiKey())
             json: true
@@ -102,6 +102,7 @@ class parsers.YoutubeVideo extends parsers.BaseVideo
                 callback(new Error("Video with id #{id} not found"))
             else
                 callback err,new parsers.VideoData 
+                    url: url
                     title : item.snippet.title
                     description : item.snippet.description
                     thumbnail : item.snippet.thumbnails.medium.url

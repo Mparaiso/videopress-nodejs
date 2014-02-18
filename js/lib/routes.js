@@ -119,9 +119,7 @@ routes._getMap = function() {
     "/": {
       get: [
         cache, function(req, res, next) {
-          return Video.find().select('title thumbnail created_at owner').sort({
-            created_at: -1
-          }).exec(function(err, videos) {
+          return Video.list(function(err, videos) {
             if (err) {
               return next(err);
             } else {
@@ -142,7 +140,7 @@ routes._getMap = function() {
             video: function(next) {
               return Video.findOne({
                 _id: req.params.id
-              }).exec(next);
+              }).populate('owner').exec(next);
             },
             videos: [
               'video', function(next, res) {
@@ -175,6 +173,39 @@ routes._getMap = function() {
               return next();
             }
           });
+        }
+      ]
+    },
+    "/profile/video/new": {
+      all: [
+        isLoggedIn, function(req, res, next) {
+          if (req.method === "POST" && req.body.url) {
+            return async.auto({
+              video: Video.fromUrl.bind(Video, req.body.url),
+              setUser: [
+                'video', function(next, result) {
+                  var video;
+                  video = result.video[0];
+                  if (req.user && req.user.id) {
+                    video.owner = req.user.id;
+                    return video.save(next);
+                  } else {
+                    return next();
+                  }
+                }
+              ]
+            }, function(err, result) {
+              if (err) {
+                return res.render('accounts/video-create', {
+                  error: err
+                });
+              } else {
+                return res.redirect('/video/' + result.video[0].id);
+              }
+            });
+          } else {
+            return res.render('accounts/video-create');
+          }
         }
       ]
     },

@@ -20,7 +20,7 @@ UserSchema = mongoose.Schema
     roles:{type:Array,default:['user']}
     username:String
     isAccountNonExpired:{type:Boolean,default:true}
-    isEnabled:{type:Boolean:default:true}
+    isEnabled:{type:Boolean,default:true}
     isCredentialsNonExpired:{type:Boolean,default:true}
     isAccountNonLocked:{type:Boolean,default:true}
     local:
@@ -48,6 +48,8 @@ UserSchema.methods.generateHash = (password)->
 ### check password ###
 UserSchema.methods.validPassword = (password)->
     bcrypt.compareSync(password,this.local.password)
+UserSchema.methods.toString = ->
+    this.username.toString()
 
 User = mongoose.model('User', UserSchema)
 
@@ -56,6 +58,7 @@ VideoSchema = mongoose.Schema
     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     title: String,
     description: String,
+    private:{type:Boolean,default:false},
     categoryId:Number,
     duration: Object,
     created_at:{type:Date,'default':Date.now},
@@ -64,7 +67,8 @@ VideoSchema = mongoose.Schema
     originalId: String,
     provider: String,
     thumbnail: String,
-    meta: Object
+    meta: Object,
+    viewCount:{type:Number,default:0}
 
 ### create video from video url ###
 VideoSchema.statics.fromUrl = (url, callback)->
@@ -75,6 +79,20 @@ VideoSchema.statics.fromUrl = (url, callback)->
             else video = new Video(res) ; video.save(callback)
     else callback(new Error(util.format("Video with url %s not found", url)))
 
+VideoSchema.statics.findByOwnerId = (id,cb)->
+    q = this.find({owner:id})
+    if cb then q.exec(cb) else q
+
+VideoSchema.statics.list = (query,callback)->
+    if query instanceof Function
+        callback = query
+        query = {}
+    q = this.find(query)
+    .select('title thumbnail created_at owner')
+    .sort({created_at:-1})
+    .populate('owner')
+    if callback then q.exec(callback) else q
+    
 VideoSchema.methods.toString = ->
     this.title
 

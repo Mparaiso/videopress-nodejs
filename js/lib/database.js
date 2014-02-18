@@ -34,11 +34,8 @@ UserSchema = mongoose.Schema({
     "default": true
   },
   isEnabled: {
-    type: {
-      Boolean: {
-        "default": true
-      }
-    }
+    type: Boolean,
+    "default": true
   },
   isCredentialsNonExpired: {
     type: Boolean,
@@ -86,6 +83,10 @@ UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.local.password);
 };
 
+UserSchema.methods.toString = function() {
+  return this.username.toString();
+};
+
 User = mongoose.model('User', UserSchema);
 
 VideoSchema = mongoose.Schema({
@@ -98,6 +99,10 @@ VideoSchema = mongoose.Schema({
   },
   title: String,
   description: String,
+  "private": {
+    type: Boolean,
+    "default": false
+  },
   categoryId: Number,
   duration: Object,
   created_at: {
@@ -115,7 +120,11 @@ VideoSchema = mongoose.Schema({
   originalId: String,
   provider: String,
   thumbnail: String,
-  meta: Object
+  meta: Object,
+  viewCount: {
+    type: Number,
+    "default": 0
+  }
 });
 
 
@@ -136,6 +145,34 @@ VideoSchema.statics.fromUrl = function(url, callback) {
     });
   } else {
     return callback(new Error(util.format("Video with url %s not found", url)));
+  }
+};
+
+VideoSchema.statics.findByOwnerId = function(id, cb) {
+  var q;
+  q = this.find({
+    owner: id
+  });
+  if (cb) {
+    return q.exec(cb);
+  } else {
+    return q;
+  }
+};
+
+VideoSchema.statics.list = function(query, callback) {
+  var q;
+  if (query instanceof Function) {
+    callback = query;
+    query = {};
+  }
+  q = this.find(query).select('title thumbnail created_at owner').sort({
+    created_at: -1
+  }).populate('owner');
+  if (callback) {
+    return q.exec(callback);
+  } else {
+    return q;
   }
 };
 

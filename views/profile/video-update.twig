@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+<h2><small>{{video.title}}</small></h2>
+<p>
+	<img src="{{video.thumbnail}}" alt="{{video.title}}" title="{{video.title}}">
+</p>
+<form action="" role="form">
+	<fieldset>
+		<legend>Update video </legend>
+		{% for field in form.getFields() %}
+		<div class="form-group">
+			{{field.toHTML()}}
+		</div>
+		{% endfor %}
+		<input type="submit" value="Update">
+	</fieldset>
+</form>
+{% endblock %}

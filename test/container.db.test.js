@@ -1,5 +1,5 @@
 "use strict";
-describe("container.db", function () {
+describe("container.db", function() {
     /*global describe,it,beforeEach,before*/
     var assert = require('assert'),
         expect = require('chai').expect(),
@@ -8,18 +8,18 @@ describe("container.db", function () {
         Video = container.Video,
         Playlist = container.Playlist;
 
-    before(function (done) {
+    before(function(done) {
         db.set('debug', false);
         Video.remove(done);
     });
 
-    describe('db', function () {
-        describe('Video', function () {
-            beforeEach(function () {
+    describe('db', function() {
+        describe('Video', function() {
+            beforeEach(function() {
                 this.url = "http://www.youtube.com/watch?v=fwyZqyGEPNk";
             });
-            it('should create a video from a url', function (done) {
-                Video.fromUrl(this.url, function (err, result) {
+            it('should create a video from a url', function(done) {
+                Video.fromUrl(this.url, function(err, result) {
                     assert(!err);
                     assert(result.title);
                     done();
@@ -28,8 +28,8 @@ describe("container.db", function () {
         });
     });
 
-    describe("db", function () {
-        beforeEach(function (done) {
+    describe("db", function() {
+        beforeEach(function(done) {
             this.data = {
                 title: 'Build an API with Node.js, Mongodb and Cloud Foundry',
                 url: 'http://www.youtube.com/watch?v=3AKaGShTHpo'
@@ -37,13 +37,13 @@ describe("container.db", function () {
             this.video = new Video(this.data);
             Video.remove(done);
         });
-        describe('Video', function () {
-            it('should save', function (done) {
+        describe('Video', function() {
+            it('should save', function(done) {
                 this.video.save(done);
             });
         });
-        describe('Playlist', function () {
-            beforeEach(function (done) {
+        describe('Playlist', function() {
+            beforeEach(function(done) {
                 this.data = {
                     title: "playlisttitle"
                 };
@@ -51,7 +51,7 @@ describe("container.db", function () {
                 Playlist.remove(done);
             });
 
-            it('should save', function (done) {
+            it('should save', function(done) {
                 this.playlist.save(done);
             });
         });

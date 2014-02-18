@@ -1,0 +1,20 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+<div class="row">
+	<h1>Create a video</h1>
+	<form action="/profile/video/new" method="POST" class="form-horizontal col-md-5" name="video-from-url">
+		<fieldset class="form-group">
+			<legend>Enter a video url</legend>
+			<label for="url">video url</label>
+			<input type="text" id="url" name="url" class="form-control">
+			<p class="text-muted">
+				support youtube videos (exemple : http://www.youtube.com/watch?v=JEF6_XC-2ZU ) 
+			</p>
+		</fieldset>
+		<div class="form-group">
+			<input type="submit" value="Create">
+		</div>
+		<input type="hidden" name="_csrf" id="_csrf" value="{{_csrf}}">
+	</form>
+</div>
+{% endblock %}

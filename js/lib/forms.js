@@ -58,7 +58,40 @@ forms.Login = function(csrf) {
       required: true
     }
   }).add('login', 'submit', {
-    'default': "Login"
+    'default': "Login",
+    attributes: {
+      "class": 'btn'
+    }
+  }).add('_csrf', 'hidden', {
+    'default': csrf,
+    attributes: {
+      id: '_csrf'
+    }
+  });
+};
+
+
+/*
+    Video Form
+ */
+
+forms.Video = function(csrf) {
+  return form.create('video').add('title', 'text', {
+    validators: form.validation.Required(),
+    attributes: {
+      'required': 'required',
+      "class": 'form-control'
+    }
+  }).add('private', 'checkbox', {
+    value: true,
+    attributes: {
+      "class": ''
+    }
+  }).add('description', 'textarea', {
+    attributes: {
+      "class": 'form-control',
+      rows: 10
+    }
   }).add('_csrf', 'hidden', {
     'default': csrf,
     attributes: {

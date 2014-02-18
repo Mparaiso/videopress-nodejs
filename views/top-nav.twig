@@ -12,12 +12,17 @@
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="navbar-nav nav navbar-right">
-				{#
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
-				#}
+				<li>
+					<form class="navbar-form" role="form">
+						<div class="form-group">
+							<input type="search" class="col-xs-6 form-control"></button>
+							<input type="button" class="btn" value="search">
+						</div>
+					</form>
+				</li>
 				{% if user %}
+				<li class="divider"></li>
+				<li><a href="/profile/video/new">Add a video</a></li>
 				<li>
 					<span class="navbar-text">
 						Welcome back <a href="/profile">{{user.username}}</a> | 
@@ -29,12 +34,6 @@
 				<li><a href="/signup">Join</a></li>
 				{% endif %}
 			</ul>
-			<form class="navbar-form navbar-right" role="form">
-				<div class="form-group">
-					<input type="search" class="form-control"></button>
-					<input type="button" class="btn" value="search">
-				</div>
-			</form>
 		</div>
 	</div>
 </div>

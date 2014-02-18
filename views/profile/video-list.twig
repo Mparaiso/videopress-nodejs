@@ -1,0 +1,33 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+	<h2>Manage Videos</h2>
+	{% if videos %}
+	<table class="table">
+		<thead>
+			<tr>
+			<th></th>
+			<th>Title</th>
+			<th>Actions</th>
+		</tr>
+		</thead>
+		
+		{% for video in videos %}
+			<tr>
+				<td>
+					<a href="/video/{{video.id}}">
+					<img width="160px" src="{{video.thumbnail}}" alt="{{video.title}}">
+					</a>
+				</td>
+				<td>
+					<a href="/video/{{video.id}}">{{video.title}}</a>
+				</td>
+				<td>
+					<a href="/video/{{video.id}}">View</a> 
+					<a href="/profile/video/{{video.id}}/update">Update</a> 
+					<a href="/profile/video/{{video.id}}/remove">Remove</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+{% endblock %}
