@@ -118,13 +118,34 @@ controllers.videoFromUrl = function(req, res, next) {
 
 controllers.videoUpdate = function(req, res, next) {
   var form;
-  form = forms.Video(req.csrfToken());
-  form.bind(res.locals.video);
+  form = forms.Video();
+  form.setModel(res.locals.video);
   if (req.method === "POST") {
-    "validation";
+    form.bind(req.body);
+    if (form.validateSync()) {
+      return res.locals.video.save(function(err) {
+        if (err) {
+          err.status = 500;
+          next(err);
+        }
+        return res.redirect('/video/' + req.params.videoId);
+      });
+    }
   }
   return res.render('profile/video-update', {
     form: form
+  });
+};
+
+controllers.videoRemove = function(req, res, next) {
+  return res.locals.video.remove(function(err) {
+    if (err) {
+      err.status = 500;
+      return next(err);
+    } else {
+      req.flash('success', 'Video removed');
+      return res.redirect('/profile/video');
+    }
   });
 };
 

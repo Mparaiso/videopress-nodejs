@@ -63,12 +63,22 @@ controllers.videoFromUrl = (req,res,next)->
 # requires middleware.video
 ###
 controllers.videoUpdate = (req,res,next)->
-    form = forms.Video(req.csrfToken())
-    form.bind(res.locals.video)
+    form = forms.Video()
+    form.setModel(res.locals.video)
     if req.method is "POST"
-        "validation"
+        form.bind(req.body)
+        if form.validateSync()
+            return res.locals.video.save (err)->
+                if err then err.status = 500 ; next(err)
+                res.redirect('/video/'+req.params.videoId)
     res.render('profile/video-update',{form})
 
+controllers.videoRemove = (req,res,next)->
+    res.locals.video.remove (err)->
+        if err then err.status = 500 ; next(err)
+        else 
+            req.flash('success','Video removed')
+            res.redirect('/profile/video')
 ###
 # /profile/video
 ###

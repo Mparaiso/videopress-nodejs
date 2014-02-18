@@ -75,7 +75,7 @@ forms.Login = function(csrf) {
     Video Form
  */
 
-forms.Video = function(csrf) {
+forms.Video = function() {
   return form.create('video').add('title', 'text', {
     validators: form.validation.Required(),
     attributes: {
@@ -83,19 +83,14 @@ forms.Video = function(csrf) {
       "class": 'form-control'
     }
   }).add('private', 'checkbox', {
-    value: true,
     attributes: {
-      "class": ''
+      "class": '',
+      value: 1
     }
   }).add('description', 'textarea', {
     attributes: {
       "class": 'form-control',
       rows: 10
-    }
-  }).add('_csrf', 'hidden', {
-    'default': csrf,
-    attributes: {
-      id: '_csrf'
     }
   });
 };

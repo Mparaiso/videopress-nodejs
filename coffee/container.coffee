@@ -65,13 +65,17 @@ container.set "app", container.share ->
             "/video/new":
                 all:[middlewares.isLoggedIn,middlewares.csrf,controllers.videoCreate]
             "/video":
-                get:[middlewares.isLoggedIn,controllers.videoList]
+                get:[middlewares.isLoggedIn,middlewares.csrf,controllers.videoList]
             "/video/:videoId/update":
                 all:[middlewares.isLoggedIn,
                     middlewares.belongsToUser(container.Video,'video'),
                     middlewares.csrf,
-                    controllers.videoUpdate
-                ]
+                    controllers.videoUpdate]
+            '/video/:videoId/remove':
+                post:[middlewares.isLoggedIn,
+                    middlewares.belongsToUser(container.Video,'video')
+                    middlewares.csrf,
+                    controllers.videoRemove]
         "/login":
             get:[middlewares.csrf,controllers.login]
             post:container.passport.authenticate('local-login',{

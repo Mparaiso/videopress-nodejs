@@ -4,7 +4,7 @@
 <p>
 	<img src="{{video.thumbnail}}" alt="{{video.title}}" title="{{video.title}}">
 </p>
-<form action="" role="form">
+<form action="" method="POST" role="form">
 	<fieldset>
 		<legend>Update video </legend>
 		{% for field in form.getFields() %}
@@ -12,6 +12,7 @@
 			{{field.toHTML()}}
 		</div>
 		{% endfor %}
+		<input type="hidden" name="_csrf" value="{{_csrf}}">
 		<input type="submit" value="Update">
 	</fieldset>
 </form>

@@ -80,10 +80,13 @@ container.set("app", container.share(function() {
         all: [middlewares.isLoggedIn, middlewares.csrf, controllers.videoCreate]
       },
       "/video": {
-        get: [middlewares.isLoggedIn, controllers.videoList]
+        get: [middlewares.isLoggedIn, middlewares.csrf, controllers.videoList]
       },
       "/video/:videoId/update": {
         all: [middlewares.isLoggedIn, middlewares.belongsToUser(container.Video, 'video'), middlewares.csrf, controllers.videoUpdate]
+      },
+      '/video/:videoId/remove': {
+        post: [middlewares.isLoggedIn, middlewares.belongsToUser(container.Video, 'video'), middlewares.csrf, controllers.videoRemove]
       }
     },
     "/login": {

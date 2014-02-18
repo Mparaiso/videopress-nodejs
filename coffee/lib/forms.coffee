@@ -24,9 +24,8 @@ forms.Login = (csrf)->
 ###
     Video Form
 ###
-forms.Video = (csrf)->
+forms.Video = ()->
     form.create('video')
     .add('title','text',{validators:form.validation.Required(),attributes:{'required',class:'form-control'}})
-    .add('private','checkbox',{value:true,attributes:{class:''}})
+    .add('private','checkbox',{attributes:{class:'',value:1}})
     .add('description','textarea',{attributes:{class:'form-control',rows:10}})
-    .add('_csrf','hidden',{'default':csrf,attributes:{id:'_csrf'}})

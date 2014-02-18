@@ -24,7 +24,10 @@
 				<td>
 					<a href="/video/{{video.id}}">View</a> 
 					<a href="/profile/video/{{video.id}}/update">Update</a> 
-					<a href="/profile/video/{{video.id}}/remove">Remove</a>
+					<form class="inline" action="/profile/video/{{video.id}}/remove" method="POST">
+						<input type="submit" value="Remove" class="inline link btn-link">
+						<input type="hidden" name="_csrf" value="{{_csrf}}">
+					</form>
 				</td>
 			</tr>
 		{% endfor %}
