@@ -20,13 +20,13 @@ Express-video is a cms allowing users to create playlists from various video web
 
 #### INSTALLATION
 
-- install git
+- install git http://git-scm.com/
 
-- install nodejs and npm
+- install nodejs and npm http://nodejs.org/
 
-- intstall mongodb
+- intstall mongodb http://www.mongodb.org/
 
-- get a youtube api key
+- get a youtube api key https://developers.google.com/youtube/v3/getting-started
 
 - clone the repository with git
 
