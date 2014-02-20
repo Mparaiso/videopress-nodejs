@@ -26,7 +26,7 @@
     "passport-google-oauth":"0.1.x",
     "connect-flash":"0.1.x",
     "bcrypt-nodejs":"0.0.x",
-    "mpm.form":"0.x"
+    "mpm.form":"~0.0.3"
   },
   "devDependencies":{
     "should":"*",
