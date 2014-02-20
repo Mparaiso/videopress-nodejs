@@ -111,6 +111,30 @@ controllers.videoFromUrl = function(req, res, next) {
 
 
 /*
+/search
+ */
+
+controllers.videoSearch = function(req, res, next) {
+  var where;
+  where = {};
+  if (req.query.q) {
+    where.title = new RegExp(req.query.q, 'i');
+  }
+  return Video.findPublicVideos(where, function(err, videos) {
+    if (err) {
+      err.status = 500;
+      return next(err);
+    } else {
+      return res.render('search', {
+        videos: videos,
+        q: req.query.q
+      });
+    }
+  });
+};
+
+
+/*
  * /profile/video/videoId/update
  * user updates a video
  * requires middleware.video
@@ -123,6 +147,8 @@ controllers.videoUpdate = function(req, res, next) {
   if (req.method === "POST") {
     form.bind(req.body);
     if (form.validateSync()) {
+      console.log(form.getData()["private"]);
+      console.log(res.locals.video["private"]);
       return res.locals.video.save(function(err) {
         if (err) {
           err.status = 500;

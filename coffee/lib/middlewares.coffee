@@ -29,7 +29,7 @@ middlewares.csrf = do ->
 # sets res.locals.video
 middlewares.video = (req,res,next,id)->
     Video.findById(id)
-    .select('title description duration thumbnail owner originalId categoryId')
+    .select('title private description duration thumbnail owner originalId categoryId')
     .populate('owner')
     .exec (err,video)->
         if err 
@@ -76,12 +76,12 @@ middlewares.flash = (req,res,next)->
     next()
 
 middlewares.videoApi = do ->
-    controller = new Rest.Controller(express())
+    controller = new Rest.Controller(express(),{allow:['list','get']})
     controller.setAdapter(new Rest.adapter.MongooseAdapter(Video))
     controller.handle()
 
 middlewares.playlistApi = do ->
-    controller = new Rest.Controller(express())
+    controller = new Rest.Controller(express(),{allow:['list','get']})
     controller.setAdapter(new Rest.adapter.MongooseAdapter(Playlist))
     controller.handle()
 

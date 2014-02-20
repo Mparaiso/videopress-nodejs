@@ -56,6 +56,19 @@ controllers.videoFromUrl = (req,res,next)->
     else Video.fromUrl url,(err,result)->
         if err then res.json(500,{error:"video for url #{url} not found"}) 
         else res.json(result)
+###
+/search
+###
+controllers.videoSearch = (req,res,next)->
+    where = {}
+    if req.query.q 
+        where.title = new RegExp(req.query.q,'i')
+    Video.findPublicVideos where , (err,videos)->
+        if err 
+            err.status = 500 
+            next(err)
+        else
+            res.render('search',{videos,q:req.query.q})
 
 ###
 # /profile/video/videoId/update
@@ -68,6 +81,8 @@ controllers.videoUpdate = (req,res,next)->
     if req.method is "POST"
         form.bind(req.body)
         if form.validateSync()
+            console.log(form.getData().private);
+            console.log(res.locals.video.private);
             return res.locals.video.save (err)->
                 if err then err.status = 500 ; next(err)
                 res.redirect('/video/'+req.params.videoId)

@@ -6,6 +6,7 @@ util = require 'util'
 config = require './config'
 async = require 'async'
 bcrypt = require 'bcrypt-nodejs'
+_= require 'underscore'
 
 YoutubeVideo = parsers.YoutubeVideo
 
@@ -93,6 +94,16 @@ VideoSchema.statics.list = (query,callback)->
     .populate('owner')
     if callback then q.exec(callback) else q
     
+VideoSchema.statics.findPublicVideos = (where={},callback)->
+    if where instanceof Function
+        callback = where
+        where = {}
+    where = _.extend(where,{private:false})
+    q = this.find(where).limit(40)
+    if callback
+        q.exec(callback)
+    else q
+
 VideoSchema.methods.toString = ->
     this.title
 

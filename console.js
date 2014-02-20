@@ -37,6 +37,7 @@ commander
 	.version('0.0.1')
 	.usage('[command] [options]');
 
+/** create a video from a file, a url or inline */
 commander
 	.command('video:create [video]')
 	.description('create a video')
@@ -83,14 +84,14 @@ commander
 			exit('Video not provided', 1);
 		}
 	});
+/** query mongodb database with mongoose query functions */
 commander
 	.command('db:query [query]')
 	.description('execute a mongoose query on some collection')
 	.action(function(query) {
-		container.db.set("debug", false);
-		if (query && query.match(/^(Video|Playlist)/)) {
+		if (query && query.match(/^(Video|Playlist|User|Session)/)) {
 			var f, exec;
-			f = new Function('Video', 'Playlist', 'exec', 'exec(' + query + ');');
+			f = new Function('Session','User','Video', 'Playlist', 'exec', 'exec(' + query + ');');
 			exec = function(query) {
 				if (typeof query !== "object") {
 					exit("Error " + query, 1);
@@ -104,9 +105,9 @@ commander
 					});
 				}
 			};
-			f(container.Video, container.Playlist, exec);
+			f(container.Session,container.User,container.Video,container.Playlist,exec);
 		} else {
-			exit('missing query!', 1);
+			exit('missing query or query not allowed on the collection!', 1);
 		}
 	});
 if (!module.parent) {

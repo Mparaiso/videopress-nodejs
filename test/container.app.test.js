@@ -1,7 +1,6 @@
 /*global describe,it,beforeEach,before,after*/
 "use strict";
-require('source-map-support').install();
-var container = require('../js/container'),
+var container = require('../app'),
     async = require('async'),
     assert = require('assert'),
     request = require('supertest').agent,
@@ -75,6 +74,13 @@ describe('container.app', function() {
             assert(process.env.NODE_ENV === 'testing');
         });
     });
+    describe("/search?q=some%20thing", function() {
+        it('should be 200', function(done) {
+            request(this.app)
+                .get('/search?q=universe')
+                .expect(200, done);
+        });
+    });
     describe("/signup", function() {
         var r = request(container.app);
         beforeEach(function() {
@@ -121,8 +127,8 @@ describe('container.app', function() {
                             });
                         });
                     });
-                    describe("the user delete the previously created video",function(){
-                        
+                    describe("the user delete the previously created video", function() {
+
                     });
                     describe("the user then logs out", function() {
                         it('should be 302', user.getLogout);

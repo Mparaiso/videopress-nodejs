@@ -89,10 +89,12 @@ container.set "app", container.share ->
                 failureRedirect:'/signup',
                 failureFlash:true
             })]
-
         #erase user credentials
         "/logout":
             get:controllers.logout
+        #search videos by title
+        "/search":
+            get:controllers.videoSearch
 
     app.use(middlewares.notFound)
     app.use(middlewares.serverError)
@@ -116,7 +118,7 @@ container.set "swig", container.share ->
 
 container.set "db", container.share ->
     database = require './lib/database'
-    database.set("debug", false) #container.debug 
+    database.set("debug", container.config.mongoose_debug) #container.debug 
     database.connect(container.config.connection_string)
     return database
 

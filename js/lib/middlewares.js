@@ -44,7 +44,7 @@ middlewares.csrf = (function() {
 })();
 
 middlewares.video = function(req, res, next, id) {
-  return Video.findById(id).select('title description duration thumbnail owner originalId categoryId').populate('owner').exec(function(err, video) {
+  return Video.findById(id).select('title private description duration thumbnail owner originalId categoryId').populate('owner').exec(function(err, video) {
     if (err) {
       err.status = 500;
       return next(err);
@@ -106,14 +106,18 @@ middlewares.flash = function(req, res, next) {
 
 middlewares.videoApi = (function() {
   var controller;
-  controller = new Rest.Controller(express());
+  controller = new Rest.Controller(express(), {
+    allow: ['list', 'get']
+  });
   controller.setAdapter(new Rest.adapter.MongooseAdapter(Video));
   return controller.handle();
 })();
 
 middlewares.playlistApi = (function() {
   var controller;
-  controller = new Rest.Controller(express());
+  controller = new Rest.Controller(express(), {
+    allow: ['list', 'get']
+  });
   controller.setAdapter(new Rest.adapter.MongooseAdapter(Playlist));
   return controller.handle();
 })();

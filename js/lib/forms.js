@@ -30,6 +30,7 @@ forms.SignUp = function(csrf) {
       required: true
     }
   }).add('_csrf', 'hidden', {
+    validators: form.validation.Required(),
     'default': csrf,
     attributes: {
       id: "_csrf"
@@ -46,7 +47,7 @@ forms.SignUp = function(csrf) {
 
 forms.Login = function(csrf) {
   return form.create('login').add('email', 'text', {
-    validators: form.validation.Required(),
+    validators: [form.validation.Required(), form.validation.Email()],
     attributes: {
       "class": 'form-control',
       required: true
@@ -82,10 +83,9 @@ forms.Video = function() {
       'required': 'required',
       "class": 'form-control'
     }
-  }).add('private', 'checkbox', {
+  }).add('private', 'boolean', {
     attributes: {
-      "class": '',
-      value: 1
+      value: true
     }
   }).add('description', 'textarea', {
     attributes: {

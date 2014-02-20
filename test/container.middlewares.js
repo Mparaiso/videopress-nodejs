@@ -5,7 +5,7 @@ expect = require('chai').expect;
 assert = require('assert');
 express = require('express');
 request = require('supertest');
-container = require('../js/container');
+container = require('../app');
 /**
  * container.middlewares
  */

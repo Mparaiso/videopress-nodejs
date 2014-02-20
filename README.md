@@ -18,6 +18,7 @@ Express-video is a cms allowing users to create playlists from various video web
 - membership
 - import and display videos from : 
 	- Youtube
+- rest api to create videos and playlists
 
 ### DOCUMENTATION
 
@@ -79,4 +80,10 @@ Express-video is a cms allowing users to create playlists from various video web
 	/profile/video/:videoId/update :update a video
 	/profile/video/:videoId/delete :delete a video
 
-### TODO
+#### Changelog
+
+#### TODO
+
+- [x] implement basic search of public videos
+- [ ] secure api (PUT/POST/DELETE are disabled at the moment)
+- [ ] make Video and Playlist models more strict

@@ -113,6 +113,9 @@ container.set("app", container.share(function() {
     },
     "/logout": {
       get: controllers.logout
+    },
+    "/search": {
+      get: controllers.videoSearch
     }
   });
   app.use(middlewares.notFound);
@@ -155,7 +158,7 @@ container.set("swig", container.share(function() {
 container.set("db", container.share(function() {
   var database;
   database = require('./lib/database');
-  database.set("debug", false);
+  database.set("debug", container.config.mongoose_debug);
   database.connect(container.config.connection_string);
   return database;
 }));

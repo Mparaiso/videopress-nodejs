@@ -1,10 +1,9 @@
 /*jslint nomen:true,white:true,node:true,es5:true*/
 /*global require,it,describe,beforeEach */
 "use strict";
-require('source-map-support').install();
 var assert = require('assert'),
     request = require('supertest'),
-    parsers = require('../js/lib/parsers'),
+    parsers = require('../app').parsers,
     YoutubeVideo = parsers.YoutubeVideo,
     youtube_api_key = process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY;
 
