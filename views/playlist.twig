@@ -1,4 +1,4 @@
-{# a single video view , with similar items on the right hand  #}
+{# a video from a playlist , with other videos from the same playlist the right hand  #}
 {% extends 'layout.twig' %}
 {% block title %} {{title}} -- {{video.title}} {%endblock%}
 {% block content %}
@@ -28,14 +28,15 @@
 		<div>&nbsp;</div>
 	</article>
 	<aside class="col-md-4">
-		{% for video in videos %}
+		<h5>{{playlist.title}}</h5>
+		{% for item in playlist.videos %}
 		<div class='row'>
 			<div class="col-md-6">
-				<a href="/video/{{video.id}}">
-					<img width="100%" class="thumbnail" src="{{video.thumbnail}}" alt="{{video.title}}"/>
+				<a href="/playlist/{{playlist.id}}?videoId={{item.id}}">
+					<img width="100%" class="thumbnail" src="{{item.thumbnail}}" alt="{{item.title}}"/>
 				</a>
 			</div>
-			<div class="col-md-6">{{video.title}}</div>
+			<div class="col-md-6">{{item.title}}</div>
 			<div>&nbsp;</div>
 		</div>
 		{% endfor %}

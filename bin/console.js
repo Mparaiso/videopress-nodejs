@@ -16,7 +16,7 @@
 var commander, container, db, connect, fs, async, exit;
 
 commander = require('commander');
-container = require('./js/container');
+container = require('../js/container');
 fs = require('fs');
 async = require('async');
 

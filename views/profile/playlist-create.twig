@@ -1,0 +1,15 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+<h1>Create a new playlist</h1>
+<form action="" role='form' class="form-horizontal col-md-6" method="POST">
+	<fieldset>
+		{% for field in form.getFields() %}
+		<div class="form-group">
+			{{field.toHTML()}}
+		</div>
+		{% endfor %}
+		<input type="submit" class="button" value="Create">
+		<input type="hidden" name="_csrf" value="{{_csrf}}">
+	</fieldset>
+</form>
+{% endblock %}

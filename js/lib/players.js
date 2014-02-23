@@ -60,7 +60,7 @@ players.Youtube = (function() {
     };
   };
 
-  Youtube.prototype.render = function() {
+  Youtube.prototype.toHTML = function() {
     var data;
     data = this.toJSON();
     return "<iframe width=\"" + data.width + "\" height=\"" + data.height + "\" src=\"" + data.src + "\" frameborder=\"{data.frameborder}\" " + (data.allowfullscreen ? "allowfullscreen" : void 0) + "></iframe>";

@@ -14,10 +14,10 @@
 </head>
 <body>
 	{% include 'top-nav.twig' %}
-	<div class="container">
+	<main class="container">
 		{% include 'flash.twig' %}
 		{% block content %}{% endblock %}
-	</div>
+	</main>
 	<footer class="container">
 		{% block footer %}
 		{% include 'footer.twig' %}

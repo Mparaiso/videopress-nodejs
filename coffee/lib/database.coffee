@@ -99,7 +99,7 @@ VideoSchema.statics.findPublicVideos = (where={},callback)->
         callback = where
         where = {}
     where = _.extend(where,{private:false})
-    q = this.find(where).limit(40)
+    q = this.find(where).limit(40).sort({created_at:-1}).populate('owner')
     if callback
         q.exec(callback)
     else q
@@ -123,9 +123,36 @@ VideoSchema.statics.findSimilar = (video,options,callback)->
 Video = mongoose.model('Video', VideoSchema)
 
 PlaylistSchema = mongoose.Schema
-        title: String,
+        title: {type:String,required:true},
+        owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'}
+        thumbnail:{type:String};
         description: String,
-        videos: [VideoSchema]
+        videos: [{ref:'Video',type:mongoose.Schema.Types.ObjectId}]
+        video_urls:String
+        private:{type:Boolean,default:false}
+
+PlaylistSchema.pre('save',(next)->
+    self= this
+    ### transform a list of video urls into video documents and add video ids to video field ###
+    if this.video_urls
+        _urls = this.video_urls
+        this.video_urls = undefined
+        async.map(_urls.split(/\s+/),
+            (url,next)->Video.fromUrl(url,(err,video)->next(null,video)),
+            ((err,videos)->
+                if videos 
+                    ids = _.pluck(videos,'_id');
+                    self.videos = if _.isArray(self.videos) then self.videos.concat(ids) else ids
+                    if videos.length > 0 then self.thumbnail = videos[0].thumbnail
+                next())
+        )
+    else
+        next()
+)
+
+PlaylistSchema.statics.findByOwnerId = (id,callback)->
+    q = this.find({owner:id}).populate('videos owner')
+    if callback then q.exec(callback) else q
 
 Playlist = mongoose.model('Playlist',PlaylistSchema)
 

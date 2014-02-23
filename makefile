@@ -23,7 +23,7 @@ commit: compile
 push: commit
 	@git push origin master --tags
 run:
-	@NODE_ENV=development supervisor -w 'views,coffee' -e 'coffee|js|twig' app.js &
+	@NODE_ENV=development supervisor -i 'node_modules' -w 'views,coffee' -e 'coffee|js|twig' app.js &
 deploy: push
 	@git push heroku master
 .PHONY: run test commit push compile deploy

@@ -1,5 +1,6 @@
 /*global describe,it,before,beforeEach*/
 "use strict";
+
 describe("container.db", function() {
     /*global describe,it,beforeEach,before*/
     var assert = require('assert'),
@@ -7,7 +8,7 @@ describe("container.db", function() {
         Video = container.Video,
         Playlist = container.Playlist;
 
-    before(function(done) {
+    beforeEach(function(done) {
         Video.remove(function() {
             Playlist.remove(done);
         });
@@ -39,23 +40,34 @@ describe("container.db", function() {
             it('should find public videos', function(done) {
                 Video.findPublicVideos(done);
             });
-               it('should find public videos with where parameter', function(done) {
-                Video.findPublicVideos({foo:/bar/},done);
+            it('should find public videos with where parameter', function(done) {
+                Video.findPublicVideos({
+                    foo: /bar/
+                }, done);
             });
         });
 
     });
     describe('Playlist', function() {
-        beforeEach(function(done) {
+        beforeEach(function() {
             this.data = {
-                title: "playlisttitle"
+                title: "playlisttitle",
+                description: 'foo',
+                video_urls: "http://www.youtube.com/watch?v=5iZ1-csQFUA \
+                    http://www.youtube.com/watch?v=MRLnOpTe2DY  \
+                    http://www.youtube.com/watch?v=gZ-kgn9xXpg \
+                    http://www.youtube.com/watch?v=1rLjFKdnCGg"
             };
             this.playlist = new Playlist(this.data);
-            Playlist.remove(done);
+        });
+        describe("a playlist is saved", function() {
+            it('it should have 4 video refs in video fields', function(done) {
+                this.playlist.save(function(err, playlist) {
+                    assert.equal(playlist.videos.length, 4);
+                    done();
+                });
+            });
         });
 
-        it('should save', function(done) {
-            this.playlist.save(done);
-        });
     });
 });

@@ -190,7 +190,9 @@ VideoSchema.statics.findPublicVideos = function(where, callback) {
   where = _.extend(where, {
     "private": false
   });
-  q = this.find(where).limit(40);
+  q = this.find(where).limit(40).sort({
+    created_at: -1
+  }).populate('owner');
   if (callback) {
     return q.exec(callback);
   } else {
@@ -228,10 +230,70 @@ VideoSchema.statics.findSimilar = function(video, options, callback) {
 Video = mongoose.model('Video', VideoSchema);
 
 PlaylistSchema = mongoose.Schema({
-  title: String,
+  title: {
+    type: String,
+    required: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  thumbnail: {
+    type: String
+  },
   description: String,
-  videos: [VideoSchema]
+  videos: [
+    {
+      ref: 'Video',
+      type: mongoose.Schema.Types.ObjectId
+    }
+  ],
+  video_urls: String,
+  "private": {
+    type: Boolean,
+    "default": false
+  }
 });
+
+PlaylistSchema.pre('save', function(next) {
+  var self, _urls;
+  self = this;
+
+  /* transform a list of video urls into video documents and add video ids to video field */
+  if (this.video_urls) {
+    _urls = this.video_urls;
+    this.video_urls = void 0;
+    return async.map(_urls.split(/\s+/), function(url, next) {
+      return Video.fromUrl(url, function(err, video) {
+        return next(null, video);
+      });
+    }, (function(err, videos) {
+      var ids;
+      if (videos) {
+        ids = _.pluck(videos, '_id');
+        self.videos = _.isArray(self.videos) ? self.videos.concat(ids) : ids;
+        if (videos.length > 0) {
+          self.thumbnail = videos[0].thumbnail;
+        }
+      }
+      return next();
+    }));
+  } else {
+    return next();
+  }
+});
+
+PlaylistSchema.statics.findByOwnerId = function(id, callback) {
+  var q;
+  q = this.find({
+    owner: id
+  }).populate('videos owner');
+  if (callback) {
+    return q.exec(callback);
+  } else {
+    return q;
+  }
+};
 
 Playlist = mongoose.model('Playlist', PlaylistSchema);
 

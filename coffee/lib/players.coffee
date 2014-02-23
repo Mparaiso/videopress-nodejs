@@ -28,7 +28,7 @@ class players.Youtube
 		height:@options.height
 		frameborder:@options.frameborder
 		allowfullscreen:@options.allowfullscreen
-	render:->
+	toHTML:->
 		data = @toJSON()
 		"""
 		<iframe width="#{data.width}" height="#{data.height}" src="#{data.src}" frameborder="{data.frameborder}" #{if data.allowfullscreen then "allowfullscreen"}></iframe>

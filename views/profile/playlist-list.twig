@@ -1,0 +1,30 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+<h1>Manage Playlists </h1>
+{% if playlists and playlists.length > 0 %}
+<table class="table" role="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Title</th>
+			<th>Description</th>
+			<th>Videos</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for playlist in playlists %}
+		<tr>
+			<td><a href="/playlist/{{playlist.id}}">
+				<img src="{{playlist.thumbnail}}" class="col-md-6" alt="{{playlist.title}}">
+			</a></td>
+			<td>{{playlist.title}}</td>
+			<td>{{playlist.description}}</td>
+			<td>{{playlist.videos.length}} videos</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
+{%else%}
+<h2 class="text-warning">No playlist found</h2>
+{% endif %}
+{% endblock %}

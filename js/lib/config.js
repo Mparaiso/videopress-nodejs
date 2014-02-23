@@ -14,6 +14,7 @@ config = {
   youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   port: process.env.PORT,
   mongoose_debug: false,
+  swig_cache: true,
   session_secret: process.env.SESSION_SECRET
 };
 
@@ -32,7 +33,9 @@ if (process.env.NODE_ENV === "staging") {
  */
 
 if (process.env.NODE_ENV === "development") {
-  util._extend(config, {});
+  util._extend(config, {
+    swig_cache: false
+  });
 }
 
 

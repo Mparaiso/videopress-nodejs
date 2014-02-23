@@ -39,7 +39,7 @@ container.set "app", container.share ->
     app.configure 'development', ->
         app.use(express.logger("dev"))
         app.enable('verbose errors')
-
+        app.use(middlewares.serverError)
 
     app.configure 'testing', ->
         app.disable("verbose errors")
@@ -47,22 +47,28 @@ container.set "app", container.share ->
     app.map = container.mixins.map
     
     app.param('videoId',middlewares.video)
+    app.param('playlistId',middlewares.playlist)
     ### protect profile pages ###
+    app.use(middlewares.user)
+    app.use(middlewares.flash)
     app.use('/profile',middlewares.isLoggedIn)
     app.use('/profile',middlewares.csrf)
-
-    app.map 
-        use:[middlewares.user,middlewares.flash],
+    app.use('/login',middlewares.csrf)
+    app.use('/signup',middlewares.csrf)
+    
+    app.map
+        "/": 
+            get:controllers.index
         "/api/video":
             use: middlewares.videoApi
         "/api/video.fromUrl": 
             post: controllers.videoFromUrl
         "/api/playlist":
             use: middlewares.playlistApi
-        "/": 
-            get:controllers.index
         "/video/:videoId":
             get:controllers.videoById
+        "/playlist/:playlistId":
+            get:controllers.playlistById
         "/profile":
             all:controllers.profile
             "/video/new":
@@ -75,16 +81,26 @@ container.set "app", container.share ->
             '/video/:videoId/remove':
                 post:[middlewares.belongsToUser(container.Video,'video')
                     controllers.videoRemove]
+            '/playlist':
+                get:controllers.playlistList
+            '/playlist/:playlistId/update':
+                all:[middlewares.belongsToUser(container.Playlist,'playlist'),
+                    controllers.playlistUpdate]
+            '/playlist/:playlistId/remove':
+                post:[middlewares.belongsToUser(container.Playlist,'playlist'),
+                    controllers.playlistRemove]
+            '/playlist/new':
+                all:controllers.playlistCreate
         "/login":
-            get:[middlewares.csrf,controllers.login]
+            get:controllers.login
             post:container.passport.authenticate('local-login',{
                 successRedirect:'/profile',
                 failureRedirect:'/login',
                 failureFlash:true
                 })
         "/signup":
-            get:[middlewares.csrf,controllers.signup]
-            post:[middlewares.csrf,controllers.signupPost,container.passport.authenticate('local-signup',{
+            get:controllers.signup
+            post:[controllers.signupPost,container.passport.authenticate('local-signup',{
                 successRedirect:'/profile',
                 failureRedirect:'/signup',
                 failureFlash:true
@@ -96,8 +112,8 @@ container.set "app", container.share ->
         "/search":
             get:controllers.videoSearch
 
+    #middleware for 404 pages
     app.use(middlewares.notFound)
-    app.use(middlewares.serverError)
 
     app.on 'error',(err)->
         container.mongolog.error(err)

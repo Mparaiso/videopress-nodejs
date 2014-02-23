@@ -17,15 +17,13 @@ middlewares = exports
     Makes the csrf token mandatory
     add _csrf to res.locals and headers
 ###
-middlewares.csrf = do ->
-    csrf = express.csrf()
-    (req,res,next)->
-        csrf(req,res,(err)->
-            if err then next err
+middlewares.csrf = (req,res,next)->
+        (express.csrf())(req,res,(err)->
+            if err then next(err)
             else 
                 res.locals._csrf = req.csrfToken()
                 res.set('_csrf',res.locals._csrf)
-                do next)
+                next())
 # sets res.locals.video
 middlewares.video = (req,res,next,id)->
     Video.findById(id)
@@ -42,7 +40,20 @@ middlewares.video = (req,res,next,id)->
         else 
             res.locals.video = video 
             next()
-
+middlewares.playlist = (req,res,next,id)->
+    Playlist.findById(id)
+        .where({private:false})
+        .populate('videos')
+        .exec((err,playlist)->
+            if err then err.status= 500 ; next(err)
+            else if not playlist
+                err = new Error("Playlist with id #{id} not found")
+                err.status = 404
+                next(err)
+            else 
+                res.locals.playlist = playlist
+                next()
+        )
 # a resource belongs to a user
 middlewares.belongsToUser = (model,param)->
     (req,res,next)->

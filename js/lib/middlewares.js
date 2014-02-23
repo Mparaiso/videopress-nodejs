@@ -27,21 +27,17 @@ middlewares = exports;
     add _csrf to res.locals and headers
  */
 
-middlewares.csrf = (function() {
-  var csrf;
-  csrf = express.csrf();
-  return function(req, res, next) {
-    return csrf(req, res, function(err) {
-      if (err) {
-        return next(err);
-      } else {
-        res.locals._csrf = req.csrfToken();
-        res.set('_csrf', res.locals._csrf);
-        return next();
-      }
-    });
-  };
-})();
+middlewares.csrf = function(req, res, next) {
+  return (express.csrf())(req, res, function(err) {
+    if (err) {
+      return next(err);
+    } else {
+      res.locals._csrf = req.csrfToken();
+      res.set('_csrf', res.locals._csrf);
+      return next();
+    }
+  });
+};
 
 middlewares.video = function(req, res, next, id) {
   return Video.findById(id).select('title private description duration thumbnail owner originalId categoryId').populate('owner').exec(function(err, video) {
@@ -54,6 +50,24 @@ middlewares.video = function(req, res, next, id) {
       return next(err);
     } else {
       res.locals.video = video;
+      return next();
+    }
+  });
+};
+
+middlewares.playlist = function(req, res, next, id) {
+  return Playlist.findById(id).where({
+    "private": false
+  }).populate('videos').exec(function(err, playlist) {
+    if (err) {
+      err.status = 500;
+      return next(err);
+    } else if (!playlist) {
+      err = new Error("Playlist with id " + id + " not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      res.locals.playlist = playlist;
       return next();
     }
   });

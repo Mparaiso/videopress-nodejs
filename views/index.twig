@@ -1,6 +1,6 @@
 {% extends 'layout.twig' %}
 {% block content %}
-<!-- <h1>{{title}}</h1> -->
+<h3 class="muted">Latest Videos</h3>
 {% for page in paginate(videos,6) %}
 <section class="row">
 	{%for video in page %}

@@ -50,19 +50,27 @@ container.set("app", container.share(function() {
   });
   app.configure('development', function() {
     app.use(express.logger("dev"));
-    return app.enable('verbose errors');
+    app.enable('verbose errors');
+    return app.use(middlewares.serverError);
   });
   app.configure('testing', function() {
     return app.disable("verbose errors");
   });
   app.map = container.mixins.map;
   app.param('videoId', middlewares.video);
+  app.param('playlistId', middlewares.playlist);
 
   /* protect profile pages */
+  app.use(middlewares.user);
+  app.use(middlewares.flash);
   app.use('/profile', middlewares.isLoggedIn);
   app.use('/profile', middlewares.csrf);
+  app.use('/login', middlewares.csrf);
+  app.use('/signup', middlewares.csrf);
   app.map({
-    use: [middlewares.user, middlewares.flash],
+    "/": {
+      get: controllers.index
+    },
     "/api/video": {
       use: middlewares.videoApi
     },
@@ -72,11 +80,11 @@ container.set("app", container.share(function() {
     "/api/playlist": {
       use: middlewares.playlistApi
     },
-    "/": {
-      get: controllers.index
-    },
     "/video/:videoId": {
       get: controllers.videoById
+    },
+    "/playlist/:playlistId": {
+      get: controllers.playlistById
     },
     "/profile": {
       all: controllers.profile,
@@ -91,10 +99,22 @@ container.set("app", container.share(function() {
       },
       '/video/:videoId/remove': {
         post: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoRemove]
+      },
+      '/playlist': {
+        get: controllers.playlistList
+      },
+      '/playlist/:playlistId/update': {
+        all: [middlewares.belongsToUser(container.Playlist, 'playlist'), controllers.playlistUpdate]
+      },
+      '/playlist/:playlistId/remove': {
+        post: [middlewares.belongsToUser(container.Playlist, 'playlist'), controllers.playlistRemove]
+      },
+      '/playlist/new': {
+        all: controllers.playlistCreate
       }
     },
     "/login": {
-      get: [middlewares.csrf, controllers.login],
+      get: controllers.login,
       post: container.passport.authenticate('local-login', {
         successRedirect: '/profile',
         failureRedirect: '/login',
@@ -102,9 +122,9 @@ container.set("app", container.share(function() {
       })
     },
     "/signup": {
-      get: [middlewares.csrf, controllers.signup],
+      get: controllers.signup,
       post: [
-        middlewares.csrf, controllers.signupPost, container.passport.authenticate('local-signup', {
+        controllers.signupPost, container.passport.authenticate('local-signup', {
           successRedirect: '/profile',
           failureRedirect: '/signup',
           failureFlash: true
@@ -119,7 +139,6 @@ container.set("app", container.share(function() {
     }
   });
   app.use(middlewares.notFound);
-  app.use(middlewares.serverError);
   app.on('error', function(err) {
     return container.mongolog.error(err);
   });

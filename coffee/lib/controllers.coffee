@@ -7,7 +7,7 @@ Video = database.model('Video')
 Playlist = database.model('Playlist')
 async = require 'async'
 forms = require "./forms"
-
+_ = require 'underscore'
 controllers= exports 
 
 ###
@@ -15,7 +15,7 @@ controllers= exports
 ###
 
 controllers.index = (req,res,next)-> #default page
-    Video.list((err,videos)->
+    Video.findPublicVideos((err,videos)->
         if err then next(err)
         else res.render('index',{videos}))
 
@@ -25,8 +25,8 @@ controllers.videoById = (req,res,next)->
             err.status = 500 
             next(err)
         else 
-            player = new players.Youtube(res.locals.video.originalId)
-            res.render('video',{videos:videos,player:player.render()})
+            player = (new players.Youtube(res.locals.video.originalId)).toHTML()
+            res.render('video',{videos:videos,player})
 ###
     VIDEO CRUD
 ###
@@ -70,6 +70,43 @@ controllers.videoSearch = (req,res,next)->
         else
             res.render('search',{videos,q:req.query.q})
 
+###
+/profile/playlist
+###
+controllers.playlistList= (req,res,next)->
+    Playlist.findByOwnerId(req.user.id,(err,playlists)->
+        if err 
+            err.status = 500
+            next(err)
+        else
+            res.render('profile/playlist-list',{playlists})
+    )
+controllers.playlistCreate = (req,res,next)->
+    playlist = new Playlist()
+    form = forms.Playlist()
+    form.setModel(playlist)
+    if req.method is "POST"
+        form.bind(req.body)
+        if form.validateSync()
+            playlist.owner = req.user.id
+            playlist.save((err,playlist)->
+                if err then err.status = 500 ; next(err)
+                else res.redirect('/playlist/'+playlist.id)
+            )
+    res.render('profile/playlist-create',{form})
+controllers.playlistUpdate= (req,res)->
+    res.send(200,'todo implement')
+controllers.playlistRemove= (req,res)->
+    res.send(200,'todo','implement')
+###
+# /playlist/:playlistId/video/:videoId
+###
+controllers.playlistById = (req,res,next)->
+    playlist = res.locals.playlist
+    video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.videos[0]
+    if video
+        player = (new players.Youtube(video.originalId)).toHTML()
+    res.render('playlist',{playlist,video,player})
 ###
 # /profile/video/videoId/update
 # user updates a video
@@ -130,7 +167,15 @@ controllers.logout = (req,res)->
     req.session.destroy(->res.redirect('/'))
 
 # show current user profile
-controllers.profile = (req,res)->
-    Video.findByOwnerId req.user.id,(err,videos)->
-        if err then app.get('monolog').error(err)
-        res.render('profile/index',{videos})
+controllers.profile = (req,res,ext)->
+    async.parallel({videos:Video.findByOwnerId.bind(Video,req.user.id)
+    ,playlists:Playlist.findByOwnerId.bind(Playlist,req.user.id)}
+    ,(err,results)->(
+            if err 
+                err.status = 500
+                next(err)
+            else 
+                res.render('profile/index',{videos:results.videos,playlists:results.playlists})
+        )
+    )
+    
