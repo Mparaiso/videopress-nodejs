@@ -9,7 +9,7 @@ config ={
     youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
     port: process.env.PORT,
     mongoose_debug: false,
-    swig_cache:true,
+    swig_cache:"memory",
     session_secret: process.env.SESSION_SECRET
 }
 ###
