@@ -1,5 +1,5 @@
 util = require 'util'
-_ = require "underscore"
+_ = require 'lodash'
 players = exports
 
 not_implemented_here=->throw "not implemented here!"

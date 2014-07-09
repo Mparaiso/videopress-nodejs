@@ -3,7 +3,7 @@ var not_implemented_here, players, util, _;
 
 util = require('util');
 
-_ = require("underscore");
+_ = require('lodash');
 
 players = exports;
 

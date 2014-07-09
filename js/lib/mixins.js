@@ -5,10 +5,10 @@ mixins = exports;
 
 
 /*
-route map mixin
-mount routes with a single object
-@param routes
-@param prefix
+    route map mixin
+    mount routes with a single object
+    @param routes
+    @param prefix
  */
 
 mixins.map = function(routes, prefix) {

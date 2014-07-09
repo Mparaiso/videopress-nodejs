@@ -1,6 +1,6 @@
 {% extends 'layout.twig' %}
 {% block profile_content %}
-<h1>Create a new playlist</h1>
+<h1>Update Playlist {{playlist.toString()}}</h1>
 <form action="" role='form' class="form-horizontal col-md-6" method="POST">
 	<fieldset>
 		{% for field in form.getFields() %}

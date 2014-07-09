@@ -4,7 +4,9 @@
 {% block content %}
 <section class="row">
 	<article class="col-md-8">
-		{%autoescape false %}{{player}}{%endautoescape%}
+        {% if video %}
+		    {%autoescape false %}{{player.toHTML()}}{%endautoescape%}
+        {% endif %}
 		<div>
 			<h3>{{video.title}} </h3>
 			<h4><small>{{video.publishedAt.toString()}}</small></h4>
@@ -28,7 +30,7 @@
 		<div>&nbsp;</div>
 	</article>
 	<aside class="col-md-4">
-		<h5>{{playlist.title}}</h5>
+		<h4>{{playlist.title}}</h4>
 		{% for item in playlist.videos %}
 		<div class='row'>
 			<div class="col-md-6">

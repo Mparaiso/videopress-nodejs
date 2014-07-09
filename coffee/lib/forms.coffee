@@ -1,4 +1,5 @@
 form = require 'mpm.form'
+_ = require 'lodash'
 forms = exports
 
 ###
@@ -39,5 +40,6 @@ forms.Playlist = ()->
     .add('description','textarea',{validators:form.validation.Required(),attributes:{rows:3,required:true,class:'form-control'}})
     .add('private','boolean',{attributes:{value:true}})
     .add('video_urls','textarea',{validators:form.validation.Required(),attributes:{class:'form-control',rows:10,required:true}})
-    .add('help','label',{default:'Help Text',attributes:{class:'help-block',value:'Copy and paste multiple video urls in the videos field,separated by a space'}})
+    .add('help','label',{default:'Help Text',attributes:{class:'help-block',value:'Copy and paste multiple video urls in the videos field,separated by a space,comma or a line break.'}})
+
 

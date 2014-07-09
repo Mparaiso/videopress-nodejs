@@ -2,7 +2,7 @@
 http = require("http")
 util = require('util')
 duration = require('mpm.duration')
-_ = require('underscore')
+_ = require('lodash')
 https = require('https')
 request = require('request')
 parsers =  exports

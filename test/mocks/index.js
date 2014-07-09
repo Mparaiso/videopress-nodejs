@@ -1,7 +1,7 @@
 "use strict";
 
 var mocks = exports;
-var _ = require('underscore')
+var _ = require('lodash')
 , path=require('path')
 , fs = require('fs')
 , util=require('util');

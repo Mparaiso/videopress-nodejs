@@ -34,3 +34,6 @@ footer{
     margin-top: 100px;
 	min-height: 100px;
 }
+.inline{
+    display: inline;
+}

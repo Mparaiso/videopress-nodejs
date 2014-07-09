@@ -6,7 +6,8 @@ util = require 'util'
 config = require './config'
 async = require 'async'
 bcrypt = require 'bcrypt-nodejs'
-_= require 'underscore'
+_= require 'lodash'
+q =require 'q'
 
 YoutubeVideo = parsers.YoutubeVideo
 
@@ -57,8 +58,8 @@ User = mongoose.model('User', UserSchema)
 VideoSchema = mongoose.Schema
     url: {type: String},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    title: String,
-    description: String,
+    title: {type:String,required:"title is required"},
+    description: {type:String},
     private:{type:Boolean,default:false},
     categoryId:Number,
     duration: Object,
@@ -71,20 +72,35 @@ VideoSchema = mongoose.Schema
     meta: Object,
     viewCount:{type:Number,default:0}
 
-### create video from video url ###
-VideoSchema.statics.fromUrl = (url, callback)->
+### 
+    create video from video url 
+    if document already exist,return existing video
+    @param url
+    @param properties?
+    @param {Function} callback
+###
+VideoSchema.statics.fromUrl = (url,properties={}, callback)->
+    if arguments.length ==2 and properties instanceof Function
+        callback=properties
+        properties={}
     youtubeVideo = new YoutubeVideo(config.youtube_apikey)
     if youtubeVideo.isValidUrl(url)
-        youtubeVideo.getVideoDataFromUrl url, (err, res)->
-            if err then callback(new Error(util.format("Video with url %s not found", url)))
-            else video = new Video(res) ; video.save(callback)
-    else callback(new Error(util.format("Video with url %s not found", url)))
-
+        return youtubeVideo.getVideoDataFromUrl(url,(err,data)->
+            if err then callback(err) else
+                _.extend(data,properties)
+                Video.findOneAndUpdate(data,data,{upsert:true},(err,video)->
+                    if err then callback(err) else callback(null,video)
+                )
+        )
+    else
+        callback(new Error(util.format("Video with url %s not found", url)))
+           
+        
 VideoSchema.statics.findByOwnerId = (id,cb)->
-    q = this.find({owner:id})
-    if cb then q.exec(cb) else q
+    query = this.find({owner:id})
+    if cb then query.exec(cb) else query
 
-VideoSchema.statics.list = (query,callback)->
+VideoSchema.statics.list = (query,callback,q)->
     if query instanceof Function
         callback = query
         query = {}
@@ -94,7 +110,7 @@ VideoSchema.statics.list = (query,callback)->
     .populate('owner')
     if callback then q.exec(callback) else q
     
-VideoSchema.statics.findPublicVideos = (where={},callback)->
+VideoSchema.statics.findPublicVideos = (where={},callback,q)->
     if where instanceof Function
         callback = where
         where = {}
@@ -132,18 +148,15 @@ PlaylistSchema = mongoose.Schema
         private:{type:Boolean,default:false}
 
 PlaylistSchema.pre('save',(next)->
-    self= this
     ### transform a list of video urls into video documents and add video ids to video field ###
-    if this.video_urls
-        _urls = this.video_urls
-        this.video_urls = undefined
-        async.map(_urls.split(/\s+/),
-            (url,next)->Video.fromUrl(url,(err,video)->next(null,video)),
-            ((err,videos)->
-                if videos 
-                    ids = _.pluck(videos,'_id');
-                    self.videos = if _.isArray(self.videos) then self.videos.concat(ids) else ids
-                    if videos.length > 0 then self.thumbnail = videos[0].thumbnail
+    if typeof this.video_urls is "string"
+        _urls = _.compact(this.video_urls.split(/[\s \n \r ,]+/))
+        _props = if this.owner then {owner:this.owner} else {}
+        async.map(_urls,
+            (url,next)=>Video.fromUrl(url,_props,(err,video)->console.warn(err);next(null,video)),
+            ((err,videos=[])=>
+                this.videos = videos
+                this.thumbnail = videos[0]?.thumbnail
                 next())
         )
     else
@@ -153,6 +166,12 @@ PlaylistSchema.pre('save',(next)->
 PlaylistSchema.statics.findByOwnerId = (id,callback)->
     q = this.find({owner:id}).populate('videos owner')
     if callback then q.exec(callback) else q
+
+PlaylistSchema.methods.toString=->
+    this.title
+
+PlaylistSchema.methods.getFirstVideo=->
+    this.videos[0]
 
 Playlist = mongoose.model('Playlist',PlaylistSchema)
 

@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "production"  ) {
 
 if (!module.parent) {
 	http.createServer(container.app).listen(container.port, function() {
-		console.log("listening on port ".concat(container.port));
+		console.log("listening on port : ".concat(container.port));
 	});
 } else {
 	module.exports = container;

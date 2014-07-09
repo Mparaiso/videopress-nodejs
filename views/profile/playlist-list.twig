@@ -9,17 +9,22 @@
 			<th>Title</th>
 			<th>Description</th>
 			<th>Videos</th>
+            <th></th>
 		</tr>
 	</thead>
 	<tbody>
 		{%for playlist in playlists %}
-		<tr>
+		<tr style="vertical-align:middle;">
 			<td><a href="/playlist/{{playlist.id}}">
 				<img src="{{playlist.thumbnail}}" class="col-md-6" alt="{{playlist.title}}">
 			</a></td>
 			<td>{{playlist.title}}</td>
 			<td>{{playlist.description}}</td>
 			<td>{{playlist.videos.length}} videos</td>
+            <td>
+                <a href="/profile/playlist/update/{{playlist.id}}">Edit</a> | 
+                <a href="/profile/playlist/delete/{{playlist.id}}">Remove</a>
+            </td>
 		</tr>
 		{%endfor%}
 	</tbody>

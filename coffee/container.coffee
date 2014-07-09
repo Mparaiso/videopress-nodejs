@@ -8,6 +8,7 @@ flash = require 'connect-flash'
 config = require './lib/config'
 events = require 'events'
 sessionStores = require './lib/session-stores'
+_ = require('lodash')
 
 container = new pimple
     port: process.env.PORT || 3000
@@ -49,6 +50,11 @@ container.set "app", container.share ->
     app.param('videoId',middlewares.video)
     app.param('playlistId',middlewares.playlist)
     ### protect profile pages ###
+    ### inject container into current request scope ###
+    app.use((req,res,next)->
+        res.locals.container=container
+        next()
+    )
     app.use(middlewares.user)
     app.use(middlewares.flash)
     app.use('/profile',middlewares.isLoggedIn)
@@ -83,11 +89,11 @@ container.set "app", container.share ->
                     controllers.videoRemove]
             '/playlist':
                 get:controllers.playlistList
-            '/playlist/:playlistId/update':
+            '/playlist/update/:playlistId':
                 all:[middlewares.belongsToUser(container.Playlist,'playlist'),
                     controllers.playlistUpdate]
-            '/playlist/:playlistId/remove':
-                post:[middlewares.belongsToUser(container.Playlist,'playlist'),
+            '/playlist/delete/:playlistId':
+                all:[middlewares.belongsToUser(container.Playlist,'playlist'),
                     controllers.playlistRemove]
             '/playlist/new':
                 all:controllers.playlistCreate
@@ -121,15 +127,15 @@ container.set "app", container.share ->
     return app
 
 container.set "locals", container.share ->
-    title: "mpm.video"
+    title: "mpm.video",
     paginate: (array, length, start = 0)->
         divisions = Math.ceil(array.length / length)
         [start...divisions].map (i)->
             array.slice(i * length, i * length + length)
 
-container.set "swig", container.share ->
+container.set "swig", container.share (c)->
     swig = require 'swig'
-    swig.setDefaults {cache: 'memory'}
+    swig.setDefaults({cache: c.config.swig_cache})
     return swig
 
 container.set "db", container.share ->
@@ -206,10 +212,24 @@ container.set "passport", container.share ->
     )
     return passport
 
-container.set "forms", container.share -> require './lib/forms'
-container.set "middlewares", container.share -> require './lib/middlewares'
-container.set "controllers", container.share -> require './lib/controllers'
-container.set "mixins", container.share -> require './lib/mixins'
-container.set "parsers",container.share -> require './lib/parsers'
-container.set "config",container.share -> require './lib/config'
+container.set("forms", container.share -> require './lib/forms')
+container.set("middlewares", container.share -> require './lib/middlewares')
+container.set("controllers", container.share -> require './lib/controllers')
+container.set("mixins", container.share -> require './lib/mixins')
+container.set("parsers",container.share -> require './lib/parsers')
+container.set("config",container.share( -> require './lib/config'))
+container.set("Category",container.share( ->
+    data = require('../data/youtubeVideoCategories.json').items.map((item)->{title:item.snippet.title,id:item.id})
+    return {
+        findAll:->data,
+        findById:(id)->_.find(data,(item)->item.id is id),
+        whereVideoExist:(options,callback)->
+            if options instanceof Function
+                callback=options
+                options={}
+            container.Video.aggregate([
+                { $match:{categoryId:{$exists:true}}},
+                { $group:{_id:"$categoryId",total:{$sum:1}}}
+            ]).exec(callback)
+    }))
 module.exports = container

@@ -54,7 +54,7 @@ middlewares.playlist = (req,res,next,id)->
                 res.locals.playlist = playlist
                 next()
         )
-# a resource belongs to a user
+# check if a resource belongs to a user
 middlewares.belongsToUser = (model,param)->
     (req,res,next)->
         model.findOne({_id:res.locals[param].id,owner:req.user.id})

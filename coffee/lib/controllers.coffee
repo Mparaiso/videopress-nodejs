@@ -1,5 +1,3 @@
-"use strict"
-
 express = require 'express'
 database = require './database'
 players = require './players'
@@ -7,12 +5,13 @@ Video = database.model('Video')
 Playlist = database.model('Playlist')
 async = require 'async'
 forms = require "./forms"
-_ = require 'underscore'
-controllers= exports 
+q = require "q"
+_ = require 'lodash'
 
 ###
-    CONTROLLERS
+# CONTROLLERS
 ###
+controllers= {}
 
 controllers.index = (req,res,next)-> #default page
     Video.findPublicVideos((err,videos)->
@@ -21,12 +20,10 @@ controllers.index = (req,res,next)-> #default page
 
 controllers.videoById = (req,res,next)->
     Video.findSimilar res.locals.video,{limit:8},(err,videos)->
-        if err 
-            err.status = 500 
-            next(err)
-        else 
-            player = (new players.Youtube(res.locals.video.originalId)).toHTML()
-            res.render('video',{videos:videos,player})
+        if err then (err.status = 500) and next(err)
+        else
+            player = new players.Youtube(res.locals.video.originalId)
+            res.render('video',{videos:videos,player:player})
 ###
     VIDEO CRUD
 ###
@@ -40,12 +37,12 @@ controllers.videoCreate = (req,res,next)->
                     if req.user and req.user.id
                         video.owner = req.user.id
                         video.save(next)
-                    else 
+                    else
                         next()
             ]},(err,result)->
-                if err 
+                if err
                     res.render('profile/video-create',{error:err})
-                else 
+                else
                     res.redirect('/video/'+result.video[0].id))
     else
         res.render('profile/video-create')
@@ -81,6 +78,9 @@ controllers.playlistList= (req,res,next)->
         else
             res.render('profile/playlist-list',{playlists})
     )
+###
+    PLAYLIST OPERATIONS
+###
 controllers.playlistCreate = (req,res,next)->
     playlist = new Playlist()
     form = forms.Playlist()
@@ -89,23 +89,40 @@ controllers.playlistCreate = (req,res,next)->
         form.bind(req.body)
         if form.validateSync()
             playlist.owner = req.user.id
-            playlist.save((err,playlist)->
-                if err then err.status = 500 ; next(err)
+            return playlist.save((err,playlist)->
+                if err 
+                    err.status = 500 ; next(err)
                 else res.redirect('/playlist/'+playlist.id)
             )
     res.render('profile/playlist-create',{form})
-controllers.playlistUpdate= (req,res)->
-    res.send(200,'todo implement')
-controllers.playlistRemove= (req,res)->
-    res.send(200,'todo','implement')
+
+###
+# /profile/playlist/:playlistId/update
+###
+controllers.playlistUpdate= (req,res,next)->
+    playlist=res.locals.playlist
+    form = res.locals.container.forms.Playlist()
+    form.setModel(playlist)
+    if req.method is "POST"
+        form.bind(req.body)
+        if form.validateSync()
+            return playlist.save((err,playlist)->
+                if err then next(err) else res.redirect('/playlist/'.concat(playlist.id))
+            )
+    res.render('profile/playlist-update',{form,playlist})
+###
+# /profile/playlist/:playlistId/delete
+###
+controllers.playlistRemove = (req,res,next)->
+    q.ninvoke(res.locals.playlist,'remove')
+    .then( (->res.redirect('/playlist')) ,next)
 ###
 # /playlist/:playlistId/video/:videoId
 ###
 controllers.playlistById = (req,res,next)->
     playlist = res.locals.playlist
-    video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.videos[0]
-    if video
-        player = (new players.Youtube(video.originalId)).toHTML()
+    video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.getFirstVideo()
+    if video then player = new players.Youtube(video.originalId)
     res.render('playlist',{playlist,video,player})
 ###
 # /profile/video/videoId/update
@@ -118,13 +135,13 @@ controllers.videoUpdate = (req,res,next)->
     if req.method is "POST"
         form.bind(req.body)
         if form.validateSync()
-            console.log(form.getData().private);
-            console.log(res.locals.video.private);
             return res.locals.video.save (err)->
                 if err then err.status = 500 ; next(err)
                 res.redirect('/video/'+req.params.videoId)
     res.render('profile/video-update',{form})
-
+###
+# /profile/videoRemove/:videoId/remove
+###
 controllers.videoRemove = (req,res,next)->
     res.locals.video.remove (err)->
         if err then err.status = 500 ; next(err)
@@ -179,3 +196,5 @@ controllers.profile = (req,res,ext)->
         )
     )
     
+
+module.exports=controllers
