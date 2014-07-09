@@ -17,7 +17,9 @@ SessionSchema = mongoose.Schema
 
 Session = mongoose.model('Session',SessionSchema)
 
-# define the user schema
+###
+# USER
+###
 UserSchema = mongoose.Schema
     roles:{type:Array,default:['user']}
     username:String
@@ -55,6 +57,35 @@ UserSchema.methods.toString = ->
 
 User = mongoose.model('User', UserSchema)
 
+###
+# CATEGORY
+###
+CategorySchema = mongoose.Schema({
+    title:{type:String,required:'title is required'},
+    provider:{type:String,default:"youtube"},
+    originalId:Number
+})
+
+###
+# @return Promise<Array>
+# @TODO implement
+###
+CategorySchema.statics.whereVideoExist = ->
+    q.ninvoke(Video,'aggregate',[
+        {$match:{category:{$exists:true}}},
+        {$group:{_id:"$category",total:{$sum:1}}}
+    ])
+    .then((categories)->
+        return Category.find({_id:{$in:_.pluck(categories,'_id')}}).exec()
+    )
+    
+CategorySchema.methods.toString = -> this.title
+
+Category = mongoose.model('Category',CategorySchema)
+
+###
+# VIDEO
+###
 VideoSchema = mongoose.Schema
     url: {type: String},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
@@ -62,6 +93,7 @@ VideoSchema = mongoose.Schema
     description: {type:String},
     private:{type:Boolean,default:false},
     categoryId:Number,
+    category:{type:mongoose.Schema.Types.ObjectId,ref:'Category'},
     duration: Object,
     created_at:{type:Date,'default':Date.now},
     updated_at:{type:Date,'default':Date.now},
@@ -85,11 +117,13 @@ VideoSchema.statics.fromUrl = (url,properties={}, callback)->
         properties={}
     youtubeVideo = new YoutubeVideo(config.youtube_apikey)
     if youtubeVideo.isValidUrl(url)
-        return youtubeVideo.getVideoDataFromUrl(url,(err,data)->
+        youtubeVideo.getVideoDataFromUrl(url,(err,data)->
             if err then callback(err) else
                 _.extend(data,properties)
-                Video.findOneAndUpdate(data,data,{upsert:true},(err,video)->
-                    if err then callback(err) else callback(null,video)
+                Video.findOne({owner:data.owner,url:data.url},(err,video)->
+                    if err then callback(err)
+                    else if video then callback(null,video)
+                    else (new Video(data)).save(callback)
                 )
         )
     else
@@ -115,7 +149,7 @@ VideoSchema.statics.findPublicVideos = (where={},callback,q)->
         callback = where
         where = {}
     where = _.extend(where,{private:false})
-    q = this.find(where).limit(40).sort({created_at:-1}).populate('owner')
+    q = this.find(where).limit(40).sort({updated_at:-1}).populate('owner')
     if callback
         q.exec(callback)
     else q
@@ -135,6 +169,14 @@ VideoSchema.statics.findSimilar = (video,options,callback)->
         options = {}
     @find {categoryId:video.categoryId,_id:{'$ne':video.id}},null,options,(err,res)->
         callback(err,res)
+
+VideoSchema.pre('save',(next)->
+    this.updated_at=Date.now()
+    if not this.category and this.categoryId
+        Category.findOne({originalId:this.categoryId}).exec()
+        .then(((category)=>this.category=category ; next()) , ->next())
+    else next()
+)
 
 Video = mongoose.model('Video', VideoSchema)
 
@@ -163,7 +205,7 @@ PlaylistSchema.pre('save',(next)->
         next()
 )
 
-PlaylistSchema.statics.findByOwnerId = (id,callback)->
+PlaylistSchema.statics.findByOwnerId = (id,callback,q)->
     q = this.find({owner:id}).populate('videos owner')
     if callback then q.exec(callback) else q
 

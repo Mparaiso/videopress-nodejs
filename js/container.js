@@ -75,6 +75,7 @@ container.set("app", container.share(function() {
   app.use('/profile', middlewares.csrf);
   app.use('/login', middlewares.csrf);
   app.use('/signup', middlewares.csrf);
+  app.use('/video', middlewares.csrf);
   app.map({
     "/": {
       get: controllers.index
@@ -93,6 +94,9 @@ container.set("app", container.share(function() {
     },
     "/playlist/:playlistId": {
       get: controllers.playlistById
+    },
+    "/category/:categoryId/:categoryTitle?": {
+      get: [middlewares.categories, controllers.categoryById]
     },
     "/profile": {
       all: controllers.profile,
@@ -156,6 +160,7 @@ container.set("app", container.share(function() {
 container.set("locals", container.share(function() {
   return {
     title: "mpm.video",
+    logopath: "/images/video-big.png",
     paginate: function(array, length, start) {
       var divisions, _i, _results;
       if (start == null) {
@@ -192,6 +197,10 @@ container.set("db", container.share(function() {
 
 container.set("User", container.share(function() {
   return container.db.model('User');
+}));
+
+container.set("Category", container.share(function() {
+  return container.db.model('Category');
 }));
 
 container.set("Video", container.share(function() {
@@ -316,7 +325,7 @@ container.set("config", container.share(function() {
   return require('./lib/config');
 }));
 
-container.set("Category", container.share(function() {
+container.set("Categories", container.share(function() {
   var data;
   data = require('../data/youtubeVideoCategories.json').items.map(function(item) {
     return {
@@ -330,10 +339,11 @@ container.set("Category", container.share(function() {
     },
     findById: function(id) {
       return _.find(data, function(item) {
-        return item.id === id;
+        return String(item.id) === String(id);
       });
     },
-    whereVideoExist: function(options, callback) {
+    whereVideoExist: function(options) {
+      var callback;
       if (options instanceof Function) {
         callback = options;
         options = {};
@@ -352,8 +362,22 @@ container.set("Category", container.share(function() {
               $sum: 1
             }
           }
+        }, {
+          $project: {
+            id: "$_id"
+          }
         }
-      ]).exec(callback);
+      ]).exec().then((function(_this) {
+        return function(categories) {
+          return _.map(categories, function(cat) {
+            return _.extend(cat, {
+              title: _.find(data, function(d) {
+                return String(d.id) === String(cat.id);
+              }).title
+            });
+          });
+        };
+      })(this));
     }
   };
 }));

@@ -6,7 +6,7 @@ express = require 'express'
 database = require './database'
 Video = database.model('Video')
 Playlist = database.model('Playlist')
-
+q = require('q')
 middlewares = exports
 
 ### 
@@ -25,21 +25,22 @@ middlewares.csrf = (req,res,next)->
                 res.set('_csrf',res.locals._csrf)
                 next())
 # sets res.locals.video
-middlewares.video = (req,res,next,id)->
+middlewares.video =(req,res,next,id)->
     Video.findById(id)
-    .select('title private description duration thumbnail owner originalId categoryId')
-    .populate('owner')
+    .select('title private description duration thumbnail owner originalId category categoryId')
+    .populate('owner category')
     .exec (err,video)->
         if err 
-            err.status = 500 
+            err.status = 500
             next(err)
-        else if not video 
+        else if not video
             err = new Error('Video not found')
             err.status = 404
             next(err)
         else 
             res.locals.video = video 
             next()
+
 middlewares.playlist = (req,res,next,id)->
     Playlist.findById(id)
         .where({private:false})
@@ -54,6 +55,13 @@ middlewares.playlist = (req,res,next,id)->
                 res.locals.playlist = playlist
                 next()
         )
+
+# list categories
+middlewares.categories=((req,res,next)->
+    res.locals.container.Category.whereVideoExist()
+    .then((categories)->res.locals.categories=categories;next() , 
+    next))
+
 # check if a resource belongs to a user
 middlewares.belongsToUser = (model,param)->
     (req,res,next)->

@@ -1,25 +1,45 @@
 {% extends 'layout.twig' %}
 {% block content %}
-<h3 class="muted">Latest Videos</h3>
-{% for page in paginate(videos,6) %}
-<section class="row">
-	{%for video in page %}
-	<article class="col-md-2 video">
-		<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
-		<div class="info">
-			<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
-			<br>
-			<span class="owner">
-				{% if video.owner %}
-					{{video.owner.username}}
-				{%else%}
-					anonymous
-				{% endif %}
-			</span>
-		</div>
-		<div>&nbsp;</div>
-	</article>
-	{% endfor %}
-</section>
-{% endfor %}
+<div class="row">
+    <h3 class="muted col-md-12">{{pageTitle|default("Latest Videos")}}</h3>
+    <p>&nbsp;</p>
+</div>
+<div class="row">
+<div class="col-md-2">
+    <ul class="list-unstyled">
+        {% for category in categories %}
+            <li>
+            <p>
+            <a href="/category/{{category.id}}/{{category.title}}">{{ category.title}}</a>
+            </p>
+            </li>        
+        {% endfor %}
+    </ul>
+</div>
+<div class="col-md-10">
+    {% for page in paginate(videos,5) %}
+    <div class="row">
+        <section class="row">
+        	{%for video in page %}
+        	<article class="col-md-2 video">
+        		<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
+        		<div class="info">
+        			<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
+        			<br>
+        			<span class="owner">
+        				{% if video.owner %}
+        					{{video.owner.username}}
+        				{%else%}
+        					anonymous
+        				{% endif %}
+        			</span>
+        		</div>
+        		<div>&nbsp;</div>
+        	</article>
+        	{% endfor %}
+        </section>
+    </div>
+    {% endfor %}
+</div>
+</div>
 {% endblock %}

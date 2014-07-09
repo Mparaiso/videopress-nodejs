@@ -3,32 +3,7 @@
 {% block title %} {{title}} -- {{video.title}} {%endblock%}
 {% block content %}
 <section class="row">
-	<article class="col-md-8">
-        {% if  video %}
-    	        {%autoescape false %}{{player.toHTML()}}{%endautoescape%}
-        {% endif %}
-		<div>
-			<h3>{{video.title}} </h3>
-			<h4><small>{{video.publishedAt.toString()}}</small></h4>
-			<h5 class="owner">
-				{% if video.owner %}
-				{{video.owner.username}}
-				{% else %}
-				anonymous
-				{% endif %}
-			</h5>
-			{% if user and video.owner and user.id == video.owner.id %}
-			<ul class="nav-pills nav">
-				<li><a href="/profile/video/{{video.id}}/update">update</a></li>
-				<li><a href="/profile/video/{{video.id}}/remove">remove</a></li>
-			</ul>
-			<hr>
-			{% endif %}
-			<pre class="unstyled">{{video.description}}</pre>
-
-		</div>
-		<div>&nbsp;</div>
-	</article>
+	{%include 'includes/video-read.twig'%}
 	<aside class="col-md-4">
 		{% for video in videos %}
 		<div class='row'>

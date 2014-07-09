@@ -27,14 +27,13 @@ _ = require('lodash');
 controllers = {};
 
 controllers.index = function(req, res, next) {
-  return Video.findPublicVideos(function(err, videos) {
-    if (err) {
-      return next(err);
-    } else {
-      return res.render('index', {
-        videos: videos
-      });
-    }
+  return q.all([q.ninvoke(Video, 'findPublicVideos'), res.locals.container.Category.whereVideoExist()]).spread(function(videos, categories) {
+    return res.render('index', {
+      videos: videos,
+      categories: categories
+    });
+  })["catch"](function(err) {
+    return next(err);
   });
 };
 
@@ -301,6 +300,37 @@ controllers.videoList = function(req, res) {
         videos: videos
       });
     }
+  });
+};
+
+
+/*
+ * CATEGORIES
+ */
+
+
+/*
+ * /category/categoryId
+ */
+
+controllers.categoryById = function(req, res, next) {
+  return q(res.locals.container.Category.findOne({
+    _id: req.params.categoryId
+  }).exec()).then(function(category) {
+    console.log(category);
+    return [
+      category, res.locals.container.Video.find({
+        category: category
+      }).exec()
+    ];
+  }).spread(function(category, videos) {
+    return res.render('index', {
+      videos: videos,
+      category: category,
+      pageTitle: "Latest Videos in " + category.title
+    });
+  })["catch"](function(err) {
+    return next(err);
   });
 };
 

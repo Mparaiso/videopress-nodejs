@@ -8,16 +8,19 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/">{{title}}</a>
+            
+			<a class="navbar-brand" href="/"> 
+<img src="{{logopath}}"  width="24" alt="logo" />
+                {{title}}
+            </a>
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="navbar-nav nav navbar-right">
 				<li>
-					<form class="navbar-form col-md-3" action="/search" role="form">
+					<form class="navbar-form" action="/search" role="form">
 						<div class="form-group">
-							<div class="col-lg-6">
 								<div class="input-group">
-									<input required type="search" name="q" class="form-control" style="width:300px">
+									<input required type="search" name="q" class="form-control" style="width:430px">
 									<span class="input-group-btn" style="width:inherit;">
 										<button class='btn btn-default' type="submit">
 											<span class="glyphicon glyphicon-search"></span> 
@@ -25,15 +28,13 @@
 										</button>
 									</span>
 								</div>
-							</div>
 						</div>
 					</form>
 				</li>
 				{% if user %}
                 <li class="divider"></li>
                 <li><a href="/profile/video/new">Add a video</a></li>
-                <li><a href="/profile/video">Manage Videos</a></li>
-                <li><a href="/profile/playlist">Manage Playlists</a></li>
+                <li><a href="/profile/">Dashboard</a></li>
                 <li>
 					<span class="navbar-text">
 						Welcome back <a href="/profile">{{user.username}}</a> | 

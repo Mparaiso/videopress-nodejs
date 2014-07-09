@@ -1,0 +1,21 @@
+{
+  "name": "mpm.video",
+  "version": "0.0.5",
+  "homepage": "https://github.com/Mparaiso/mpm.video",
+  "authors": [
+    "mparaiso <aikah@free.fr>"
+  ],
+  "description": "mpm.video",
+  "license": "all rights reserved",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}

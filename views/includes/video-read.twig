@@ -1,0 +1,32 @@
+<article class="col-md-8">
+    {% if  video %}
+	        {%autoescape false %}{{player.toHTML()}}{%endautoescape%}
+    {% endif %}
+	<div>
+		<h3>{{video.title}} </h3>
+		<h5 class="owner">
+			{% if video.owner %}
+			{{video.owner.username}}
+			{% else %}
+			anonymous
+			{% endif %}
+		</h5>
+		{% if user and video.owner and user.id == video.owner.id %}
+		<ul class="nav-pills nav"
+			<li><a class="btn btn-link" href="/profile/video/{{video.id}}/update">update</a></li>
+			<li>
+                <form action="/profile/video/{{video.id}}/remove" method="POST">
+                    <input type="submit" value="remove" class="btn btn-link" />
+                    <input type="hidden" name="_csrf" value="{{_csrf}}" />
+                </form>
+            </li>
+		</ul>
+		{% endif %}
+        <p class="text-muted">{{video.publishedAt|date('Y-m-d')}}</p>
+        <p class="text-muted">Category : {{video.category.title}}</p>
+		<p style="white-space:pre-wrap;unicode-bidi:embed;word-wrap:break-word;" class="unstyled">{{video.description}}</p>
+
+	</div>
+	<div>&nbsp;</div>
+</article>
+

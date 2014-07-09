@@ -61,13 +61,14 @@ container.set "app", container.share ->
     app.use('/profile',middlewares.csrf)
     app.use('/login',middlewares.csrf)
     app.use('/signup',middlewares.csrf)
+    app.use('/video',middlewares.csrf)
     
     app.map
-        "/": 
+        "/":
             get:controllers.index
         "/api/video":
             use: middlewares.videoApi
-        "/api/video.fromUrl": 
+        "/api/video.fromUrl":
             post: controllers.videoFromUrl
         "/api/playlist":
             use: middlewares.playlistApi
@@ -75,6 +76,8 @@ container.set "app", container.share ->
             get:controllers.videoById
         "/playlist/:playlistId":
             get:controllers.playlistById
+        "/category/:categoryId/:categoryTitle?":
+            get:[middlewares.categories,controllers.categoryById]
         "/profile":
             all:controllers.profile
             "/video/new":
@@ -128,6 +131,7 @@ container.set "app", container.share ->
 
 container.set "locals", container.share ->
     title: "mpm.video",
+    logopath:"/images/video-big.png",
     paginate: (array, length, start = 0)->
         divisions = Math.ceil(array.length / length)
         [start...divisions].map (i)->
@@ -146,6 +150,10 @@ container.set "db", container.share ->
 
 container.set "User", container.share ->
     container.db.model('User')
+
+container.set("Category",container.share(->
+    container.db.model('Category'))
+)
 
 container.set "Video", container.share ->
     container.db.model('Video')
@@ -218,18 +226,23 @@ container.set("controllers", container.share -> require './lib/controllers')
 container.set("mixins", container.share -> require './lib/mixins')
 container.set("parsers",container.share -> require './lib/parsers')
 container.set("config",container.share( -> require './lib/config'))
-container.set("Category",container.share( ->
+container.set("Categories",container.share( ->
     data = require('../data/youtubeVideoCategories.json').items.map((item)->{title:item.snippet.title,id:item.id})
     return {
         findAll:->data,
-        findById:(id)->_.find(data,(item)->item.id is id),
-        whereVideoExist:(options,callback)->
+        findById:(id)->_.find(data,(item)->String(item.id) == String(id)),
+        whereVideoExist:(options)->
             if options instanceof Function
                 callback=options
                 options={}
-            container.Video.aggregate([
+            return container.Video.aggregate([
                 { $match:{categoryId:{$exists:true}}},
-                { $group:{_id:"$categoryId",total:{$sum:1}}}
-            ]).exec(callback)
+                { $group:{_id:"$categoryId",total:{$sum:1}}},
+                {$project:{id:"$_id"}}
+            ])
+            .exec()
+            .then((categories)=>
+                _.map(categories,(cat)=>
+                    _.extend(cat,{title:_.find(data,(d)->String(d.id)==String(cat.id)).title})))
     }))
 module.exports = container

@@ -14,9 +14,11 @@ _ = require 'lodash'
 controllers= {}
 
 controllers.index = (req,res,next)-> #default page
-    Video.findPublicVideos((err,videos)->
-        if err then next(err)
-        else res.render('index',{videos}))
+    q.all([q.ninvoke(Video,'findPublicVideos'),res.locals.container.Category.whereVideoExist()])
+    .spread((videos,categories)->
+        res.render('index',{videos,categories}))
+    .catch((err)->
+        next(err))
 
 controllers.videoById = (req,res,next)->
     Video.findSimilar res.locals.video,{limit:8},(err,videos)->
@@ -156,7 +158,22 @@ controllers.videoList = (req,res)->
         .exec (err,videos)->
             if err then next(err)
             else res.render('profile/video-list',{videos})
+###
+# CATEGORIES
+###
 
+###
+# /category/categoryId
+###
+controllers.categoryById=(req,res,next)->
+    q(res.locals.container.Category.findOne({_id:req.params.categoryId}).exec())
+    .then((category)->
+        console.log(category)
+        return [category,res.locals.container.Video.find({category:category}).exec()])
+    .spread((category,videos)->
+        res.render('index',{videos,category,pageTitle:"Latest Videos in #{category.title}"}))
+    .catch((err)->
+        next(err))
 ###
     ACCOUNTS
 ###
