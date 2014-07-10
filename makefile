@@ -25,5 +25,5 @@ push: commit
 start:
 	@NODE_ENV=development supervisor -i 'node_modules' -w 'views,coffee' -e 'coffee|js' app.js &
 deploy: push
-	@git push openshift master -f
+	@git push heroku master -f
 .PHONY: start test commit push compile deploy

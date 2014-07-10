@@ -11,8 +11,10 @@ sessionStores = require './lib/session-stores'
 _ = require('lodash')
 
 container = new pimple
-    youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY
-    connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING
+    port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000 ,
+    ip: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
+    youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
+    connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
     debug: if process.env.NODE_ENV == "production" then false else true
 
 container.set "app", container.share ->
@@ -20,7 +22,7 @@ container.set "app", container.share ->
     middlewares = container.middlewares
     controllers = container.controllers
     app.configure ->
-        app.use(express.static(path.join(__dirname, "..", "public")))
+        app.use(express.static(path.join(__dirname, "..", "public"),{maxAge:10000}))
         app.engine('twig',container.swig.renderFile)
         app.set('view engine', 'twig')
         app.locals(container.locals)
@@ -225,6 +227,5 @@ container.set("controllers", container.share -> require './lib/controllers')
 container.set("mixins", container.share -> require './lib/mixins')
 container.set("parsers",container.share -> require './lib/parsers')
 container.set("config",container.share( -> require './lib/config'))
-container.set("port",->container.config.port)
-container.set("ip",->container.config.ip)
+
 module.exports = container

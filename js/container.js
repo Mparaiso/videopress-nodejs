@@ -21,6 +21,8 @@ sessionStores = require('./lib/session-stores');
 _ = require('lodash');
 
 container = new pimple({
+  port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000,
+  ip: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
   youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   debug: process.env.NODE_ENV === "production" ? false : true
@@ -32,7 +34,9 @@ container.set("app", container.share(function() {
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.configure(function() {
-    app.use(express["static"](path.join(__dirname, "..", "public")));
+    app.use(express["static"](path.join(__dirname, "..", "public"), {
+      maxAge: 10000
+    }));
     app.engine('twig', container.swig.renderFile);
     app.set('view engine', 'twig');
     app.locals(container.locals);
@@ -324,14 +328,6 @@ container.set("parsers", container.share(function() {
 container.set("config", container.share(function() {
   return require('./lib/config');
 }));
-
-container.set("port", function() {
-  return container.config.port;
-});
-
-container.set("ip", function() {
-  return container.config.ip;
-});
 
 module.exports = container;
 
