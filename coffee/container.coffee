@@ -11,7 +11,6 @@ sessionStores = require './lib/session-stores'
 _ = require('lodash')
 
 container = new pimple
-    port: process.env.PORT || 3000
     youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY
     connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING
     debug: if process.env.NODE_ENV == "production" then false else true
@@ -226,23 +225,6 @@ container.set("controllers", container.share -> require './lib/controllers')
 container.set("mixins", container.share -> require './lib/mixins')
 container.set("parsers",container.share -> require './lib/parsers')
 container.set("config",container.share( -> require './lib/config'))
-container.set("Categories",container.share( ->
-    data = require('../data/youtubeVideoCategories.json').items.map((item)->{title:item.snippet.title,id:item.id})
-    return {
-        findAll:->data,
-        findById:(id)->_.find(data,(item)->String(item.id) == String(id)),
-        whereVideoExist:(options)->
-            if options instanceof Function
-                callback=options
-                options={}
-            return container.Video.aggregate([
-                { $match:{categoryId:{$exists:true}}},
-                { $group:{_id:"$categoryId",total:{$sum:1}}},
-                {$project:{id:"$_id"}}
-            ])
-            .exec()
-            .then((categories)=>
-                _.map(categories,(cat)=>
-                    _.extend(cat,{title:_.find(data,(d)->String(d.id)==String(cat.id)).title})))
-    }))
+container.set("port",->container.config.port)
+container.set("ip",->container.config.ip)
 module.exports = container

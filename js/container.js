@@ -21,7 +21,6 @@ sessionStores = require('./lib/session-stores');
 _ = require('lodash');
 
 container = new pimple({
-  port: process.env.PORT || 3000,
   youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   debug: process.env.NODE_ENV === "production" ? false : true
@@ -326,62 +325,13 @@ container.set("config", container.share(function() {
   return require('./lib/config');
 }));
 
-container.set("Categories", container.share(function() {
-  var data;
-  data = require('../data/youtubeVideoCategories.json').items.map(function(item) {
-    return {
-      title: item.snippet.title,
-      id: item.id
-    };
-  });
-  return {
-    findAll: function() {
-      return data;
-    },
-    findById: function(id) {
-      return _.find(data, function(item) {
-        return String(item.id) === String(id);
-      });
-    },
-    whereVideoExist: function(options) {
-      var callback;
-      if (options instanceof Function) {
-        callback = options;
-        options = {};
-      }
-      return container.Video.aggregate([
-        {
-          $match: {
-            categoryId: {
-              $exists: true
-            }
-          }
-        }, {
-          $group: {
-            _id: "$categoryId",
-            total: {
-              $sum: 1
-            }
-          }
-        }, {
-          $project: {
-            id: "$_id"
-          }
-        }
-      ]).exec().then((function(_this) {
-        return function(categories) {
-          return _.map(categories, function(cat) {
-            return _.extend(cat, {
-              title: _.find(data, function(d) {
-                return String(d.id) === String(cat.id);
-              }).title
-            });
-          });
-        };
-      })(this));
-    }
-  };
-}));
+container.set("port", function() {
+  return container.config.port;
+});
+
+container.set("ip", function() {
+  return container.config.ip;
+});
 
 module.exports = container;
 
