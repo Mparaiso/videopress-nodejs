@@ -1,23 +1,34 @@
-mpm.video
+videopress
 =========
+
+![principe](http://aikah.online.fr/cdn/videopress/principe.png)
+![detail](http://aikah.online.fr/cdn/videopress/detail.png)
 
 author : mparaiso
 
 version : 0.0.3
 
-###LIVE DEMO : http://mpm-video.herokuapp.com
+###LIVE DEMO : http://videopress.herokuapp.com/
 
-Express-video is a cms allowing users to create playlists from various video web sites such as Youtube. It is built on nodejs with express framework and mongodb.
+VIDEOPRESS is a cms allowing users to create playlists from various video web sites such as Youtube. 
+
+It is built on nodejs with express framework and mongodb.
 
 ### Changelog
 
 ### FEATURES
 
 - blazing fast thanks to nodejs
+
 - mongodb backend
+
 - membership
+
 - import and display videos from : 
 	- Youtube
+
+- create playlists from various video hosting services
+
 - rest api to create videos and playlists
 
 ### DOCUMENTATION
