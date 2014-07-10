@@ -20,6 +20,7 @@ container.set "app", container.share ->
     middlewares = container.middlewares
     controllers = container.controllers
     app.configure ->
+        app.use(express.static(path.join(__dirname, "..", "public")))
         app.engine('twig',container.swig.renderFile)
         app.set('view engine', 'twig')
         app.locals(container.locals)
@@ -30,7 +31,6 @@ container.set "app", container.share ->
         app.use(container.passport.initialize())
         app.use(container.passport.session())
         # persistent session login
-        app.use(express.static(path.join(__dirname, "..", "public")))
         app.use(express.favicon())
         app.use(express.compress())
         app.use(container.monolog.middleware())

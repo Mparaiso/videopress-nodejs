@@ -32,6 +32,7 @@ container.set("app", container.share(function() {
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.configure(function() {
+    app.use(express["static"](path.join(__dirname, "..", "public")));
     app.engine('twig', container.swig.renderFile);
     app.set('view engine', 'twig');
     app.locals(container.locals);
@@ -43,7 +44,6 @@ container.set("app", container.share(function() {
     app.use(express.bodyParser());
     app.use(container.passport.initialize());
     app.use(container.passport.session());
-    app.use(express["static"](path.join(__dirname, "..", "public")));
     app.use(express.favicon());
     app.use(express.compress());
     app.use(container.monolog.middleware());
