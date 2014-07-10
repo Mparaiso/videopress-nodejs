@@ -37,3 +37,18 @@ footer{
 .inline{
     display: inline;
 }
+/**
+ * TYPOGRAPHY
+ */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/**
+ * BOOTSTRAP OVERRIDE
+ */
+.navbar-brand{
+    font-family: Oswald,Arial,sans-serif;
+}
+

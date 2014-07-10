@@ -3,6 +3,7 @@ database = require './database'
 players = require './players'
 Video = database.model('Video')
 Playlist = database.model('Playlist')
+Category = database.model('Category')
 async = require 'async'
 forms = require "./forms"
 q = require "q"
@@ -14,9 +15,9 @@ _ = require 'lodash'
 controllers= {}
 
 controllers.index = (req,res,next)-> #default page
-    q.all([q.ninvoke(Video,'findPublicVideos'),res.locals.container.Category.whereVideoExist()])
-    .spread((videos,categories)->
-        res.render('index',{videos,categories}))
+    q.all([q.ninvoke(Video,'findPublicVideos'),Category.whereVideoExist(),Playlist.getLatest()])
+    .spread((videos,categories,playlists)->
+        res.render('index',{videos,categories,playlists}))
     .catch((err)->
         next(err))
 
@@ -32,20 +33,10 @@ controllers.videoById = (req,res,next)->
 controllers.videoCreate = (req,res,next)->
     res.locals._csrf = req.csrfToken()
     if req.method is "POST" and req.body.url
-        async.auto({
-                video:Video.fromUrl.bind(Video,req.body.url)
-                setUser:['video',(next,result)->
-                    video = result.video[0]
-                    if req.user and req.user.id
-                        video.owner = req.user.id
-                        video.save(next)
-                    else
-                        next()
-            ]},(err,result)->
-                if err
-                    res.render('profile/video-create',{error:err})
-                else
-                    res.redirect('/video/'+result.video[0].id))
+        q()
+        .then -> q.ninvoke(Video,'fromUrl',req.body.url,{owner:req.user})
+        .then (video)-> res.redirect('/video/'+video.id)
+        .catch (err)-> res.render('/profile/video-create',{error:err})
     else
         res.render('profile/video-create')
 
@@ -119,13 +110,19 @@ controllers.playlistRemove = (req,res,next)->
     q.ninvoke(res.locals.playlist,'remove')
     .then( (->res.redirect('/playlist')) ,next)
 ###
-# /playlist/:playlistId/video/:videoId
+# PLAYLIST
 ###
+
+# /playlist/:playlistId/video/:videoId
 controllers.playlistById = (req,res,next)->
-    playlist = res.locals.playlist
-    video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.getFirstVideo()
-    if video then player = new players.Youtube(video.originalId)
-    res.render('playlist',{playlist,video,player})
+    q().then ->
+        playlist = res.locals.playlist
+        video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.getFirstVideo()
+        return [q.ninvoke(Video,'populate',video,{path:"owner category"}),new players.Youtube(video.originalId),playlist]
+    .spread (video,player,playlist)->
+        res.render('playlist',{playlist,video,player})
+    .done _.noop,(err)-> next(err)
+
 ###
 # /profile/video/videoId/update
 # user updates a video
@@ -162,16 +159,14 @@ controllers.videoList = (req,res)->
 # CATEGORIES
 ###
 
-###
-# /category/categoryId
-###
+# /category/:categoryId
 controllers.categoryById=(req,res,next)->
     q(res.locals.container.Category.findOne({_id:req.params.categoryId}).exec())
     .then((category)->
         console.log(category)
-        return [category,res.locals.container.Video.find({category:category}).exec()])
-    .spread((category,videos)->
-        res.render('index',{videos,category,pageTitle:"Latest Videos in #{category.title}"}))
+        return [category,res.locals.container.Video.find({category:category}).exec(),Playlist.getLatest()])
+    .spread((category,videos,playlists)->
+        res.render('index',{videos,category,playlists,pageTitle:"Latest Videos in #{category.title}"}))
     .catch((err)->
         next(err))
 ###

@@ -40,7 +40,6 @@ container.set "app", container.share ->
     app.configure 'development', ->
         app.use(express.logger("dev"))
         app.enable('verbose errors')
-        app.use(middlewares.serverError)
 
     app.configure 'testing', ->
         app.disable("verbose errors")
@@ -92,10 +91,10 @@ container.set "app", container.share ->
                     controllers.videoRemove]
             '/playlist':
                 get:controllers.playlistList
-            '/playlist/update/:playlistId':
+            '/playlist/:playlistId/update':
                 all:[middlewares.belongsToUser(container.Playlist,'playlist'),
                     controllers.playlistUpdate]
-            '/playlist/delete/:playlistId':
+            '/playlist/:playlistId/delete':
                 all:[middlewares.belongsToUser(container.Playlist,'playlist'),
                     controllers.playlistRemove]
             '/playlist/new':
@@ -121,8 +120,9 @@ container.set "app", container.share ->
         "/search":
             get:controllers.videoSearch
 
-    #middleware for 404 pages
-    app.use(middlewares.notFound)
+    app.configure "production",->
+        #middleware for errors
+        app.use(middlewares.error)
 
     app.on 'error',(err)->
         container.mongolog.error(err)
@@ -130,7 +130,7 @@ container.set "app", container.share ->
     return app
 
 container.set "locals", container.share ->
-    title: "mpm.video",
+    title: "videopress",
     logopath:"/images/video-big.png",
     paginate: (array, length, start = 0)->
         divisions = Math.ceil(array.length / length)

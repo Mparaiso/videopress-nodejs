@@ -238,7 +238,10 @@ VideoSchema.statics.fromUrl = function(url, properties, callback) {
           } else if (video) {
             return callback(null, video);
           } else {
-            return (new Video(data)).save(callback);
+            video = new Video(data);
+            return video.save(function(err) {
+              return callback(err, video);
+            });
           }
         });
       }
@@ -343,6 +346,11 @@ VideoSchema.pre('save', function(next) {
 
 Video = mongoose.model('Video', VideoSchema);
 
+
+/*
+ * PLAYLIST
+ */
+
 PlaylistSchema = mongoose.Schema({
   title: {
     type: String,
@@ -400,6 +408,19 @@ PlaylistSchema.pre('save', function(next) {
     return next();
   }
 });
+
+PlaylistSchema.statics.getLatest = function(limit, callback) {
+  if (limit == null) {
+    limit = 10;
+  }
+  if (limit instanceof Function) {
+    callback = limit;
+    limit = 10;
+  }
+  return Playlist.find().sort({
+    updated_at: -1
+  }).limit(10).exec(callback);
+};
 
 PlaylistSchema.statics.findByOwnerId = function(id, callback, q) {
   q = this.find({

@@ -5,15 +5,22 @@
     <p>&nbsp;</p>
 </div>
 <div class="row">
-<div class="col-md-2">
+<div class="col-md-2 truncate">
     <ul class="list-unstyled">
+        <li>
+            <p>Topics</p>
+        </li>
         {% for category in categories %}
-            <li>
-            <p>
-            <a href="/category/{{category.id}}/{{category.title}}">{{ category.title}}</a>
-            </p>
-            </li>        
+            <li><p><a href="/category/{{category.id}}/{{category.title}}">{{ category.title}}</a></p></li>        
         {% endfor %}
+        {% if playlists %}
+            <li>
+                <p>Latest playlists</p>
+            </li>
+            {% for playlist in playlists %}
+                <li><p><a href="/playlist/{{playlist.id}}">{{playlist.title}}</a></p></li>            
+            {% endfor %}
+        {% endif %}
     </ul>
 </div>
 <div class="col-md-10">

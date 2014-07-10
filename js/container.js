@@ -52,8 +52,7 @@ container.set("app", container.share(function() {
   });
   app.configure('development', function() {
     app.use(express.logger("dev"));
-    app.enable('verbose errors');
-    return app.use(middlewares.serverError);
+    return app.enable('verbose errors');
   });
   app.configure('testing', function() {
     return app.disable("verbose errors");
@@ -115,10 +114,10 @@ container.set("app", container.share(function() {
       '/playlist': {
         get: controllers.playlistList
       },
-      '/playlist/update/:playlistId': {
+      '/playlist/:playlistId/update': {
         all: [middlewares.belongsToUser(container.Playlist, 'playlist'), controllers.playlistUpdate]
       },
-      '/playlist/delete/:playlistId': {
+      '/playlist/:playlistId/delete': {
         all: [middlewares.belongsToUser(container.Playlist, 'playlist'), controllers.playlistRemove]
       },
       '/playlist/new': {
@@ -150,7 +149,9 @@ container.set("app", container.share(function() {
       get: controllers.videoSearch
     }
   });
-  app.use(middlewares.notFound);
+  app.configure("production", function() {
+    return app.use(middlewares.error);
+  });
   app.on('error', function(err) {
     return container.mongolog.error(err);
   });
@@ -159,7 +160,7 @@ container.set("app", container.share(function() {
 
 container.set("locals", container.share(function() {
   return {
-    title: "mpm.video",
+    title: "videopress",
     logopath: "/images/video-big.png",
     paginate: function(array, length, start) {
       var divisions, _i, _results;

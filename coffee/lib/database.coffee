@@ -123,7 +123,9 @@ VideoSchema.statics.fromUrl = (url,properties={}, callback)->
                 Video.findOne({owner:data.owner,url:data.url},(err,video)->
                     if err then callback(err)
                     else if video then callback(null,video)
-                    else (new Video(data)).save(callback)
+                    else 
+                        video = new Video(data)
+                        video.save((err)->callback(err,video))
                 )
         )
     else
@@ -180,6 +182,10 @@ VideoSchema.pre('save',(next)->
 
 Video = mongoose.model('Video', VideoSchema)
 
+###
+# PLAYLIST
+###
+#
 PlaylistSchema = mongoose.Schema
         title: {type:String,required:true},
         owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'}
@@ -204,6 +210,11 @@ PlaylistSchema.pre('save',(next)->
     else
         next()
 )
+PlaylistSchema.statics.getLatest = (limit=10,callback)->
+    if limit instanceof Function
+        callback=limit
+        limit=10
+    Playlist.find().sort({updated_at:-1}).limit(10).exec(callback)
 
 PlaylistSchema.statics.findByOwnerId = (id,callback,q)->
     q = this.find({owner:id}).populate('videos owner')

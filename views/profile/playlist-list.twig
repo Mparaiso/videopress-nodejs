@@ -22,8 +22,8 @@
 			<td>{{playlist.description}}</td>
 			<td>{{playlist.videos.length}} videos</td>
             <td>
-                <a href="/profile/playlist/update/{{playlist.id}}">Edit</a> | 
-                <a href="/profile/playlist/delete/{{playlist.id}}">Remove</a>
+                <a href="/profile/playlist/{{playlist.id}}/update">Edit</a> | 
+                <a href="/profile/playlist/{{playlist.id}}/delete">Remove</a>
             </td>
 		</tr>
 		{%endfor%}

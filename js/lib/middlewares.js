@@ -16,12 +16,13 @@ Playlist = database.model('Playlist');
 
 q = require('q');
 
-middlewares = exports;
-
 
 /* 
-    MIDDLEWARES
+ * MIDDLEWARES 
+ * @namespace
  */
+
+middlewares = {};
 
 
 /*
@@ -42,7 +43,7 @@ middlewares.csrf = function(req, res, next) {
 };
 
 middlewares.video = function(req, res, next, id) {
-  return Video.findById(id).select('title private description duration thumbnail owner originalId category categoryId').populate('owner category').exec(function(err, video) {
+  return Video.findById(id).select('title private description duration thumbnail owner publishedAt originalId category categoryId').populate('owner category').exec(function(err, video) {
     if (err) {
       err.status = 500;
       return next(err);
@@ -60,7 +61,7 @@ middlewares.video = function(req, res, next, id) {
 middlewares.playlist = function(req, res, next, id) {
   return Playlist.findById(id).where({
     "private": false
-  }).populate('videos').exec(function(err, playlist) {
+  }).populate('videos owner').exec(function(err, playlist) {
     if (err) {
       err.status = 500;
       return next(err);
@@ -151,17 +152,15 @@ error handlers
 @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
  */
 
-middlewares.notFound = function(req, res) {
-  res.status(404);
-  return res.render('404', {
-    code: res.statusCode
-  });
+middlewares.error = function(err, req, res, next) {
+  switch (String(err.status)) {
+    case '404':
+      return res.render('404');
+    default:
+      return res.render('500');
+  }
 };
 
-middlewares.serverError = function(err, req, res, next) {
-  req.app.get('monolog').error(err);
-  res.status(err.status || 500);
-  return res.render('500');
-};
+module.exports = middlewares;
 
 //# sourceMappingURL=middlewares.map

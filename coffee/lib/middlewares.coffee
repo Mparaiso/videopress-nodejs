@@ -7,11 +7,12 @@ database = require './database'
 Video = database.model('Video')
 Playlist = database.model('Playlist')
 q = require('q')
-middlewares = exports
 
 ### 
-    MIDDLEWARES 
+# MIDDLEWARES 
+# @namespace
 ###
+middlewares = {}
 
 ###
     Makes the csrf token mandatory
@@ -20,17 +21,17 @@ middlewares = exports
 middlewares.csrf = (req,res,next)->
         (express.csrf())(req,res,(err)->
             if err then next(err)
-            else 
+            else
                 res.locals._csrf = req.csrfToken()
                 res.set('_csrf',res.locals._csrf)
                 next())
 # sets res.locals.video
 middlewares.video =(req,res,next,id)->
     Video.findById(id)
-    .select('title private description duration thumbnail owner originalId category categoryId')
+    .select('title private description duration thumbnail owner publishedAt originalId category categoryId')
     .populate('owner category')
     .exec (err,video)->
-        if err 
+        if err
             err.status = 500
             next(err)
         else if not video
@@ -44,7 +45,7 @@ middlewares.video =(req,res,next,id)->
 middlewares.playlist = (req,res,next,id)->
     Playlist.findById(id)
         .where({private:false})
-        .populate('videos')
+        .populate('videos owner')
         .exec((err,playlist)->
             if err then err.status= 500 ; next(err)
             else if not playlist
@@ -108,11 +109,12 @@ middlewares.playlistApi = do ->
 error handlers
 @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
 ###
-middlewares.notFound = (req, res)->
-        res.status(404)
-        res.render('404', {code: res.statusCode})
+middlewares.error = (err, req, res,next)->
 
-middlewares.serverError = (err, req, res,next)->
-        req.app.get('monolog').error(err)
-        res.status(err.status || 500)
-        res.render('500')
+        switch String(err.status)
+            when '404'
+                res.render('404')
+            else
+                res.render('500')
+
+module.exports = middlewares
