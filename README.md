@@ -1,26 +1,21 @@
 videopress
 =========
 
-[![principe](http://aikah.online.fr/cdn/videopress/principe.png)](http://videopress.herokuapp.com/)
-[![detail](http://aikah.online.fr/cdn/videopress/detail.png)](http://videopress.herokuapp.com/video/53be064a585e54b00036147a)
+[![principe](http://aikah.online.fr/cdn/videopress/principe.png)](http://videopress.herokuapp.com/) [![detail](http://aikah.online.fr/cdn/videopress/detail.png)](http://videopress.herokuapp.com/video/53be064a585e54b00036147a)
 
-author : mparaiso
-
-version : 0.0.3
+author : mparaiso <mparaiso@online.fr>
 
 ###LIVE DEMO : http://videopress.herokuapp.com/
 
 VIDEOPRESS is a cms allowing users to create playlists from various video web sites such as Youtube. 
 
-It is built on nodejs with express framework and mongodb.
-
 ### Changelog
 
 ### FEATURES
 
-- blazing fast thanks to nodejs
+- built with nodejs
 
-- mongodb backend
+- backed by mongodb
 
 - membership
 
@@ -61,6 +56,8 @@ It is built on nodejs with express framework and mongodb.
 
 - install packages with the npm install command
 
+#### RUN
+
 - you should be good to go , just type : node app.js in the project folder
 
 - open a web browser to http://localhost:300
@@ -72,29 +69,4 @@ It is built on nodejs with express framework and mongodb.
 	
 
 
-#### API 
 
-	GET		/ : homepage
-	GET		/videoId : display a video
-
-	user accounts
-
-	/signup : signup
-	/login :login
-	/profile : profile
-	/logout :logout
-
-	### video management
-
-	/profile/video :list user videos
-	/profile/video/new :add new vide
-	/profile/video/:videoId/update :update a video
-	/profile/video/:videoId/delete :delete a video
-
-#### Changelog
-
-#### TODO
-
-- [x] implement basic search of public videos
-- [ ] secure api (PUT/POST/DELETE are disabled at the moment)
-- [ ] make Video and Playlist models more strict
