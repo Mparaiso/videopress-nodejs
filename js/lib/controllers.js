@@ -41,19 +41,17 @@ controllers.index = function(req, res, next) {
 };
 
 controllers.videoById = function(req, res, next) {
-  return Video.findSimilar(res.locals.video, {
+  return q(Video.findSimilar(res.locals.video, {
     limit: 8
-  }, function(err, videos) {
-    var player;
-    if (err) {
-      return (err.status = 500) && next(err);
-    } else {
-      player = new players.Youtube(res.locals.video.originalId);
-      return res.render('video', {
-        videos: videos,
-        player: player
-      });
-    }
+  })).then(function(videos) {
+    return res.render('video', {
+      videos: videos,
+      player: new players.Youtube(res.locals.video.originalId)
+    });
+  })["catch"](function(err) {
+    return next(_.extend(err, {
+      status: 500
+    }));
   });
 };
 
@@ -108,38 +106,18 @@ controllers.videoFromUrl = function(req, res, next) {
 
 controllers.videoSearch = function(req, res, next) {
   var where;
-  where = {};
-  if (req.query.q) {
-    where.title = new RegExp(req.query.q, 'i');
-  }
-  return Video.findPublicVideos(where, function(err, videos) {
-    if (err) {
-      err.status = 500;
-      return next(err);
-    } else {
-      return res.render('search', {
-        videos: videos,
-        q: req.query.q
-      });
-    }
-  });
-};
-
-
-/*
-/profile/playlist
- */
-
-controllers.playlistList = function(req, res, next) {
-  return Playlist.findByOwnerId(req.user.id, function(err, playlists) {
-    if (err) {
-      err.status = 500;
-      return next(err);
-    } else {
-      return res.render('profile/playlist-list', {
-        playlists: playlists
-      });
-    }
+  where = {
+    title: req.query.q ? new RegExp(req.query.q, 'i') : void 0
+  };
+  return q.ninvoke(Video, 'findPublicVideos', where).then(function(videos) {
+    return res.render('search', {
+      videos: videos,
+      q: req.query.q
+    });
+  })["catch"](function(err) {
+    return next(_.extend(err, {
+      status: 500
+    }));
   });
 };
 
@@ -147,6 +125,20 @@ controllers.playlistList = function(req, res, next) {
 /*
     PLAYLIST OPERATIONS
  */
+
+controllers.playlistList = function(req, res, next) {
+  return q.ninvoke(Playlist, 'findByOwnerId', req.user.id).then(function(playlists) {
+    return res.render('profile/playlist-list', {
+      playlists: playlists
+    });
+  })["catch"](function(err) {
+    return next(_.extend(err, [
+      {
+        status: 500
+      }
+    ]));
+  });
+};
 
 controllers.playlistCreate = function(req, res, next) {
   var form, playlist;
@@ -307,16 +299,11 @@ controllers.videoList = function(req, res) {
  */
 
 controllers.categoryById = function(req, res, next) {
-  return q(res.locals.container.Category.findOne({
-    _id: req.params.categoryId
-  }).exec()).then(function(category) {
-    console.log(category);
-    return [
-      category, res.locals.container.Video.find({
-        category: category
-      }).exec(), Playlist.getLatest()
-    ];
-  }).spread(function(category, videos, playlists) {
+  return q.all([
+    Category.findById(req.params.categoryId).exec(), Video.find({
+      category: req.params.categoryId
+    }).exec(), Playlist.getLatest()
+  ]).spread(function(category, videos, playlists) {
     return res.render('index', {
       videos: videos,
       category: category,
@@ -372,19 +359,15 @@ controllers.logout = function(req, res) {
 };
 
 controllers.profile = function(req, res, ext) {
-  return async.parallel({
-    videos: Video.findByOwnerId.bind(Video, req.user.id),
-    playlists: Playlist.findByOwnerId.bind(Playlist, req.user.id)
-  }, function(err, results) {
-    if (err) {
-      err.status = 500;
-      return next(err);
-    } else {
-      return res.render('profile/index', {
-        videos: results.videos,
-        playlists: results.playlists
-      });
-    }
+  return q.all([q.ninvoke(Video, 'findByOwnerId', req.user.id), q.ninvoke(Playlist, 'findByOwnerId', req.user.id)]).spread(function(videos, playlists) {
+    return res.render('profile/index', {
+      videos: videos,
+      playlists: playlists
+    });
+  })["catch"](function(err) {
+    return next(_.extend(err, {
+      status: 500
+    }));
   });
 };
 

@@ -311,9 +311,8 @@ VideoSchema.methods.toString = function() {
  * @param  {Function} callback
  */
 
-VideoSchema.statics.findSimilar = function(video, options, callback) {
-  if (arguments.length === 2) {
-    callback = options;
+VideoSchema.statics.findSimilar = function(video, options) {
+  if (options == null) {
     options = {};
   }
   return this.find({
@@ -321,9 +320,7 @@ VideoSchema.statics.findSimilar = function(video, options, callback) {
     _id: {
       '$ne': video.id
     }
-  }, null, options, function(err, res) {
-    return callback(err, res);
-  });
+  }, null, options).exec();
 };
 
 VideoSchema.pre('save', function(next) {

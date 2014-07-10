@@ -22,19 +22,17 @@ controllers.index = (req,res,next)-> #default page
         next(err))
 
 controllers.videoById = (req,res,next)->
-    Video.findSimilar res.locals.video,{limit:8},(err,videos)->
-        if err then (err.status = 500) and next(err)
-        else
-            player = new players.Youtube(res.locals.video.originalId)
-            res.render('video',{videos:videos,player:player})
+    q(Video.findSimilar(res.locals.video,{limit:8}))
+    .then (videos)-> res.render('video',{videos:videos,player:new players.Youtube(res.locals.video.originalId)})
+    .catch (err)-> next(_.extend(err,{status:500}))
+
 ###
     VIDEO CRUD
 ###
 controllers.videoCreate = (req,res,next)->
     res.locals._csrf = req.csrfToken()
     if req.method is "POST" and req.body.url
-        q()
-        .then -> q.ninvoke(Video,'fromUrl',req.body.url,{owner:req.user})
+        q().then -> q.ninvoke(Video,'fromUrl',req.body.url,{owner:req.user})
         .then (video)-> res.redirect('/video/'+video.id)
         .catch (err)-> res.render('/profile/video-create',{error:err})
     else
@@ -50,30 +48,22 @@ controllers.videoFromUrl = (req,res,next)->
 /search
 ###
 controllers.videoSearch = (req,res,next)->
-    where = {}
-    if req.query.q 
-        where.title = new RegExp(req.query.q,'i')
-    Video.findPublicVideos where , (err,videos)->
-        if err 
-            err.status = 500 
-            next(err)
-        else
-            res.render('search',{videos,q:req.query.q})
+    where = {title:if req.query.q then new RegExp(req.query.q,'i')}
+    q.ninvoke(Video,'findPublicVideos', where)
+    .then((videos)->res.render('search',{videos,q:req.query.q}))
+    .catch((err)->next(_.extend(err,{status:500})))
 
-###
-/profile/playlist
-###
-controllers.playlistList= (req,res,next)->
-    Playlist.findByOwnerId(req.user.id,(err,playlists)->
-        if err 
-            err.status = 500
-            next(err)
-        else
-            res.render('profile/playlist-list',{playlists})
-    )
+
 ###
     PLAYLIST OPERATIONS
 ###
+
+# /profile/playlist
+controllers.playlistList= (req,res,next)->
+    q.ninvoke(Playlist,'findByOwnerId',req.user.id)
+    .then((playlists)->res.render('profile/playlist-list',{playlists}))
+    .catch((err)->next(_.extend(err,[status:500])))
+
 controllers.playlistCreate = (req,res,next)->
     playlist = new Playlist()
     form = forms.Playlist()
@@ -161,14 +151,9 @@ controllers.videoList = (req,res)->
 
 # /category/:categoryId
 controllers.categoryById=(req,res,next)->
-    q(res.locals.container.Category.findOne({_id:req.params.categoryId}).exec())
-    .then((category)->
-        console.log(category)
-        return [category,res.locals.container.Video.find({category:category}).exec(),Playlist.getLatest()])
-    .spread((category,videos,playlists)->
-        res.render('index',{videos,category,playlists,pageTitle:"Latest Videos in #{category.title}"}))
-    .catch((err)->
-        next(err))
+    q.all([Category.findById(req.params.categoryId).exec(),Video.find({category:req.params.categoryId}).exec(),Playlist.getLatest()])
+    .spread((category,videos,playlists)-> res.render('index',{videos,category,playlists,pageTitle:"Latest Videos in #{category.title}"}))
+    .catch((err)->next(err))
 ###
     ACCOUNTS
 ###
@@ -197,16 +182,8 @@ controllers.logout = (req,res)->
 
 # show current user profile
 controllers.profile = (req,res,ext)->
-    async.parallel({videos:Video.findByOwnerId.bind(Video,req.user.id)
-    ,playlists:Playlist.findByOwnerId.bind(Playlist,req.user.id)}
-    ,(err,results)->(
-            if err 
-                err.status = 500
-                next(err)
-            else 
-                res.render('profile/index',{videos:results.videos,playlists:results.playlists})
-        )
-    )
-    
+    q.all([q.ninvoke(Video,'findByOwnerId',req.user.id),q.ninvoke(Playlist,'findByOwnerId',req.user.id)])
+    .spread((videos,playlists)->res.render('profile/index',{videos,playlists}))
+    .catch((err)->next(_.extend(err,{status:500})))
 
 module.exports=controllers

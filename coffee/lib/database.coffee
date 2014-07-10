@@ -165,12 +165,8 @@ VideoSchema.methods.toString = ->
  * @param  {Object}   options  
  * @param  {Function} callback 
 ###
-VideoSchema.statics.findSimilar = (video,options,callback)->
-    if arguments.length==2 
-        callback = options 
-        options = {}
-    @find {categoryId:video.categoryId,_id:{'$ne':video.id}},null,options,(err,res)->
-        callback(err,res)
+VideoSchema.statics.findSimilar = (video,options={})->
+    this.find({categoryId:video.categoryId,_id:{'$ne':video.id}},null,options).exec()
 
 VideoSchema.pre('save',(next)->
     this.updated_at=Date.now()
