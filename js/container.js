@@ -22,7 +22,7 @@ _ = require('lodash');
 
 container = new pimple({
   port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000,
-  ip: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
+  ip: process.env.OPENSHIFT_NODEJS_IP,
   youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   debug: process.env.NODE_ENV === "production" ? false : true

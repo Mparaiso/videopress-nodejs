@@ -9,13 +9,19 @@ if (process.env.NODE_ENV === "production"  ) {
 	container = require('./js/container');
 } else {
 	require('coffee-script').register();
-	container = require('./coffee/container');
+    container = require('./coffee/container');
 }
 
 if (!module.parent) {
-	http.createServer(container.app).listen(container.port,container.ip, function() {
-		console.log("listening on "+container.ip+":"+container.port);
-	});
+    if(container.ip){
+        http.createServer(container.app).listen(container.port,container.ip, function() {
+            console.log("listening on "+container.ip+":"+container.port);
+        });
+    }else{
+        http.createServer(container.app).listen(container.port ,function() {
+            console.log("listening on port :"+container.port);
+        });
+    }
 } else {
 	module.exports = container;
 }
