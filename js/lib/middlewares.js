@@ -153,6 +153,7 @@ error handlers
  */
 
 middlewares.error = function(err, req, res, next) {
+  console.error(err);
   switch (String(err.status)) {
     case '404':
       return res.render('404');

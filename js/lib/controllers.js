@@ -151,11 +151,11 @@ controllers.playlistCreate = function(req, res, next) {
       playlist.owner = req.user.id;
       return playlist.save(function(err, playlist) {
         if (err) {
-          err.status = 500;
-          return next(err);
-        } else {
-          return res.redirect('/playlist/' + playlist.id);
+          return next(_.extend(err, {
+            status: 500
+          }));
         }
+        return res.redirect('/playlist/' + playlist.id);
       });
     }
   }

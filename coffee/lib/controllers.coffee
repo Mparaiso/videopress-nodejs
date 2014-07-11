@@ -73,9 +73,8 @@ controllers.playlistCreate = (req,res,next)->
         if form.validateSync()
             playlist.owner = req.user.id
             return playlist.save((err,playlist)->
-                if err 
-                    err.status = 500 ; next(err)
-                else res.redirect('/playlist/'+playlist.id)
+                return next(_.extend(err,status:500)) if err
+                res.redirect('/playlist/'+playlist.id)
             )
     res.render('profile/playlist-create',{form})
 

@@ -110,7 +110,7 @@ error handlers
 @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
 ###
 middlewares.error = (err, req, res,next)->
-
+        console.error(err)
         switch String(err.status)
             when '404'
                 res.render('404')
