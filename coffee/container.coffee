@@ -149,6 +149,9 @@ container.set "app", container.share (container)->
 
     if not container.debug
         #middleware for errors if not debug
+        app.get '*',(req,res,next)->
+            next(new container.errors.NotFound("page not found"))
+
         app.use(middlewares.error)
 
     app.on 'error',(err)->
@@ -230,5 +233,11 @@ container.set "passport", container.share ->
 container.set "playerFactory",container.share (c)->
     new c.players.PlayerFactory [c.players.Youtube,c.players.Vimeo]
 
-
+container.set "errors",container.share ->
+    {
+        NotFound:class extends Error
+            constructor:->
+                super
+                @status = 404
+    }
 module.exports = container

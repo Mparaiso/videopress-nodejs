@@ -34,7 +34,7 @@ describe("container.db", function() {
             it('should save a video', function(done) {
                 this.video.save(done);
             });
-            it('shouldnt be inserted multiple times',function(done){
+            it('shouldnt be inserted multiple times for the same user',function(done){
                 var self=this;
                 q(User.create({username:"foo"}))
                 .then(function(user){return [user,Video.fromUrl(self.url,{owner:user})];})
