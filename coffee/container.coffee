@@ -239,5 +239,9 @@ container.set "errors",container.share ->
             constructor:->
                 super
                 @status = 404
+        Forbidden:class extends Error
+            constructor:->
+                super
+                @status = 500
     }
 module.exports = container

@@ -334,6 +334,17 @@ container.set("errors", container.share(function() {
 
       return _Class;
 
+    })(Error),
+    Forbidden: (function(_super) {
+      __extends(_Class, _super);
+
+      function _Class() {
+        _Class.__super__.constructor.apply(this, arguments);
+        this.status = 500;
+      }
+
+      return _Class;
+
     })(Error)
   };
 }));

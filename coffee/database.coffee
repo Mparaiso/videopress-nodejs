@@ -13,7 +13,13 @@ module.exports = (container)->
         return videoParserChain
 
     container.set 'mongoose', container.share (c)->
-        require 'mongoose'
+        mongoose = require('mongoose')
+        if not c.debug
+            mongooseCachebox = require('mongoose-cachebox')
+            mongooseCachebox mongoose, 
+                cache: true, # start caching
+                ttl: 30 # 30 seconds
+        return mongoose
 
     container.set "db", container.share (c)->
         c.mongoose.set("debug", c.config.mongoose_debug)

@@ -20,7 +20,16 @@ module.exports = function(container) {
     return videoParserChain;
   }));
   container.set('mongoose', container.share(function(c) {
-    return require('mongoose');
+    var mongoose, mongooseCachebox;
+    mongoose = require('mongoose');
+    if (!c.debug) {
+      mongooseCachebox = require('mongoose-cachebox');
+      mongooseCachebox(mongoose, {
+        cache: true,
+        ttl: 30
+      });
+    }
+    return mongoose;
   }));
   container.set("db", container.share(function(c) {
     c.mongoose.set("debug", c.config.mongoose_debug);
