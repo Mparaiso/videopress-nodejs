@@ -21,6 +21,7 @@ VIDEOPRESS is a cms allowing users to create playlists from various video web si
 
 - import and display videos from : 
 	- Youtube
+    - Vimeo
 
 - create playlists from various video hosting services
 

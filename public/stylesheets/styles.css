@@ -20,9 +20,12 @@ body {
 }
 
 .video .info {
-    display: inline-block;
+    display: block;
 }
-
+a .thumb{
+    overflow:hidden;
+    height:90px;
+}
 .video .thumb {
     width: 160px;
 }

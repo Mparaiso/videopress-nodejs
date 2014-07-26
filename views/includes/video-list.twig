@@ -4,18 +4,19 @@
 		{%for video in page %}
 		<article class="col-md-3 video">
 			<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
-			<div class="info">
-				<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
-				<br>
-				<span class="owner">
-					{% if video.owner %}
-					{{video.owner.username}}
-					{%else%}
-					anonymous
-					{% endif %}
-				</span>
+			<div class="info truncate">
+				<a title="{{video.title}}" href="/video/{{video.id}}">{{video.title}}</a>
 			</div>
-			<div>&nbsp;</div>
+            	<div>
+            {% if user && isAuthenticated && video.owner.id == user.id %}
+                <a href="/profile/video/{{video.id}}/update">update</a>  |
+                <form class="inline" action="/profile/video/{{video.id}}/remove" method="POST">
+                <input type="hidden" name="_csrf" value="{{_csrf}}" />
+                <button type="submit" class="btn-link inline">remove</button>
+                </form>
+            {% endif %}
+            </div>
+            <div>&nbsp;</div>
 		</article>
 		{% endfor %}
 	</section>

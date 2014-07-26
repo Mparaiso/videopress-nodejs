@@ -24,22 +24,21 @@
     </ul>
 </div>
 <div class="col-md-10">
-    {% for page in paginate(videos,5) %}
+    {% for page in paginate(videos,4) %}
     <div class="row">
         <section class="row">
         	{%for video in page %}
-        	<article class="col-md-2 video">
+        	<article class="col-md-3 video">
         		<a title="{{video.title}}" href="/video/{{video.id}}"><img class="thumb" src="{{video.thumbnail}}" alt="{{video.title}}"></a>
-        		<div class="info">
-        			<span><a title="{{video.title}}" href="/video/{{video.id}}">{{video.title.slice(0,49)}}...</a></span>
-        			<br>
-        			<span class="owner">
+        		<div class="info truncate">
+        	        <a title="{{video.title}}" href="/video/{{video.id}}">{{video.title}}</a>
+                </div>
+        		<div class="owner">
         				{% if video.owner %}
         					{{video.owner.username}}
         				{%else%}
         					anonymous
         				{% endif %}
-        			</span>
         		</div>
         		<div>&nbsp;</div>
         	</article>

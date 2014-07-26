@@ -25,13 +25,14 @@
     "passport-google-oauth": "0.1.x",
     "connect-flash": "0.1.x",
     "bcrypt-nodejs": "0.0.x",
-    "mpm.form": "~0.0.62",
+    "mpm.form": "~0.0.64",
     "commander": "*",
     "q": "~1.0.1",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "mongoose-cachebox": "~1.2.0"
   },
   "devDependencies": {
-    "coffee-script":"~1.7.1",
+    "coffee-script": "~1.7.1",
     "mocha": "*",
     "chai": "*",
     "supertest": "*",

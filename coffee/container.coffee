@@ -1,14 +1,7 @@
 "use strict"
 
-express = require 'express'
 pimple = require 'pimple'
-util = require 'util'
 path = require 'path'
-flash = require 'connect-flash'
-config = require './lib/config'
-events = require 'events'
-sessionStores = require './lib/session-stores'
-_ = require('lodash')
 
 container = new pimple
     port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000 ,
@@ -17,30 +10,62 @@ container = new pimple
     connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
     debug: if process.env.NODE_ENV == "production" then false else true
 
-container.set "app", container.share ->
-    app = express()
+# service providers
+container.register require './database'
+container.register require './controllers'
+container.register require './middlewares'
+container.register require './forms'
+container.register require './players'
+# node modules
+container.set "mixins", container.share -> require './mixins'
+container.set "parsers",container.share -> require './parsers'
+container.set "config",container.share  -> require './config'
+container.set "express",container.share -> require 'express'
+container.set '_',container.share -> require 'lodash'
+container.set 'q',container.share (c)->
+    q = require 'q'
+    if c.debug
+        q.longStackSupport = true
+    return q
+
+container.set "app", container.share (container)->
+    init = false
+    app = container.express()
     middlewares = container.middlewares
     controllers = container.controllers
-    app.configure ->
-        app.use(express.static(path.join(__dirname, "..", "public"),{maxAge:10000}))
-        app.engine('twig',container.swig.renderFile)
-        app.set('view engine', 'twig')
-        app.locals(container.locals)
-        app.use(express.cookieParser("secret sentence"))
-        app.use(express.session({store:container.sessionStore}))
-        app.use(flash())
-        app.use(express.bodyParser())
-        app.use(container.passport.initialize())
-        app.use(container.passport.session())
-        # persistent session login
-        app.use(express.favicon())
-        app.use(express.compress())
-        app.use(container.monolog.middleware())
-        app.disable("verbose errors")
+    app.use (req,res,next)->
+        container.q()
+        .then (->
+            # init models
+            if not init
+                container.Session
+                container.Category
+                container.User
+                container.Video
+                container.Playlist
+                init = true
+            return )
+        .catch((err)-> err)
+        .done next
+    app.use(container.express.static(path.join(__dirname, "..", "public"),{maxAge:10000}))
+    app.engine('twig',container.swig.renderFile)
+    app.set('view engine', 'twig')
+    app.locals(container.locals)
+    app.use(container.express.cookieParser("secret sentence"))
+    app.use(container.express.session({store:container.sessionStore}))
+    app.use( require('connect-flash')())
+    app.use(container.express.bodyParser())
+    app.use(container.passport.initialize())
+    app.use(container.passport.session())
+    # persistent session login
+    app.use(container.express.compress())
+    app.use(container.logger.middleware())
 
-    app.configure 'development', ->
-        app.use(express.logger("dev"))
+    if container.debug 
         app.enable('verbose errors')
+        app.use(container.express.logger("dev"))
+    else
+        app.disable("verbose errors")
 
     app.configure 'testing', ->
         app.disable("verbose errors")
@@ -66,12 +91,13 @@ container.set "app", container.share ->
     app.map
         "/":
             get:controllers.index
-        "/api/video":
-            use: middlewares.videoApi
-        "/api/video.fromUrl":
-            post: controllers.videoFromUrl
-        "/api/playlist":
-            use: middlewares.playlistApi
+        # @TODO rethink apis
+        #"/api/video":
+        #    use: middlewares.videoApi
+        #"/api/video.fromUrl":
+        #    post: controllers.videoFromUrl
+        #"/api/playlist":
+        #    use: middlewares.playlistApi
         "/video/:videoId":
             get:controllers.videoById
         "/playlist/:playlistId":
@@ -121,12 +147,12 @@ container.set "app", container.share ->
         "/search":
             get:controllers.videoSearch
 
-    app.configure "production",->
-        #middleware for errors
+    if not container.debug
+        #middleware for errors if not debug
         app.use(middlewares.error)
 
     app.on 'error',(err)->
-        container.mongolog.error(err)
+        container.logger.error(err)
 
     return app
 
@@ -140,49 +166,30 @@ container.set "locals", container.share ->
 
 container.set "swig", container.share (c)->
     swig = require 'swig'
-    swig.setDefaults({cache: c.config.swig_cache})
+    swig.setDefaults({cache: if c.debug then false else "memory"})
     return swig
 
-container.set "db", container.share ->
-    database = require './lib/database'
-    database.set("debug", container.config.mongoose_debug) #container.debug 
-    database.connect(container.config.connection_string)
-    return database
-
-container.set "User", container.share ->
-    container.db.model('User')
-
-container.set("Category",container.share(->
-    container.db.model('Category'))
-)
-
-container.set "Video", container.share ->
-    container.db.model('Video')
-
-container.set "Playlist", container.share ->
-    container.db.model('Playlist')
-
-container.set "Session",container.share ->
-    container.db.model('Session')
-
 container.set "sessionStore",container.share ->
+    sessionStores = require './session-stores'
     new sessionStores.MongooseSessionStore({},container.Session)
 
-container.set "monolog", container.share ->
-    monolog = require 'monolog'
-    logger = new monolog.Logger("express logger")
-    logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt"))
-    logger.middleware = (message = "debug")->
+container.set "monolog", container.share ->require 'monolog'
+container.set "logger", container.share (c)->
+    monolog = c.monolog
+    Logger = monolog.Logger
+    logger = new Logger("express logger")
+    logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt",Logger.DEBUG))
+    logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO))
+    logger.middleware = (message = "INFO")->
         init = false
         return (req, res, next)->
             if not init
                 logger.addProcessor(new monolog.processor.ExpressProcessor(req.app))
-                req.app.set('monolog', logger)
                 init = true
-            logger.debug("#{message} #{req.method} #{req.path} #{JSON.stringify(req.headers)}")
+            logger.debug("#{message} #{req.method} #{req.path}")
             next()
-
     return logger
+
 
 container.set "passport", container.share ->
     passport = require 'passport'
@@ -220,12 +227,8 @@ container.set "passport", container.share ->
             return done(null,false,req.flash('loginMessage','Invalid credentials!'))
     )
     return passport
+container.set "playerFactory",container.share (c)->
+    new c.players.PlayerFactory [c.players.Youtube,c.players.Vimeo]
 
-container.set("forms", container.share -> require './lib/forms')
-container.set("middlewares", container.share -> require './lib/middlewares')
-container.set("controllers", container.share -> require './lib/controllers')
-container.set("mixins", container.share -> require './lib/mixins')
-container.set("parsers",container.share -> require './lib/parsers')
-container.set("config",container.share( -> require './lib/config'))
 
 module.exports = container

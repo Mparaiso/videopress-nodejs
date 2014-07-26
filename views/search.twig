@@ -8,13 +8,13 @@
 <div class="row">
 	<div class="col-md-2">
 		<a href="/video/{{video.id}}">
-			<img width="100%" src="{{video.thumbnail}}" alt="">
+			<img class="thumb" width="100%" src="{{video.thumbnail}}" alt="">
 		</a>
 	</div>
 	<div class="col-md-9">
 		<a href="/video/{{video.id}}">
 			<h4>{{video.title}}</h4>
-			<p>{{video.description.slice(0,100)}}...</p>
+			<p class="truncate">{{video.description}}</p>
 		</a>
 	</div>
 </div>
