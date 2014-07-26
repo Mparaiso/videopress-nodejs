@@ -32,6 +32,7 @@ container.set 'q',container.share (c)->
 container.set "app", container.share (container)->
     init = false
     app = container.express()
+    app.disable 'x-powered-by'
     middlewares = container.middlewares
     controllers = container.controllers
     app.use (req,res,next)->
@@ -52,8 +53,9 @@ container.set "app", container.share (container)->
     app.engine('twig',container.swig.renderFile)
     app.set('view engine', 'twig')
     app.locals(container.locals)
-    app.use(container.express.cookieParser("secret sentence"))
-    app.use(container.express.session({store:container.sessionStore}))
+    app.use(container.express.cookieParser(container.config.session.secret))
+    sessionOptions = container._.extend({},container.config.session,{store:container.sessionStore})
+    app.use(container.express.session(sessionOptions))
     app.use( require('connect-flash')())
     app.use(container.express.bodyParser())
     app.use(container.passport.initialize())

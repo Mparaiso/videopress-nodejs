@@ -11,13 +11,21 @@ _ = require('lodash');
  */
 
 config = {
+  brand: "videopress",
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   vimeo_access_token: process.env.VIDEOPRESS_VIMEO_ACCESS_TOKEN,
   port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000,
   ip: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
   mongoose_debug: false,
-  session_secret: process.env.SESSION_SECRET
+  session: {
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true
+    },
+    key: "videopress",
+    secret: process.env.SESSION_SECRET
+  }
 };
 
 
