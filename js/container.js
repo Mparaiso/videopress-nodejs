@@ -77,9 +77,7 @@ container.set("app", container.share(function(container) {
       return err;
     }).done(next);
   });
-  app.use(container.express["static"](path.join(__dirname, "..", "public"), {
-    maxAge: 10000
-  }));
+  app.use(container.express["static"](path.join(__dirname, "..", "public"), container.config["static"]));
   app.engine('twig', container.swig.renderFile);
   app.set('view engine', 'twig');
   app.locals(container.locals);

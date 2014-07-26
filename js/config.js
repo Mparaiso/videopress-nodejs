@@ -28,6 +28,14 @@ config = {
   }
 };
 
+if (process.env.NODE_ENV === "production") {
+  _.extend(config, {
+    "static": {
+      maxAge: 1000 * 60 * 60 * 24
+    }
+  });
+}
+
 
 /* 
 	TESTING
