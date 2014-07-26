@@ -11,11 +11,17 @@ module.exports = function(container) {
      */
     controllers = {};
     controllers.index = function(req, res, next) {
-      return q.all([q.ninvoke(c.Video, 'findPublicVideos'), c.Category.whereVideoExist(), c.Playlist.getLatest()]).spread(function(videos, categories, playlists) {
+      var offset, skip;
+      offset = !(isNaN(+req.query.offset) || typeof +req.query.offset !== "number") ? +req.query.offset : 0;
+      skip = offset * c.item_per_page;
+      return q.all([c.Video.findPublicVideos(null, null, null, skip), c.Category.whereVideoExist(), c.Playlist.getLatest()]).spread(function(videos, categories, playlists) {
         return res.render('index', {
           videos: videos,
           categories: categories,
-          playlists: playlists
+          playlists: playlists,
+          item_per_page: c.item_per_page,
+          item_count: videos.length,
+          offset: offset
         });
       })["catch"](function(err) {
         return next(err);
@@ -216,12 +222,22 @@ module.exports = function(container) {
      * CATEGORIES
      */
     controllers.categoryById = function(req, res, next) {
-      return q.all([c.Category.findById(req.params.categoryId).exec(), c.Video.findByCategoryId(req.params.categoryId), c.Playlist.getLatest()]).spread(function(category, videos, playlists) {
+      var offset, skip;
+      offset = isNaN(+req.query.offset) || typeof +req.query.offset !== "number" ? 0 : +req.query.offset;
+      skip = offset * c.item_per_page;
+      return q.all([
+        c.Category.findById(req.params.categoryId).exec(), c.Video.findPublicVideos({
+          category: req.params.categoryId
+        }, null, c.item_per_page, skip), c.Playlist.getLatest()
+      ]).spread(function(category, videos, playlists) {
         return res.render('index', {
           videos: videos,
           category: category,
           playlists: playlists,
-          pageTitle: "Latest videos in " + category.title
+          pageTitle: "Latest videos in " + category.title,
+          offset: offset,
+          item_count: videos.length,
+          item_per_page: c.item_per_page
         });
       })["catch"](function(err) {
         return next(err);

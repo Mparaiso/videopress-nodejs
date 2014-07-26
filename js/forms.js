@@ -97,15 +97,28 @@ module.exports = function(container) {
       });
     };
     forms.Video = function(categories) {
+      var categoryTransform, _categories;
       if (categories == null) {
         categories = [];
       }
-      categories = categories.map(function(category) {
+      _categories = categories.map(function(category) {
         return {
           key: category.title,
           value: category.id
         };
       });
+      categoryTransform = {
+        from: function(c) {
+          if (c) {
+            return c.id;
+          }
+        },
+        to: function(id) {
+          return categories.filter(function(c) {
+            return c.id.toString() === id.toString();
+          })[0];
+        }
+      };
       return form.create('video').add('title', 'text', {
         validators: form.validation.Required(),
         attributes: {
@@ -113,7 +126,8 @@ module.exports = function(container) {
           "class": 'form-control'
         }
       }).add('category', 'select', {
-        choices: categories,
+        transform: categoryTransform,
+        choices: _categories,
         validators: form.validation.Required(),
         attributes: {
           'required': 'required',

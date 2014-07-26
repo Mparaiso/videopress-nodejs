@@ -24,6 +24,7 @@
     </ul>
 </div>
 <div class="col-md-10">
+    {% if videos.length > 0 %}
     {% for page in paginate(videos,4) %}
     <div class="row">
         <section class="row">
@@ -46,6 +47,9 @@
         </section>
     </div>
     {% endfor %}
+    {% else %}
+        <h2>No video found.</h2>
+    {%endif%}
 </div>
 </div>
 {% endblock %}

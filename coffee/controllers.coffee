@@ -8,11 +8,13 @@ module.exports = (container)->
         # CONTROLLERS
         ###
         controllers= {}
-        
+       
         controllers.index = (req,res,next)-> #default page
-            q.all([q.ninvoke(c.Video,'findPublicVideos'),c.Category.whereVideoExist(),c.Playlist.getLatest()])
+            offset = if not ( isNaN( +req.query.offset ) or typeof +req.query.offset isnt "number" ) then +req.query.offset else 0 
+            skip =  offset  * c.item_per_page
+            q.all([c.Video.findPublicVideos(null,null,null,skip),c.Category.whereVideoExist(),c.Playlist.getLatest()])
             .spread((videos,categories,playlists)->
-                res.render('index',{videos,categories,playlists}))
+                res.render('index',{videos,categories,playlists,item_per_page:c.item_per_page,item_count:videos.length,offset}))
             .catch((err)->
                 next(err))
         
@@ -132,9 +134,12 @@ module.exports = (container)->
         
         # /category/:categoryId
         controllers.categoryById=(req,res,next)->
-            q.all([c.Category.findById(req.params.categoryId).exec(),c.Video.findByCategoryId(req.params.categoryId),c.Playlist.getLatest()])
-            .spread((category,videos,playlists)-> res.render('index',{videos,category,playlists,pageTitle:"Latest videos in #{category.title}"}))
+            offset = if isNaN(+req.query.offset) or typeof +req.query.offset isnt "number" then 0 else +req.query.offset
+            skip = offset * c.item_per_page
+            q.all([c.Category.findById(req.params.categoryId).exec(),c.Video.findPublicVideos({category:req.params.categoryId},null,c.item_per_page,skip),c.Playlist.getLatest()])
+            .spread((category,videos,playlists)-> res.render('index',{videos,category,playlists,pageTitle:"Latest videos in #{category.title}",offset,item_count:videos.length,item_per_page:c.item_per_page}))
             .catch((err)->next(err))
+
         ###
             ACCOUNTS
         ###

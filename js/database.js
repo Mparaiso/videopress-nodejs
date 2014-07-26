@@ -22,13 +22,11 @@ module.exports = function(container) {
   container.set('mongoose', container.share(function(c) {
     var mongoose, mongooseCachebox;
     mongoose = require('mongoose');
-    if (!c.debug) {
-      mongooseCachebox = require('mongoose-cachebox');
-      mongooseCachebox(mongoose, {
-        cache: true,
-        ttl: 30
-      });
-    }
+    mongooseCachebox = require('mongoose-cachebox');
+    mongooseCachebox(mongoose, {
+      cache: !c.debug,
+      ttl: 30
+    });
     return mongoose;
   }));
   container.set("db", container.share(function(c) {
@@ -200,25 +198,24 @@ module.exports = function(container) {
         return q;
       }
     };
-    VideoSchema.statics.findPublicVideos = function(where, callback, q) {
+    VideoSchema.statics.findPublicVideos = function(where, sort, limit, skip) {
+      var query;
       if (where == null) {
         where = {};
       }
-      if (where instanceof Function) {
-        callback = where;
-        where = {};
+      if (sort == null) {
+        sort = {
+          created_at: -1
+        };
+      }
+      if (limit == null) {
+        limit = c.item_per_page;
       }
       where = _.extend(where, {
         "private": false
       });
-      q = this.find(where).limit(40).sort({
-        updated_at: -1
-      }).populate('owner');
-      if (callback) {
-        return q.exec(callback);
-      } else {
-        return q;
-      }
+      query = this.find(where).limit(c.item_per_page).skip(skip).sort(sort).populate('owner');
+      return c.q(query.exec());
     };
     VideoSchema.statics.persist = function(video) {
       return c.q(video.save());

@@ -13,7 +13,8 @@ container = new pimple({
   ip: process.env.OPENSHIFT_NODEJS_IP,
   youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
-  debug: process.env.NODE_ENV === "production" ? false : true
+  debug: process.env.NODE_ENV === "production" ? false : true,
+  item_per_page: 26
 });
 
 container.register(require('./database'));

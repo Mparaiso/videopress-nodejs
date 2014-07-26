@@ -14,11 +14,10 @@ module.exports = (container)->
 
     container.set 'mongoose', container.share (c)->
         mongoose = require('mongoose')
-        if not c.debug
-            mongooseCachebox = require('mongoose-cachebox')
-            mongooseCachebox mongoose, 
-                cache: true, # start caching
-                ttl: 30 # 30 seconds
+        mongooseCachebox = require('mongoose-cachebox')
+        mongooseCachebox mongoose,
+            cache: not c.debug, # start caching
+            ttl: 30 # 30 seconds
         return mongoose
 
     container.set "db", container.share (c)->
@@ -102,15 +101,11 @@ module.exports = (container)->
             .populate('owner')
             if callback then q.exec(callback) else q
             
-        VideoSchema.statics.findPublicVideos = (where={},callback,q)->
-            if where instanceof Function
-                callback = where
-                where = {}
+        VideoSchema.statics.findPublicVideos = (where={},sort={created_at:-1},limit=c.item_per_page,skip)->
             where = _.extend(where,{private:false})
-            q = this.find(where).limit(40).sort({updated_at:-1}).populate('owner')
-            if callback
-                q.exec(callback)
-            else q
+            query = this.find(where).limit(c.item_per_page).skip(skip).sort(sort).populate('owner')
+            c.q(query.exec())
+            
         
         VideoSchema.statics.persist = (video)->
             c.q(video.save())

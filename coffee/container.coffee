@@ -9,6 +9,7 @@ container = new pimple
     youtub_api_key: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
     connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
     debug: if process.env.NODE_ENV == "production" then false else true
+    item_per_page:26
 
 # service providers
 container.register require './database'

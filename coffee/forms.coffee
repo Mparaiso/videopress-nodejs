@@ -33,10 +33,14 @@ module.exports = (container)->
             .add('category','select',{choices:categories,validators:form.validation.Required(),attributes:{'required',class:'form-control'}})
 
         forms.Video = (categories=[])->
-            categories = categories.map (category)-> {key:category.title,value:category.id}
+            _categories = categories.map (category)-> {key:category.title,value:category.id}
+            categoryTransform={
+                from:(c)->if c then c.id 
+                to:(id)->categories.filter((c)->c.id.toString() == id.toString() )[0]
+            }
             form.create('video')
             .add('title','text',{validators:form.validation.Required(),attributes:{'required',class:'form-control'}})
-            .add('category','select',{choices:categories,validators:form.validation.Required(),attributes:{'required',class:'form-control'}})
+            .add('category','select',{transform:categoryTransform,choices:_categories,validators:form.validation.Required(),attributes:{'required',class:'form-control'}})
             .add('description','textarea',{attributes:{class:'form-control',rows:10}})
         
         ###
@@ -51,3 +55,4 @@ module.exports = (container)->
         
         
         return forms
+

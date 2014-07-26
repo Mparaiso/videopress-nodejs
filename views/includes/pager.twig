@@ -1,0 +1,20 @@
+{# 
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+    views/includes/pager 
+#}
+{% if offset !== undefined && item_per_page !== undefined && item_count !==undefined %}
+<div class="row">
+    <ul class="pager col-md-12">
+        {% if offset > 0 %}
+            <li class="previous"><a href="?offset={{offset-1}}">Previous</a></li>
+        {%else%}
+            <li class="previous disabled"><a>Previous</a></li>
+        {% endif %}
+        {% if item_count % item_per_page == 0 && item_count > 0 %}
+            <li class="next"><a href="?offset={{offset+1}}">Next</a></li>
+        {% else %}
+            <li class="next disabled"><a>Next</a></li>
+        {%endif%}
+    </ul>
+</div>
+{%endif%}
