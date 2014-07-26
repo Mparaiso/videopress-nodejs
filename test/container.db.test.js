@@ -7,7 +7,9 @@ describe("container.db", function() {
     var assert = require('assert'),
     container = require('../app'),
     Video = container.Video,
-    Playlist = container.Playlist;
+    Playlist = container.Playlist,
+    User = container.User,
+    q=container.q;
 
     beforeEach(function(done) {
         Video.remove(function() {
@@ -23,7 +25,6 @@ describe("container.db", function() {
                 url: 'http://www.youtube.com/watch?v=3AKaGShTHpo'
             };
             this.video = new Video(this.data);
-            Video.remove();
         });
         describe("#fromUrl", function() {
             it('should create a video from a url', function(done) {
@@ -32,6 +33,18 @@ describe("container.db", function() {
             });
             it('should save a video', function(done) {
                 this.video.save(done);
+            });
+            it('shouldnt be inserted multiple times',function(done){
+                var self=this;
+                q(User.create({username:"foo"}))
+                .then(function(user){return [user,Video.fromUrl(self.url,{owner:user})];})
+                .spread(function(user,video){return Video.fromUrl(self.url,{owner:user});})
+                .then(function(){return q(Video.find().exec())})
+                .catch(done)
+                .done(function(videos){
+                    assert.equal(1,videos.length);
+                    done();
+                })
             });
             describe("#findPublicVideos", function() {
                 it('should find public videos', function(done) {

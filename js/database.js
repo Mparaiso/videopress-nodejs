@@ -136,11 +136,12 @@ module.exports = function(container) {
         properties = {};
       }
       return c.q.ninvoke(c.videoParser, 'parse', url).then(function(data) {
+        _.extend(data, properties);
         return [
           c.q(Video.findOne({
             owner: data.owner,
             url: data.url
-          }).exec()), _.extend(data, properties)
+          }).exec()), data
         ];
       }).spread(function(video, data) {
         if (video) {
@@ -359,9 +360,12 @@ module.exports = function(container) {
     UserSchema = c.db.Schema({
       roles: {
         type: Array,
-        "default": ['user']
+        "default": ['member']
       },
-      username: String,
+      username: {
+        type: String,
+        required: "username is required"
+      },
       isAccountNonExpired: {
         type: Boolean,
         "default": true
@@ -377,6 +381,11 @@ module.exports = function(container) {
       isAccountNonLocked: {
         type: Boolean,
         "default": true
+      },
+      created_at: {
+        type: Date,
+        "default": Date.now,
+        required: true
       },
       local: {
         email: String,

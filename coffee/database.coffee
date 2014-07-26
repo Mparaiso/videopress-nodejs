@@ -73,7 +73,8 @@ module.exports = (container)->
         VideoSchema.statics.fromUrl = (url,properties={})->
             c.q.ninvoke(c.videoParser,'parse',url)
             .then (data)->
-                [c.q(Video.findOne({owner:data.owner,url:data.url}).exec()),_.extend(data,properties)]
+                _.extend(data,properties)
+                [c.q(Video.findOne({owner:data.owner,url:data.url}).exec()),data]
             .spread (video,data)->
                 if video then video
                 else Video.create(data)
@@ -186,12 +187,13 @@ module.exports = (container)->
 
     container.set 'User',container.share (c)->
         UserSchema = c.db.Schema
-            roles:{type:Array,default:['user']}
-            username:String
+            roles:{type:Array,default:['member']}
+            username:{type:String,required:"username is required"}
             isAccountNonExpired:{type:Boolean,default:true}
             isEnabled:{type:Boolean,default:true}
             isCredentialsNonExpired:{type:Boolean,default:true}
             isAccountNonLocked:{type:Boolean,default:true}
+            created_at:{type:Date,default:Date.now,required:true}
             local:
                 email:String
                 password:String
