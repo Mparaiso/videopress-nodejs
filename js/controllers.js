@@ -99,8 +99,10 @@ module.exports = function(container) {
      * /profile/playlist/:playlistId/delete
      */
     controllers.playlistRemove = function(req, res, next) {
+      var redirect;
+      redirect = req.body._redirect || '/profile/playlist';
       return q.ninvoke(res.locals.playlist, 'remove').then((function() {
-        return res.redirect('/profile/playlist');
+        return res.redirect(redirect);
       }), next);
     };
 
@@ -114,11 +116,15 @@ module.exports = function(container) {
         video = _.find(playlist.videos, function(v) {
           return v.id === req.query.videoId;
         }) || playlist.getFirstVideo();
-        return [
-          q.ninvoke(c.Video, 'populate', video, {
-            path: "owner category"
-          }), c.playerFactory.fromVideo(video), playlist
-        ];
+        if (video) {
+          return [
+            q.ninvoke(c.Video, 'populate', video, {
+              path: "owner category"
+            }), c.playerFactory.fromVideo(video), playlist
+          ];
+        } else {
+          return [null, null, playlist];
+        }
       }).spread(function(video, player, playlist) {
         return res.render('playlist', {
           playlist: playlist,
@@ -282,6 +288,7 @@ module.exports = function(container) {
       });
     };
     controllers.profile = function(req, res, ext) {
+      res.locals._redirect = req.originalUrl;
       return q.all([q.ninvoke(c.Video, 'findByOwnerId', req.user.id), q.ninvoke(c.Playlist, 'findByOwnerId', req.user.id)]).spread(function(videos, playlists) {
         return res.render('profile/index', {
           videos: videos,

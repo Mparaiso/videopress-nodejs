@@ -3,7 +3,9 @@
 {% block title %} {{title}} -- {{video.title}} {%endblock%}
 {% block content %}
 <section class="row">
-	{%include 'includes/video-read.twig'%}
+    <article class="col-md-8">
+        {%include 'includes/video-read.twig'%}
+    </article>
 	<aside class="col-md-4">
 		{% for video in videos %}
 		<div class='row'>

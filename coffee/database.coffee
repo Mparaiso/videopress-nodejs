@@ -8,8 +8,9 @@ _= require 'lodash'
 module.exports = (container)->
     container.set "videoParser",container.share (c)->
         youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey)
+        youtubeShortParser = new parsers.YoutubeShort(c.config.youtube_apikey)
         vimeoVideoParser = new parsers.Vimeo(c.config.vimeo_access_token)
-        videoParserChain = new parsers.Chain [youtubeVideoParser,vimeoVideoParser]
+        videoParserChain = new parsers.Chain [youtubeVideoParser,vimeoVideoParser,youtubeShortParser]
         return videoParserChain
 
     container.set 'mongoose', container.share (c)->
@@ -144,17 +145,24 @@ module.exports = (container)->
                 videos: [{ref:'Video',type:c.db.Schema.Types.ObjectId}]
                 video_urls:String
                 private:{type:Boolean,default:false}
+                created_at:{type:Date,default:Date.now}
+                updated_at:{type:Date,default:Date.now}
         
         PlaylistSchema.pre('save',(next)->
             ### 
              transform a string of video urls into video documents and add video ids to video field 
             ###
             self=this
-            if typeof this.video_urls is "string"
+            this.updated_at = new Date
+            if typeof @video_urls is "string"
                 _urls = _.compact(this.video_urls.split(/[\s \n \r ,]+/))
                 _props = if this.owner then {owner:this.owner} else {}
-                c.q.all(_urls.map (url)-> c.Video.fromUrl(url,_props).catch (err)->c.logger.err err  )
-                .then (videos)-> self.videos = c._(videos).compact().pluck('id').value() ; self.thumbnail = videos[0]?.thumbnail ; next() 
+                c.q.all(_urls.map (url)-> c.Video.fromUrl(url,_props).catch (err)->c.logger.err err ; false  )
+                .then (videos)->
+                    self.videos = c._(videos).compact().pluck('id').value()
+                    self.thumbnail = videos[0]?.thumbnail 
+                    self.video_urls = c._.pluck(videos,'url').join("\r\n")
+                    next()
                 .catch next
             else
                 next()
@@ -166,7 +174,7 @@ module.exports = (container)->
             Playlist.find().sort({updated_at:-1}).limit(10).exec(callback)
         
         PlaylistSchema.statics.findByOwnerId = (id,callback,q)->
-            q = this.find({owner:id}).populate('videos owner')
+            q = this.find({owner:id}).sort({created_at:-1}).populate('videos owner')
             if callback then q.exec(callback) else q
         PlaylistSchema.statics.persist = (playlist,options...)->
             c.q.ninvoke(playlist,'save',options...)

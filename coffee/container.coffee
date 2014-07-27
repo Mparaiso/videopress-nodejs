@@ -64,14 +64,12 @@ container.set "app", container.share (container)->
     app.use(container.express.compress())
     app.use(container.logger.middleware())
 
-    if container.debug 
+    if container.debug
         app.enable('verbose errors')
         app.use(container.express.logger("dev"))
-    else
-        app.disable("verbose errors")
+    else app.disable("verbose errors")
 
-    app.configure 'testing', ->
-        app.disable("verbose errors")
+    app.configure 'testing', ->app.disable("verbose errors")
 
     app.map = container.mixins.map
     
@@ -195,7 +193,6 @@ container.set "logger", container.share (c)->
             logger.debug("#{message} #{req.method} #{req.path}")
             next()
     return logger
-
 
 container.set "passport", container.share ->
     passport = require 'passport'

@@ -60,8 +60,9 @@ module.exports = (container)->
         # /profile/playlist/:playlistId/delete
         ###
         controllers.playlistRemove = (req,res,next)->
+            redirect = req.body._redirect or '/profile/playlist'
             q.ninvoke(res.locals.playlist,'remove')
-            .then( (->res.redirect('/profile/playlist')) ,next)
+            .then( (->res.redirect(redirect)) ,next)
         ###
         # PLAYLIST
         ###
@@ -71,7 +72,10 @@ module.exports = (container)->
             q().then ->
                 playlist = res.locals.playlist
                 video = _.find(playlist.videos,(v)->v.id==req.query.videoId) or playlist.getFirstVideo()
-                return [q.ninvoke(c.Video,'populate',video,{path:"owner category"}),c.playerFactory.fromVideo(video),playlist]
+                if video
+                    [q.ninvoke(c.Video,'populate',video,{path:"owner category"}),c.playerFactory.fromVideo(video),playlist]
+                else
+                    [null,null,playlist]
             .spread (video,player,playlist)->
                 res.render('playlist',{playlist,video,player})
             .done _.noop,(err)-> next(err)
@@ -135,7 +139,7 @@ module.exports = (container)->
         # /category/:categoryId
         controllers.categoryById=(req,res,next)->
             offset = if isNaN(+req.query.offset) or typeof +req.query.offset isnt "number" then 0 else +req.query.offset
-            skip = offset * c.item_per_page
+            skip = offset* c.item_per_page
             q.all([c.Category.findById(req.params.categoryId).exec(),c.Video.findPublicVideos({category:req.params.categoryId},null,c.item_per_page,skip),c.Playlist.getLatest()])
             .spread((category,videos,playlists)-> res.render('index',{videos,category,playlists,pageTitle:"Latest videos in #{category.title}",offset,item_count:videos.length,item_per_page:c.item_per_page}))
             .catch((err)->next(err))
@@ -168,6 +172,7 @@ module.exports = (container)->
         
         # show current user profile
         controllers.profile = (req,res,ext)->
+            res.locals._redirect = req.originalUrl
             q.all([q.ninvoke(c.Video,'findByOwnerId',req.user.id),q.ninvoke(c.Playlist,'findByOwnerId',req.user.id)])
             .spread((videos,playlists)->res.render('profile/index',{videos,playlists}))
             .catch((err)->next(_.extend(err,{status:500})))

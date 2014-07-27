@@ -10,18 +10,14 @@
 			<div>
             {% if user && isAuthenticated && playlist.owner.id == user.id %}
                 <a href="/profile/playlist/{{playlist.id}}/update">update</a> | 
-                <a href="/profile/playlist/{{playlist.id}}/remove">remove</a>
+                <form class="inline" action="/profile/playlist/{{playlist.id}}/delete" method="POST">
+                    <button class="btn-link inline" type="submit">remove</button>
+                    <input type="hidden" name="_csrf" value="{{_csrf}}" />
+                    <input type="hidden" name="_redirect" value="{{_redirect}}" />
+                </form>
             {% endif %}
             </div>
-            {#
-	           <div class="owner">
-					{% if playlist.owner %}
-					{{playlist.owner.username}}
-					{%else%}
-					anonymous
-					{% endif %}
-			</div>
-            #}
+            
             <div>&nbsp;</div>
 		</article>
 		{% endfor %}

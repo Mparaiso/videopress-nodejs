@@ -51,9 +51,9 @@ describe("container.db", function() {
                     Video.findPublicVideos(done);
                 });
                 it('should find public videos with where parameter', function(done) {
-                    Video.findPublicVideos({
-                        foo: /bar/
-                    }, done);
+                    Video.findPublicVideos({foo: /bar/})
+                    .then(function(){done()})
+                    .catch(done)
                 });
             });
 

@@ -276,6 +276,22 @@ parsers.Youtube = (function(_super) {
 
 })(parsers.Base);
 
+parsers.YoutubeShort = (function(_super) {
+  __extends(YoutubeShort, _super);
+
+  function YoutubeShort() {
+    YoutubeShort.__super__.constructor.apply(this, arguments);
+    this.regexp = /(?:(?:http|https):\/\/)?youtu\.be\/([\d \w _ -]+)/i;
+  }
+
+  YoutubeShort.prototype._getIdFromUrl = function(url) {
+    return url.match(this.regexp).pop();
+  };
+
+  return YoutubeShort;
+
+})(parsers.Youtube);
+
 
 /*
  * Chain of responsability , allows getting videos from multiple video apis

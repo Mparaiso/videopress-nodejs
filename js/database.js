@@ -13,10 +13,11 @@ _ = require('lodash');
 
 module.exports = function(container) {
   container.set("videoParser", container.share(function(c) {
-    var videoParserChain, vimeoVideoParser, youtubeVideoParser;
+    var videoParserChain, vimeoVideoParser, youtubeShortParser, youtubeVideoParser;
     youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey);
+    youtubeShortParser = new parsers.YoutubeShort(c.config.youtube_apikey);
     vimeoVideoParser = new parsers.Vimeo(c.config.vimeo_access_token);
-    videoParserChain = new parsers.Chain([youtubeVideoParser, vimeoVideoParser]);
+    videoParserChain = new parsers.Chain([youtubeVideoParser, vimeoVideoParser, youtubeShortParser]);
     return videoParserChain;
   }));
   container.set('mongoose', container.share(function(c) {
@@ -288,6 +289,14 @@ module.exports = function(container) {
       "private": {
         type: Boolean,
         "default": false
+      },
+      created_at: {
+        type: Date,
+        "default": Date.now
+      },
+      updated_at: {
+        type: Date,
+        "default": Date.now
       }
     });
     PlaylistSchema.pre('save', function(next) {
@@ -297,6 +306,7 @@ module.exports = function(container) {
        */
       var self, _props, _urls;
       self = this;
+      this.updated_at = new Date;
       if (typeof this.video_urls === "string") {
         _urls = _.compact(this.video_urls.split(/[\s \n \r ,]+/));
         _props = this.owner ? {
@@ -304,12 +314,14 @@ module.exports = function(container) {
         } : {};
         return c.q.all(_urls.map(function(url) {
           return c.Video.fromUrl(url, _props)["catch"](function(err) {
-            return c.logger.err(err);
+            c.logger.err(err);
+            return false;
           });
         })).then(function(videos) {
           var _ref;
           self.videos = c._(videos).compact().pluck('id').value();
           self.thumbnail = (_ref = videos[0]) != null ? _ref.thumbnail : void 0;
+          self.video_urls = c._.pluck(videos, 'url').join("\r\n");
           return next();
         })["catch"](next);
       } else {
@@ -331,6 +343,8 @@ module.exports = function(container) {
     PlaylistSchema.statics.findByOwnerId = function(id, callback, q) {
       q = this.find({
         owner: id
+      }).sort({
+        created_at: -1
       }).populate('videos owner');
       if (callback) {
         return q.exec(callback);

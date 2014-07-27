@@ -1,9 +1,15 @@
 {# a video from a playlist , with other videos from the same playlist the right hand  #}
 {% extends 'layout.twig' %}
-{% block title %} {{title}} -- {{video.title}} {%endblock%}
+{% block title %} {{title}} -- {%if video %}{{video.title}} {%endif%}{%endblock%}
 {% block content %}
 <section class="row">
-	{%include 'includes/video-read.twig'%}
+    <article class="col-md-8">
+    {% if video %}
+	        {%include 'includes/video-read.twig'%}
+    {% else %}
+        <h2>No Video Found for that playlist</h2>
+    {% endif %}
+    </article>
 	<aside class="col-md-4">
 		<h4>{{playlist.title}} {% if playlist.owner.id == user.id %} <small><a  href="/profile/playlist/{{playlist.id}}/update">(edit)</a></small>{% endif %}</h4>
         

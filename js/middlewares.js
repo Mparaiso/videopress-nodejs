@@ -129,7 +129,7 @@ module.exports = function(container) {
     @see https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
      */
     middlewares.error = function(err, req, res, next) {
-      console.error(err);
+      c.logger.error(err);
       switch (String(err.status)) {
         case '404':
           return res.render('404');

@@ -141,29 +141,32 @@ class parsers.Youtube extends parsers.Base
                     provider : "youtube"
                     meta : item
 
+class parsers.YoutubeShort extends parsers.Youtube
+
+    constructor:->
+        super
+        @regexp = /(?:(?:http|https):\/\/)?youtu\.be\/([\d \w _ -]+)/i
+
+    _getIdFromUrl:(url)-> url.match(@regexp).pop()
+
 ###
 # Chain of responsability , allows getting videos from multiple video apis
 ###
 class parsers.Chain extends parsers.Base
     constructor:(@_parsers=[])->
 
-    push:()->
-        @_parsers.push(arguments...)
+    push:()->  @_parsers.push(arguments...)
 
-    pop:()->
-        @_parsers.pop(arguments...)
+    pop:()-> @_parsers.pop(arguments...)
 
-    remove:(parser)->
-        @_parsers.splice(@_parsers.indexOf(parser),1)
+    remove:(parser)-> @_parsers.splice(@_parsers.indexOf(parser),1)
 
-    isValidUrl:(url)->
-        return @_parsers.some (parser)-> parser.isValidUrl(url)
+    isValidUrl:(url)-> @_parsers.some (parser)-> parser.isValidUrl(url)
 
     parse:(url,callback)->
         parser = @_find(url)
         if not parser then callback(new Error("Url #{url} is not supported among parsers"))
         else parser.parse(url,callback)
 
-    _find:(url)->
-        @_parsers.filter((parser)-> parser.isValidUrl(url))[0]
+    _find:(url)-> @_parsers.filter((parser)-> parser.isValidUrl(url))[0]
 
