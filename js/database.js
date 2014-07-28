@@ -25,6 +25,9 @@ module.exports = function(container) {
     c.mongoose.connect(c.config.connection_string);
     return c.mongoose;
   }));
+  container.set("connection", container.share(function(c) {
+    return c.db.connection;
+  }));
   container.set("Category", container.share(function(c) {
     var Category, CategorySchema;
     CategorySchema = c.db.Schema({

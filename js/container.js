@@ -59,25 +59,26 @@ container.set('q', container.share(function(c) {
 }));
 
 container.set("app", container.share(function(container) {
-  var app, controllers, init, middlewares, sessionOptions;
+  var app, controllers, init, middlewares, sessionOptions, _;
   init = false;
+  _ = container._;
   app = container.express();
   app.disable('x-powered-by');
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.use(function(req, res, next) {
-    return container.q().then((function() {
+    return container.q().then(function() {
       if (!init) {
         container.Session;
         container.Category;
         container.User;
         container.Video;
         container.Playlist;
-        init = true;
+        return init = true;
       }
-    }))["catch"](function(err) {
-      return err;
-    }).done(next);
+    }).done(function() {
+      return next();
+    });
   });
   app.use(container.express["static"](path.join(__dirname, "..", "public"), container.config["static"]));
   app.engine('twig', container.swig.renderFile);
@@ -93,12 +94,14 @@ container.set("app", container.share(function(container) {
   app.use(container.passport.initialize());
   app.use(container.passport.session());
   app.use(container.express.compress());
-  app.use(container.logger.middleware());
   if (container.debug) {
     app.enable('verbose errors');
     app.use(container.express.logger("dev"));
   } else {
     app.disable("verbose errors");
+    app.on('error', function(err) {
+      return container.logger.error(arguments);
+    });
   }
   app.configure('testing', function() {
     return app.disable("verbose errors");
@@ -111,7 +114,8 @@ container.set("app", container.share(function(container) {
 
   /* inject container into current request scope */
   app.use(function(req, res, next) {
-    res.locals.container = container;
+    res.locals.originalUrl = req.originalUrl;
+    res.locals.config = container.config;
     return next();
   });
   app.use(middlewares.user);
@@ -121,6 +125,22 @@ container.set("app", container.share(function(container) {
   app.use('/login', middlewares.csrf);
   app.use('/signup', middlewares.csrf);
   app.use('/video', middlewares.csrf);
+  app.use(function(req, res, next) {
+    res.once('finish', function() {
+      if (res.status > 399) {
+        return container.logger.error({
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
+          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
+        });
+      } else {
+        return container.logger.info({
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
+          response: _.pick(res, ['status', 'statusCode', 'trailers', 'headers'])
+        });
+      }
+    });
+    return next();
+  });
   app.map({
     "/": {
       get: controllers.index
@@ -245,22 +265,13 @@ container.set("logger", container.share(function(c) {
   logger = new Logger("express logger");
   logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt", Logger.DEBUG));
   logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO));
-  logger.middleware = function(message) {
-    var init;
-    if (message == null) {
-      message = "INFO";
-    }
-    init = false;
-    return function(req, res, next) {
-      if (!init) {
-        logger.addProcessor(new monolog.processor.ExpressProcessor(req.app));
-        init = true;
-      }
-      logger.debug("" + message + " " + req.method + " " + req.path);
-      return next();
-    };
-  };
+  logger.addHandler(c.mongodbLoggerHandler);
   return logger;
+}));
+
+container.set("mongodbLoggerHandler", container.share(function(c) {
+  var mongodbHandler;
+  return mongodbHandler = new c.MongodbLogHandler(c.connection.db, "logs", c.monolog.Logger.DEBUG);
 }));
 
 container.set("videoParser", container.share(function(c) {
@@ -360,6 +371,43 @@ container.set("errors", container.share(function() {
 
     })(Error)
   };
+}));
+
+container.set("MongodbLogHandler", container.share(function(c) {
+  var MongodbLogHandler;
+  return MongodbLogHandler = (function(_super) {
+    __extends(MongodbLogHandler, _super);
+
+    function MongodbLogHandler(mongodb, collection, level, bubble) {
+      this.mongodb = mongodb;
+      this.collection = collection != null ? collection : "log";
+      if (level == null) {
+        level = 100;
+      }
+      if (bubble == null) {
+        bubble = true;
+      }
+      MongodbLogHandler.__super__.constructor.call(this, level, bubble);
+    }
+
+
+    /*
+     * @param record
+     * @param {Function} cb
+     */
+
+    MongodbLogHandler.prototype.write = function(record, cb) {
+      this.mongodb.collection(this.collection).insert(record, (function(_this) {
+        return function(err, res) {
+          return cb(err, res, record, _this);
+        };
+      })(this));
+      return this.bubble;
+    };
+
+    return MongodbLogHandler;
+
+  })(c.monolog.handler.AbstractProcessingHandler);
 }));
 
 module.exports = container;

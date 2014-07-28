@@ -19,6 +19,9 @@ module.exports = (container)->
         c.mongoose.connect(c.config.connection_string)
         return c.mongoose
 
+    container.set "connection",container.share (c)->
+        c.db.connection
+
     container.set "Category",container.share (c)->
         CategorySchema = c.db.Schema({
             title:{type:String,required:'title is required'},

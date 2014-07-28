@@ -12,6 +12,10 @@ _ = require('lodash');
 
 config = {
   brand: "videopress",
+  loggly: {
+    url: process.env.VIDEOPRESS_LOGGLY_URL,
+    enable_pixel_tracking: true
+  },
   connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
   youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
   vimeo_access_token: process.env.VIDEOPRESS_VIMEO_ACCESS_TOKEN,

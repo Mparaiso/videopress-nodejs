@@ -32,13 +32,16 @@ container.set 'q',container.share (c)->
 
 container.set "app", container.share (container)->
     init = false
+    _=container._
     app = container.express()
     app.disable 'x-powered-by'
     middlewares = container.middlewares
     controllers = container.controllers
+
+
     app.use (req,res,next)->
         container.q()
-        .then (->
+        .then ->
             # init models
             if not init
                 container.Session
@@ -47,9 +50,7 @@ container.set "app", container.share (container)->
                 container.Video
                 container.Playlist
                 init = true
-            return )
-        .catch((err)-> err)
-        .done next
+        .done -> next()
     app.use(container.express.static(path.join(__dirname, "..", "public"),container.config.static))
     app.engine('twig',container.swig.renderFile)
     app.set('view engine', 'twig')
@@ -63,12 +64,14 @@ container.set "app", container.share (container)->
     app.use(container.passport.session())
     # persistent session login
     app.use(container.express.compress())
-    app.use(container.logger.middleware())
 
     if container.debug
         app.enable('verbose errors')
         app.use(container.express.logger("dev"))
-    else app.disable("verbose errors")
+    else
+        app.disable("verbose errors")
+        app.on 'error',(err)->
+            container.logger.error(arguments)
 
     app.configure 'testing', ->app.disable("verbose errors")
 
@@ -79,7 +82,8 @@ container.set "app", container.share (container)->
     ### protect profile pages ###
     ### inject container into current request scope ###
     app.use((req,res,next)->
-        res.locals.container=container
+        res.locals.originalUrl = req.originalUrl
+        res.locals.config = container.config
         next()
     )
     app.use(middlewares.user)
@@ -89,7 +93,16 @@ container.set "app", container.share (container)->
     app.use('/login',middlewares.csrf)
     app.use('/signup',middlewares.csrf)
     app.use('/video',middlewares.csrf)
-    
+
+    app.use (req,res,next)->
+        # log every request/response
+        res.once 'finish',->
+            if res.status > 399
+                container.logger.error({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['statusCode','trailers','headers'])})
+            else
+                container.logger.info({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['status','statusCode','trailers','headers'])})
+        next()
+
     app.map
         "/":
             get:controllers.index
@@ -179,21 +192,18 @@ container.set "sessionStore",container.share ->
     new sessionStores.MongooseSessionStore({},container.Session)
 
 container.set "monolog", container.share ->require 'monolog'
+
 container.set "logger", container.share (c)->
     monolog = c.monolog
     Logger = monolog.Logger
     logger = new Logger("express logger")
     logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt",Logger.DEBUG))
     logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO))
-    logger.middleware = (message = "INFO")->
-        init = false
-        return (req, res, next)->
-            if not init
-                logger.addProcessor(new monolog.processor.ExpressProcessor(req.app))
-                init = true
-            logger.debug("#{message} #{req.method} #{req.path}")
-            next()
+    logger.addHandler(c.mongodbLoggerHandler)
     return logger
+
+container.set "mongodbLoggerHandler",container.share (c)->
+    mongodbHandler= new c.MongodbLogHandler(c.connection.db,"logs", c.monolog.Logger.DEBUG)
 
 container.set "videoParser",container.share (c)->
     youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey)
@@ -253,4 +263,23 @@ container.set "errors",container.share ->
                 super
                 @status = 500
     }
+
+container.set "MongodbLogHandler",container.share (c)->
+    class MongodbLogHandler extends c.monolog.handler.AbstractProcessingHandler
+
+        # @param  {MongoClient} @mongodb
+        # @param  {String} @collection
+        # @param  {Number} level=100
+        # @param  {Boolean} bubble=true
+        constructor:(@mongodb,@collection="log",level=100,bubble=true)->
+            super(level,bubble)
+        ###
+         * @param record
+         * @param {Function} cb
+        ###
+        write:(record,cb)->
+            @mongodb.collection(@collection).insert record,(err,res)=>
+                cb(err,res,record,this)
+            @bubble
+
 module.exports = container
