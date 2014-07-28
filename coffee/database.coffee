@@ -1,17 +1,10 @@
 "use strict"
 
-parsers = require './parsers'
 async = require 'async'
 bcrypt = require 'bcrypt-nodejs'
 _= require 'lodash'
 
 module.exports = (container)->
-    container.set "videoParser",container.share (c)->
-        youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey)
-        youtubeShortParser = new parsers.YoutubeShort(c.config.youtube_apikey)
-        vimeoVideoParser = new parsers.Vimeo(c.config.vimeo_access_token)
-        videoParserChain = new parsers.Chain [youtubeVideoParser,vimeoVideoParser,youtubeShortParser]
-        return videoParserChain
 
     container.set 'mongoose', container.share (c)->
         mongoose = require('mongoose')
@@ -62,7 +55,7 @@ module.exports = (container)->
             duration: Object,
             created_at:{type:Date,'default':Date.now},
             updated_at:{type:Date,'default':Date.now},
-            publishedAt: { type: Date, 'default': Date.now},
+            publishedAt: { type: Date, 'default': Date.now,required:"Must be a valid date for publishedAt"},
             originalId: String,
             provider: String,
             thumbnail: String,

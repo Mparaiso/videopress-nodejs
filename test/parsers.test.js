@@ -16,7 +16,11 @@ describe("parsers.Chain", function() {
             "http://youtu.be/bbww4vmB88k",
             "https://youtu.be/bbww4vmB88k",
             "youtu.be/bbww4vmB88k",
-            "http://youtu.be/_g6Z_AMCylg?list=UUv-fy9iUJMxpa-1yHP6LIOQ"
+            "http://youtu.be/_g6Z_AMCylg?list=UUv-fy9iUJMxpa-1yHP6LIOQ",
+            "http://www.dailymotion.com/video/xvtlja",
+            "https://www.dailymotion.com/video/xvtlja",
+            "www.dailymotion.com/video/xvtlja_tutoriel-video-php-paypal-express-checkout_lifestyle",
+            "dailymotion.com/video/xvtlja_tutoriel-video-php-paypal-express-checkout_lifestyle"
         ],
         invalidUrls = [
             "foo"
@@ -33,8 +37,8 @@ describe("parsers.Chain", function() {
     invalidUrls.forEach(function(url){
         it('shouldnt be a valid url : '+url,function(){
             assert.equal(false,this.videoParser.isValidUrl(url));
-        })
-    })
+        });
+    });
     it('should find youtube video datas', function(done) {
         this.videoParser.parse(youtube_url, function(err, result) {
             assert.equal(result.originalId, youtube_video_id);

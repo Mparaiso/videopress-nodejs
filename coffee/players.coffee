@@ -13,8 +13,6 @@ module.exports = (container)->
             render:->do not_implemented_here
         
         class players.Youtube extends players.Base
-
-           
             @canPlay=(video)->
                 "youtube" is video.provider
         	
@@ -56,7 +54,22 @@ module.exports = (container)->
                 webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                 """
                 
-        
+        class players.Dailymotion extends players.Base
+            @canPlay=(video)->
+                "dailymotion" is video.provider
+            constructor:(@_videoId,@_options={})->
+                _.defaults(@_options,{width:640,height:480})
+            toJSON:->
+                id:@_videoId,
+                width:@_options.width
+                height:@_options.height
+            toHTML:->
+                data = @toJSON()
+                """
+                    <iframe src="//www.dailymotion.com/embed/video/#{data.id}"
+                    width="#{data.width}" height="#{data.height}" frameborder="0"
+                    webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    """
         class players.PlayerFactory
         
             constructor:(@_players=[])->

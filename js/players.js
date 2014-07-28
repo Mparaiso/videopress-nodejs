@@ -101,6 +101,39 @@ module.exports = function(container) {
       return Vimeo;
 
     })(players.Base);
+    players.Dailymotion = (function(_super) {
+      __extends(Dailymotion, _super);
+
+      Dailymotion.canPlay = function(video) {
+        return "dailymotion" === video.provider;
+      };
+
+      function Dailymotion(_videoId, _options) {
+        this._videoId = _videoId;
+        this._options = _options != null ? _options : {};
+        _.defaults(this._options, {
+          width: 640,
+          height: 480
+        });
+      }
+
+      Dailymotion.prototype.toJSON = function() {
+        return {
+          id: this._videoId,
+          width: this._options.width,
+          height: this._options.height
+        };
+      };
+
+      Dailymotion.prototype.toHTML = function() {
+        var data;
+        data = this.toJSON();
+        return "<iframe src=\"//www.dailymotion.com/embed/video/" + data.id + "\"\nwidth=\"" + data.width + "\" height=\"" + data.height + "\" frameborder=\"0\"\nwebkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
+      };
+
+      return Dailymotion;
+
+    })(players.Base);
     players.PlayerFactory = (function() {
       function PlayerFactory(_players) {
         this._players = _players != null ? _players : [];

@@ -2,6 +2,7 @@
 
 pimple = require 'pimple'
 path = require 'path'
+parsers = require './parsers'
 
 container = new pimple
     port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000 ,
@@ -194,6 +195,14 @@ container.set "logger", container.share (c)->
             next()
     return logger
 
+container.set "videoParser",container.share (c)->
+    youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey)
+    youtubeShortParser = new parsers.YoutubeShort(c.config.youtube_apikey)
+    vimeoVideoParser = new parsers.Vimeo(c.config.vimeo_access_token)
+    dailymotionParser = new parsers.Dailymotion()
+    videoParserChain = new parsers.Chain [youtubeVideoParser,vimeoVideoParser,dailymotionParser,youtubeShortParser]
+    return videoParserChain
+
 container.set "passport", container.share ->
     passport = require 'passport'
     LocalStrategy = require('passport-local').Strategy
@@ -206,7 +215,7 @@ container.set "passport", container.share ->
         passReqToCallback:true
     },(req,email,password,done)->
         process.nextTick ->
-            User.findOne 'local.email':email,(err,user)->
+            User.findOne {'local.email':email}, (err,user)->
                 if err  then done(err)
                 if user
                     done(null,false,req.flash('signupMessage','That email is already taken'))
@@ -231,7 +240,7 @@ container.set "passport", container.share ->
     )
     return passport
 container.set "playerFactory",container.share (c)->
-    new c.players.PlayerFactory [c.players.Youtube,c.players.Vimeo]
+    new c.players.PlayerFactory [c.players.Youtube,c.players.Vimeo,c.players.Dailymotion]
 
 container.set "errors",container.share ->
     {

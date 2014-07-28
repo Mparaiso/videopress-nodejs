@@ -1,9 +1,7 @@
 "use strict"
-http = require("http")
 util = require('util')
 duration = require('mpm.duration')
 _ = require('lodash')
-https = require('https')
 request = require('request')
 parsers =  exports
 
@@ -24,13 +22,14 @@ class parsers.VideoData
     if typeof @title == 'object'
         {@title,@description,@thumbnail,@duration,@publishedAt,@originalId,@originalCategoryId,@provider,@meta,@url}=@title
 
-###
- * Provide access to a website video apiUrl
- * @constructor
- * @param {String} name Baseparser name
-###
-class parsers.Base
 
+class parsers.Base
+    ###
+     * Provide access to a website video apiUrl
+     * @constructor
+     * @param {String} name Baseparser name
+    ###
+    constructor:->
     ###
     * validate url
     * @param  {String}  url
@@ -86,13 +85,6 @@ class parsers.Vimeo extends parsers.Base
                 else callback(error)
         else callback(@_notValidUrl(url,@_name))
 
-
-
-###
- * Parse a Youtube video Url to extract informations
- * @constructor
- * @param {string} apikey
-###
 class parsers.Youtube extends parsers.Base
     ###
     # @param  {String} apikey Youtube api key
@@ -142,12 +134,43 @@ class parsers.Youtube extends parsers.Base
                     meta : item
 
 class parsers.YoutubeShort extends parsers.Youtube
-
     constructor:->
         super
         @regexp = /(?:(?:http|https):\/\/)?youtu\.be\/([\d \w _ -]+)/i
 
     _getIdFromUrl:(url)-> url.match(@regexp).pop()
+
+class parsers.Dailymotion extends parsers.Base
+    constructor:->
+        @_regexp = /(?:https?\:\/\/)?(?:(?:www\.)?dailymotion\.com\/video\/)([\w \- \_ ]+)/i
+    isValidUrl:(url)->url.match(@_regexp)
+    parse:(url,callback)->
+        if @isValidUrl(url)
+            _id = url.match(@_regexp).pop()
+            _options = {
+                json:true
+                method:"GET"
+                url:"https://api.dailymotion.com/video/#{_id}?fields=title,created_time,description,duration%2Cduration_formatted%2Cid%2Cowner%2Cpublished%2Cthumbnail_240_url%2Ctype%2Curl"
+            }
+            @_request _options,(err,response,body)->
+                if err then callback(err) else
+                    callback(null,{
+                        title:body.title
+                        description:body.description
+                        url:body.url
+                        publishedAt:body.created_time
+                        meta:body
+                        originalId:_id
+                        thumbnail:body.thumbnail_240_url
+                        provider:"dailymotion"
+                        duration:do ->
+                            d  = new duration.Duration()
+                            d.seconds = body.duration
+                            return d
+                    })
+
+        else
+            callback(new Error("#{url} is not a valid dailymotion url"))
 
 ###
 # Chain of responsability , allows getting videos from multiple video apis

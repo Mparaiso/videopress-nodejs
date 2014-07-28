@@ -2,7 +2,7 @@
 "use strict";
 var assert, expect, express, mixins, request;
 assert = require('assert');
-mixins = require('../js/lib/mixins');
+mixins = require('../js/mixins');
 express = require('express');
 request = require('supertest').agent;
 /**
