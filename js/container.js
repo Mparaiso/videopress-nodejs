@@ -67,33 +67,25 @@ container.set("app", container.share(function(container) {
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.use(function(req, res, next) {
-    res.once('finish', function() {
-      if (res.status > 399) {
-        return container.logger.error({
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
-          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
-        });
-      } else {
-        return container.logger.info({
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
-          response: _.pick(res, ['status', 'statusCode', 'trailers', 'headers'])
-        });
-      }
-    });
+    if (!init) {
+      container.Session;
+      container.Category;
+      container.User;
+      container.Video;
+      container.Playlist;
+      init = true;
+    }
     return next();
   });
   app.use(function(req, res, next) {
-    return container.q().then(function() {
-      if (!init) {
-        container.Session;
-        container.Category;
-        container.User;
-        container.Video;
-        container.Playlist;
-        return init = true;
-      }
-    }).done(function() {
-      return next();
+    next();
+    return res.once('finish', function() {
+      return process.nextTick(function() {
+        return container.logger.debug({
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
+          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
+        });
+      });
     });
   });
   app.use(container.express["static"](path.join(__dirname, "..", "public"), container.config["static"]));
@@ -265,7 +257,7 @@ container.set("logger", container.share(function(c) {
   logger = new Logger("express logger");
   logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt", Logger.DEBUG));
   logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO));
-  logger.addHandler(c.MongodbLogHandler(c.connection.db, "logs", Logger.INFO));
+  logger.addHandler(new c.MongodbLogHandler(c.connection.db, "logs", Logger.INFO));
   return logger;
 }));
 
@@ -392,6 +384,7 @@ container.set("MongodbLogHandler", container.share(function(c) {
      */
 
     MongodbLogHandler.prototype.write = function(record, cb) {
+      console.log('logging to mongodb');
       this.mongodb.collection(this.collection).insert(record, (function(_this) {
         return function(err, res) {
           return cb(err, res, record, _this);
