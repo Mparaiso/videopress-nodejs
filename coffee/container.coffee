@@ -37,7 +37,7 @@ container.set "app", container.share (container)->
     app.disable 'x-powered-by'
     middlewares = container.middlewares
     controllers = container.controllers
-    
+
     app.use (req,res,next)->
         # log every request/response
         res.once 'finish',->
@@ -200,11 +200,8 @@ container.set "logger", container.share (c)->
     logger = new Logger("express logger")
     logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt",Logger.DEBUG))
     logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO))
-    logger.addHandler(c.mongodbLoggerHandler)
+    logger.addHandler(c.MongodbLogHandler(c.connection.db,"logs",Logger.INFO))
     return logger
-
-container.set "mongodbLoggerHandler",container.share (c)->
-    mongodbHandler= new c.MongodbLogHandler(c.connection.db,"logs", c.monolog.Logger.DEBUG)
 
 container.set "videoParser",container.share (c)->
     youtubeVideoParser = new parsers.Youtube(c.config.youtube_apikey)

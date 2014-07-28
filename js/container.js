@@ -265,13 +265,8 @@ container.set("logger", container.share(function(c) {
   logger = new Logger("express logger");
   logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt", Logger.DEBUG));
   logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO));
-  logger.addHandler(c.mongodbLoggerHandler);
+  logger.addHandler(c.MongodbLogHandler(c.connection.db, "logs", Logger.INFO));
   return logger;
-}));
-
-container.set("mongodbLoggerHandler", container.share(function(c) {
-  var mongodbHandler;
-  return mongodbHandler = new c.MongodbLogHandler(c.connection.db, "logs", c.monolog.Logger.DEBUG);
 }));
 
 container.set("videoParser", container.share(function(c) {
