@@ -67,6 +67,22 @@ container.set("app", container.share(function(container) {
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.use(function(req, res, next) {
+    res.once('finish', function() {
+      if (res.status > 399) {
+        return container.logger.error({
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
+          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
+        });
+      } else {
+        return container.logger.info({
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
+          response: _.pick(res, ['status', 'statusCode', 'trailers', 'headers'])
+        });
+      }
+    });
+    return next();
+  });
+  app.use(function(req, res, next) {
     return container.q().then(function() {
       if (!init) {
         container.Session;
@@ -125,22 +141,6 @@ container.set("app", container.share(function(container) {
   app.use('/login', middlewares.csrf);
   app.use('/signup', middlewares.csrf);
   app.use('/video', middlewares.csrf);
-  app.use(function(req, res, next) {
-    res.once('finish', function() {
-      if (res.status > 399) {
-        return container.logger.error({
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
-          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
-        });
-      } else {
-        return container.logger.info({
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
-          response: _.pick(res, ['status', 'statusCode', 'trailers', 'headers'])
-        });
-      }
-    });
-    return next();
-  });
   app.map({
     "/": {
       get: controllers.index

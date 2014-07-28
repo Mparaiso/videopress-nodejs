@@ -37,7 +37,15 @@ container.set "app", container.share (container)->
     app.disable 'x-powered-by'
     middlewares = container.middlewares
     controllers = container.controllers
-
+    
+    app.use (req,res,next)->
+        # log every request/response
+        res.once 'finish',->
+            if res.status > 399
+                container.logger.error({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['statusCode','trailers','headers'])})
+            else
+                container.logger.info({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['status','statusCode','trailers','headers'])})
+        next()
 
     app.use (req,res,next)->
         container.q()
@@ -94,14 +102,7 @@ container.set "app", container.share (container)->
     app.use('/signup',middlewares.csrf)
     app.use('/video',middlewares.csrf)
 
-    app.use (req,res,next)->
-        # log every request/response
-        res.once 'finish',->
-            if res.status > 399
-                container.logger.error({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['statusCode','trailers','headers'])})
-            else
-                container.logger.info({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['status','statusCode','trailers','headers'])})
-        next()
+
 
     app.map
         "/":
