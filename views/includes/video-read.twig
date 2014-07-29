@@ -22,7 +22,9 @@
 		</ul>
 		{% endif %}
         <p class="text-muted">{{video.publishedAt|date('Y-m-d')}}</p>
-        <p class="text-muted">Category : {{video.category.title}}</p>
+        {%if video.category.title %}
+            <p class="text-muted">Category : {{video.category.title}}</p>
+        {%endif%}
         {%if video.description %}
 		    <p style="white-space:pre-wrap;unicode-bidi:embed;word-wrap:break-word;" class="unstyled">{{video.description}}</p>
         {%endif%}

@@ -164,7 +164,7 @@ module.exports = function(container) {
       query.compile(req.query.q, 'i');
       return q(c.Video.findPublicVideos({
         description: query
-      }).exec()).then(function(videos) {
+      })).then(function(videos) {
         return res.render('search', {
           videos: videos,
           q: req.query.q

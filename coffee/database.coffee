@@ -22,6 +22,19 @@ module.exports = (container)->
     container.set "connection",container.share (c)->
         c.db.connection
 
+    container.set "Log",container.share (c)->
+        LogSchema = c.db.Schema
+            message: Object
+            context: Object
+            level: Number
+            level_name: String
+            channel: String
+            datetime: Date
+            created_at:{type:Date,default:Date.now}
+            extra: Object
+
+        Log = c.db.model('Log',LogSchema)
+
     container.set "Category",container.share (c)->
         CategorySchema = c.db.Schema({
             title:{type:String,required:'title is required'},

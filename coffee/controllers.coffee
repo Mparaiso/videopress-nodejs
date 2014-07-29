@@ -97,7 +97,7 @@ module.exports = (container)->
         controllers.videoSearch = (req,res,next)->
             query = if req.query.q then new RegExp()
             query.compile(req.query.q,'i')
-            q(c.Video.findPublicVideos({description:query}).exec())
+            q(c.Video.findPublicVideos({description:query}))
             .then((videos)->res.render('search',{videos,q:req.query.q}))
             .catch((err)->next(_.extend(err,{status:500})))
                

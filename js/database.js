@@ -28,6 +28,23 @@ module.exports = function(container) {
   container.set("connection", container.share(function(c) {
     return c.db.connection;
   }));
+  container.set("Log", container.share(function(c) {
+    var Log, LogSchema;
+    LogSchema = c.db.Schema({
+      message: Object,
+      context: Object,
+      level: Number,
+      level_name: String,
+      channel: String,
+      datetime: Date,
+      created_at: {
+        type: Date,
+        "default": Date.now
+      },
+      extra: Object
+    });
+    return Log = c.db.model('Log', LogSchema);
+  }));
   container.set("Category", container.share(function(c) {
     var Category, CategorySchema;
     CategorySchema = c.db.Schema({

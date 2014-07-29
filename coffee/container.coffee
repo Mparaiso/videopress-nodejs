@@ -51,12 +51,7 @@ container.set "app", container.share (container)->
             init = true
         next()
 
-    app.use (req,res,next)->
-        # log every request/response
-        next()
-        res.once 'finish',->
-            process.nextTick ->
-                container.logger.debug({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user']),response:_.pick(res,['statusCode','trailers','headers'])})
+
 
     app.use(container.express.static(path.join(__dirname, "..", "public"),container.config.static))
 
@@ -80,7 +75,7 @@ container.set "app", container.share (container)->
     else
         app.disable("verbose errors")
         app.on 'error',(err)->
-            container.logger.error(arguments)
+            container.logger.error(err)
 
     app.configure 'testing', ->app.disable("verbose errors")
 
@@ -103,6 +98,11 @@ container.set "app", container.share (container)->
     app.use('/signup',middlewares.csrf)
     app.use('/video',middlewares.csrf)
 
+    app.use (req,res,next)->
+        # log every request/response
+        res.once 'finish',->
+            container.logger.info({request:_.pick(req,['headers','trailers','method','url','statusCode','ip','port','user','error',"err"]),response:_.pick(res,['statusCode','trailers','headers','error',"err"])})
+        next()
 
     app.map
         "/":
@@ -200,7 +200,7 @@ container.set "logger", container.share (c)->
     logger = new Logger("express logger")
     logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt",Logger.DEBUG))
     logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO))
-    logger.addHandler(new c.MongodbLogHandler(c.connection.db,"logs",Logger.INFO))
+    logger.addHandler(new c.MongooseLogHandler(c.Log,Logger.INFO))
     return logger
 
 container.set "videoParser",container.share (c)->
@@ -262,23 +262,22 @@ container.set "errors",container.share ->
                 @status = 500
     }
 
-container.set "MongodbLogHandler",container.share (c)->
-    class MongodbLogHandler extends c.monolog.handler.AbstractProcessingHandler
+container.set "MongooseLogHandler",container.share (c)->
+    class MongooseLogHandler extends c.monolog.handler.AbstractProcessingHandler
 
         # @param  {MongoClient} @mongodb
         # @param  {String} @collection
         # @param  {Number} level=100
         # @param  {Boolean} bubble=true
-        constructor:(@mongodb,@collection="log",level=100,bubble=true)->
+        constructor:(@mongooseModel,level=100,bubble=true)->
             super(level,bubble)
         ###
          * @param record
          * @param {Function} cb
         ###
         write:(record,cb)->
-            console.log('logging to mongodb')
-            @mongodb.collection(@collection).insert record,(err,res)=>
-                cb(err,res,record,this)
+            @mongooseModel.create(record,(err,res)=>
+                cb(err,res,record,this))
             @bubble
 
 module.exports = container

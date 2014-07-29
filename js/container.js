@@ -77,17 +77,6 @@ container.set("app", container.share(function(container) {
     }
     return next();
   });
-  app.use(function(req, res, next) {
-    next();
-    return res.once('finish', function() {
-      return process.nextTick(function() {
-        return container.logger.debug({
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user']),
-          response: _.pick(res, ['statusCode', 'trailers', 'headers'])
-        });
-      });
-    });
-  });
   app.use(container.express["static"](path.join(__dirname, "..", "public"), container.config["static"]));
   app.engine('twig', container.swig.renderFile);
   app.set('view engine', 'twig');
@@ -108,7 +97,7 @@ container.set("app", container.share(function(container) {
   } else {
     app.disable("verbose errors");
     app.on('error', function(err) {
-      return container.logger.error(arguments);
+      return container.logger.error(err);
     });
   }
   app.configure('testing', function() {
@@ -133,6 +122,15 @@ container.set("app", container.share(function(container) {
   app.use('/login', middlewares.csrf);
   app.use('/signup', middlewares.csrf);
   app.use('/video', middlewares.csrf);
+  app.use(function(req, res, next) {
+    res.once('finish', function() {
+      return container.logger.info({
+        request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error', "err"]),
+        response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])
+      });
+    });
+    return next();
+  });
   app.map({
     "/": {
       get: controllers.index
@@ -257,7 +255,7 @@ container.set("logger", container.share(function(c) {
   logger = new Logger("express logger");
   logger.addHandler(new monolog.handler.StreamHandler(__dirname + "/../temp/log.txt", Logger.DEBUG));
   logger.addHandler(new monolog.handler.ConsoleLogHandler(Logger.INFO));
-  logger.addHandler(new c.MongodbLogHandler(c.connection.db, "logs", Logger.INFO));
+  logger.addHandler(new c.MongooseLogHandler(c.Log, Logger.INFO));
   return logger;
 }));
 
@@ -360,21 +358,20 @@ container.set("errors", container.share(function() {
   };
 }));
 
-container.set("MongodbLogHandler", container.share(function(c) {
-  var MongodbLogHandler;
-  return MongodbLogHandler = (function(_super) {
-    __extends(MongodbLogHandler, _super);
+container.set("MongooseLogHandler", container.share(function(c) {
+  var MongooseLogHandler;
+  return MongooseLogHandler = (function(_super) {
+    __extends(MongooseLogHandler, _super);
 
-    function MongodbLogHandler(mongodb, collection, level, bubble) {
-      this.mongodb = mongodb;
-      this.collection = collection != null ? collection : "log";
+    function MongooseLogHandler(mongooseModel, level, bubble) {
+      this.mongooseModel = mongooseModel;
       if (level == null) {
         level = 100;
       }
       if (bubble == null) {
         bubble = true;
       }
-      MongodbLogHandler.__super__.constructor.call(this, level, bubble);
+      MongooseLogHandler.__super__.constructor.call(this, level, bubble);
     }
 
 
@@ -383,9 +380,8 @@ container.set("MongodbLogHandler", container.share(function(c) {
      * @param {Function} cb
      */
 
-    MongodbLogHandler.prototype.write = function(record, cb) {
-      console.log('logging to mongodb');
-      this.mongodb.collection(this.collection).insert(record, (function(_this) {
+    MongooseLogHandler.prototype.write = function(record, cb) {
+      this.mongooseModel.create(record, (function(_this) {
         return function(err, res) {
           return cb(err, res, record, _this);
         };
@@ -393,7 +389,7 @@ container.set("MongodbLogHandler", container.share(function(c) {
       return this.bubble;
     };
 
-    return MongodbLogHandler;
+    return MongooseLogHandler;
 
   })(c.monolog.handler.AbstractProcessingHandler);
 }));
