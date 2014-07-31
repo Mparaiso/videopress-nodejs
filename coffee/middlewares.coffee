@@ -102,11 +102,11 @@ module.exports = (container)->
 
         middlewares.firewall =(req,res,next)->
             # test current route against acl
-            {path} = req.app._router.match(req.method,req.originalUrl)
+            {path} = req.app._router.match(req.method,req.originalUrl) or {}
             c.acl.query (req.isAuthenticated() and req.user),c.resources.ROUTE,path,(err,isAllowed)->
                 if isAllowed is true then next()
                 else if not req.isAuthenticated()
                     res.redirect('/login')
-                else next(err or c.errors.Forbidden("Forbidden : User '#{req.user}' with role '#{req.user.role}' tried to access #{req.originalUrl}"))
+                else next(err or (path and c.errors.Forbidden("Forbidden : User '#{req.user}' with role '#{req.user.role}' tried to access #{req.originalUrl}")) or c.errors.NotFound("url #{req.originalUrl} not found "))
 
         return middlewares

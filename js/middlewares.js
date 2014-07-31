@@ -119,14 +119,14 @@ module.exports = function(container) {
     };
     middlewares.firewall = function(req, res, next) {
       var path;
-      path = req.app._router.match(req.method, req.originalUrl).path;
+      path = (req.app._router.match(req.method, req.originalUrl) || {}).path;
       return c.acl.query(req.isAuthenticated() && req.user, c.resources.ROUTE, path, function(err, isAllowed) {
         if (isAllowed === true) {
           return next();
         } else if (!req.isAuthenticated()) {
           return res.redirect('/login');
         } else {
-          return next(err || c.errors.Forbidden("Forbidden : User '" + req.user + "' with role '" + req.user.role + "' tried to access " + req.originalUrl));
+          return next(err || (path && c.errors.Forbidden("Forbidden : User '" + req.user + "' with role '" + req.user.role + "' tried to access " + req.originalUrl)) || c.errors.NotFound("url " + req.originalUrl + " not found "));
         }
       });
     };
