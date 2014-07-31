@@ -6,12 +6,8 @@ _ = require('lodash')
 ###
 config ={
     brand:"videopress"
-    loggly:{
-        url: process.env.VIDEOPRESS_LOGGLY_URL
-        enable_pixel_tracking:true
-    }
-    connection_string: process.env.EXPRESS_VIDEO_MONGODB_CONNECTION_STRING,
-    youtube_apikey: process.env.EXPRESS_VIDEO_YOUTUBE_API_KEY,
+    connection_string: process.env.VIDEOPRESS_MONGODB_CONNECTION_STRING,
+    youtube_apikey: process.env.VIDEOPRESS_YOUTUBE_API_KEY,
     vimeo_access_token: process.env.VIDEOPRESS_VIMEO_ACCESS_TOKEN,
     port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000 ,
     ip: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',

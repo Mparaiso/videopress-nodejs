@@ -6,15 +6,11 @@
 <div class="row">
     <ul class="pager col-md-12">
         {% if offset > 0 %}
-            <li class="previous"><a href="?offset={{offset-1}}">Previous</a></li>
-        {%else%}
-            <li class="previous disabled"><a>Previous</a></li>
+        <li class="previous"><a href="?offset={{ offset-1 }}">Previous</a></li>
         {% endif %}
         {% if item_count % item_per_page == 0 && item_count > 0 %}
-            <li class="next"><a href="?offset={{offset+1}}">Next</a></li>
-        {% else %}
-            <li class="next disabled"><a>Next</a></li>
-        {%endif%}
+        <li class="next"><a href="?offset={{offset+1}}">Next</a></li>
+        {% endif %}
     </ul>
 </div>
-{%endif%}
+{% endif %}
