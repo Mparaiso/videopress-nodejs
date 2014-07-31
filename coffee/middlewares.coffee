@@ -1,8 +1,7 @@
 module.exports = (container)->
     container.set 'middlewares',container.share (c)->        
-        Rest = require 'mpm.express.rest'
-        q = require('q')
-
+        q = c.q
+        _ = c._
         
         ### 
         # MIDDLEWARES 
@@ -118,5 +117,14 @@ module.exports = (container)->
                         res.render('404')
                     else
                         res.render('500')
-        
+        middlewares.requestLogger = (req, res, next)->
+            # log every request/response
+            res.once 'finish', ->
+                message = {request: _.pick(req,['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error',"err"]), response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])}
+                if res.statusCode >= 400
+                    container.logger.error(message)
+                else
+                    container.logger.info(message)
+            next()
+
         return middlewares
