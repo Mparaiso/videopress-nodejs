@@ -113,6 +113,10 @@ container.set 'acl', container.share (c)->
         c.routes.SIGNUP
         c.routes.SEARCH
     ])
+    acl.deny(c.roles.MEMBER,c.resources.ROUTE,[
+        c.routes.SIGNUP,
+        c.routes.LOGIN
+    ])
     return acl
 
 container.set "locals", container.share ->
