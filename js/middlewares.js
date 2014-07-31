@@ -14,22 +14,6 @@ module.exports = function(container) {
      * @namespace
      */
     middlewares = {};
-
-    /*
-        Makes the csrf token mandatory
-        add _csrf to res.locals and headers
-     */
-    middlewares.csrf = function(req, res, next) {
-      return (c.express.csrf())(req, res, function(err) {
-        if (err) {
-          return next(err);
-        } else {
-          res.locals._csrf = req.csrfToken();
-          res.set('_csrf', res.locals._csrf);
-          return next();
-        }
-      });
-    };
     middlewares.video = function(req, res, next, id) {
       return c.Video.findOneById(id).then(function(video) {
         var err;
@@ -84,32 +68,11 @@ module.exports = function(container) {
         });
       };
     };
-    middlewares.user = function(req, res, next) {
-      if (req.isAuthenticated()) {
-        res.locals.isAuthenticated = true;
-        res.locals.user = req.user;
-      } else {
-        delete res.locals.user;
-        delete res.locals.isAuthenticated;
-      }
-      return next();
-    };
-    middlewares.isLoggedIn = function(req, res, next) {
-      if (req.isAuthenticated()) {
-        return next();
-      } else {
-        return res.redirect('/login');
-      }
-    };
     middlewares.cache = function(req, res, next) {
       if (req.method === "GET" && req.app.get('env') === "production") {
-        res.header('Cache-Control', "max-age=" + 5);
+        res.header('Cache-Control', "max-age=" + (1000 * 60));
         res.header('X-Powered-By', 'mparaiso mparaiso@online.fr');
       }
-      return next();
-    };
-    middlewares.flash = function(req, res, next) {
-      res.locals.flash = req.flash();
       return next();
     };
 
@@ -153,6 +116,19 @@ module.exports = function(container) {
         }
       });
       return next();
+    };
+    middlewares.firewall = function(req, res, next) {
+      var path;
+      path = req.app._router.match(req.method, req.originalUrl).path;
+      return c.acl.query(req.isAuthenticated() && req.user, c.resources.ROUTE, path, function(err, isAllowed) {
+        if (isAllowed === true) {
+          return next();
+        } else if (!req.isAuthenticated()) {
+          return res.redirect('/login');
+        } else {
+          return next(err || c.errors.Forbidden("Forbidden : User '" + req.user + "' with role '" + req.user.role + "' tried to access " + req.originalUrl));
+        }
+      });
     };
     return middlewares;
   }));

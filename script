@@ -1,3 +1,0 @@
-c=require('./app')
-p=new c.parsers.YoutubePlaylist(c.config.youtube_apikey,c.q,c._)
-p.parse('http://youtu.be/53EVBPVJpZw?list=PLqhVB9XFOQlIlMCPEqrKvODvCIDpbS1ic',->console.log(arguments))

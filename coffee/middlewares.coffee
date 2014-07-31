@@ -11,20 +11,7 @@ module.exports = (container)->
         # @namespace
         ###
         middlewares = {}
-        
-        ###
-            Makes the csrf token mandatory
-            add _csrf to res.locals and headers
-        ###
-        middlewares.csrf = (req,res,next)->
-                (c.express.csrf())(req,res,(err)->
-                    if err then next(err)
-                    else
-                        # add _csrf to template variables
-                        res.locals._csrf = req.csrfToken()
-                        # add _csrf to response headers
-                        res.set('_csrf',res.locals._csrf)
-                        next())
+
         # sets res.locals.video
         middlewares.video =(req,res,next,id)->
             c.Video.findOneById(id)
@@ -71,31 +58,14 @@ module.exports = (container)->
                         err = new Error("Access to resource #{param} for #{req.user} forbidden")
                         next(err)
                     else next()
-        
-        # sets req.locals.user and req.locals.isAuthenticated
-        middlewares.user = (req,res,next)-> 
-            if req.isAuthenticated()
-                res.locals.isAuthenticated = true
-                res.locals.user = req.user
-            else
-                delete res.locals.user
-                delete res.locals.isAuthenticated
-            next()
-        # check if user is authenticated
-        middlewares.isLoggedIn = (req,res,next)->
-            if req.isAuthenticated() then next() else res.redirect('/login')
+
         # cache pages
         middlewares.cache = (req, res, next)-> # basic caching
             if req.method is "GET" and req.app.get('env') is "production"
-                res.header('Cache-Control', "max-age=#{5}")
+                res.header('Cache-Control', "max-age=#{1000*60}")
                 res.header('X-Powered-By', 'mparaiso mparaiso@online.fr')
             next()
         
-        #set flash local variable
-        middlewares.flash = (req,res,next)->
-            res.locals.flash = req.flash()
-            next()
-       
         ###
         # @TODO rethink apis
         middlewares.videoApi = do ->
@@ -129,5 +99,14 @@ module.exports = (container)->
                 else
                     container.logger.info(message)
             next()
+
+        middlewares.firewall =(req,res,next)->
+            # test current route against acl
+            {path} = req.app._router.match(req.method,req.originalUrl)
+            c.acl.query (req.isAuthenticated() and req.user),c.resources.ROUTE,path,(err,isAllowed)->
+                if isAllowed is true then next()
+                else if not req.isAuthenticated()
+                    res.redirect('/login')
+                else next(err or c.errors.Forbidden("Forbidden : User '#{req.user}' with role '#{req.user.role}' tried to access #{req.originalUrl}"))
 
         return middlewares

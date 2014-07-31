@@ -5,13 +5,17 @@ module.exports = (container)->
 
     container.set "app", container.share (c)->
         init = false
+        middlewares = c.middlewares
+        controllers = c.controllers
 
         app = c.express()
         app.disable 'x-powered-by'
         app.enable 'trust proxy'
-        middlewares = c.middlewares
-        controllers = c.controllers
-    
+
+        app.engine('twig', c.swig.renderFile)
+        app.set('view engine', 'twig')
+        app.locals(c.locals)
+
         app.use (req, res, next)->
             # init models
             if not init
@@ -24,18 +28,13 @@ module.exports = (container)->
             next()
     
         app.use(c.express.static(c.path.join(__dirname, "..", "public"), c.config.static))
-    
-        app.engine('twig', c.swig.renderFile)
-        app.set('view engine', 'twig')
-        app.locals(c.locals)
         app.use(c.express.cookieParser(c.config.session.secret))
-        sessionOptions = c._.extend({}, c.config.session, {store: c.sessionStore})
-        app.use(c.express.session(sessionOptions))
+        app.use(c.express.session(c._.extend({}, c.config.session, {store: c.sessionStore})))
+        app.use c.express.csrf()
         app.use(require('connect-flash')())
         app.use(c.express.bodyParser())
         app.use(c.passport.initialize())
         app.use(c.passport.session())
-        # persistent session login
         app.use(c.express.compress())
     
         if c.debug
@@ -45,25 +44,28 @@ module.exports = (container)->
             app.disable("verbose errors")
             app.on 'error', (err)->
                 c.logger.error(err)
-    
+
+        app.enable('verbose errors')
+
+        app.use middlewares.requestLogger # log every regquests
+        app.use middlewares.firewall #use acl to check if current user can access route
+
         app.param 'videoId', middlewares.video
         app.param 'playlistId', middlewares.playlist
-    
-        app.use (req, res, next)->
+
+        app.use (req,res,next)->
+            #set various params on res.locals
+            if req.isAuthenticated()
+                res.locals.isAuthenticated = true
+                res.locals.user = req.user
+
             res.locals.originalUrl = req.originalUrl
             res.locals.config = c.config
+            res.locals._csrf = req.csrfToken()
+            res.locals.flash = req.flash()
             next()
 
-        app.use middlewares.user
-        app.use middlewares.flash
-        app.use '/profile', middlewares.isLoggedIn # protect profile pages
-        app.use '/profile', middlewares.csrf
-        app.use '/login', middlewares.csrf
-        app.use '/signup', middlewares.csrf
-        app.use '/video', middlewares.csrf
-    
-        app.use middlewares.requestLogger # log every regquests
-    
+
         ### Routes ###
         app.get  '/',controllers.index
         app.get  '/video/:videoId',controllers.videoById
@@ -89,7 +91,7 @@ module.exports = (container)->
     
         if not c.debug
             #middleware for errors if not debug
-            app.get '*', (req, res, next)->
+            app.get '/*', (req, res, next)->
                 next(new c.errors.NotFound("page not found"))
     
             app.use middlewares.error

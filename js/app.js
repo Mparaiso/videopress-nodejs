@@ -5,13 +5,16 @@
  */
 module.exports = function(container) {
   return container.set("app", container.share(function(c) {
-    var app, controllers, init, middlewares, sessionOptions;
+    var app, controllers, init, middlewares;
     init = false;
+    middlewares = c.middlewares;
+    controllers = c.controllers;
     app = c.express();
     app.disable('x-powered-by');
     app.enable('trust proxy');
-    middlewares = c.middlewares;
-    controllers = c.controllers;
+    app.engine('twig', c.swig.renderFile);
+    app.set('view engine', 'twig');
+    app.locals(c.locals);
     app.use(function(req, res, next) {
       if (!init) {
         c.Session;
@@ -24,14 +27,11 @@ module.exports = function(container) {
       return next();
     });
     app.use(c.express["static"](c.path.join(__dirname, "..", "public"), c.config["static"]));
-    app.engine('twig', c.swig.renderFile);
-    app.set('view engine', 'twig');
-    app.locals(c.locals);
     app.use(c.express.cookieParser(c.config.session.secret));
-    sessionOptions = c._.extend({}, c.config.session, {
+    app.use(c.express.session(c._.extend({}, c.config.session, {
       store: c.sessionStore
-    });
-    app.use(c.express.session(sessionOptions));
+    })));
+    app.use(c.express.csrf());
     app.use(require('connect-flash')());
     app.use(c.express.bodyParser());
     app.use(c.passport.initialize());
@@ -48,21 +48,22 @@ module.exports = function(container) {
         return c.logger.error(err);
       });
     }
+    app.enable('verbose errors');
+    app.use(middlewares.requestLogger);
+    app.use(middlewares.firewall);
     app.param('videoId', middlewares.video);
     app.param('playlistId', middlewares.playlist);
     app.use(function(req, res, next) {
+      if (req.isAuthenticated()) {
+        res.locals.isAuthenticated = true;
+        res.locals.user = req.user;
+      }
       res.locals.originalUrl = req.originalUrl;
       res.locals.config = c.config;
+      res.locals._csrf = req.csrfToken();
+      res.locals.flash = req.flash();
       return next();
     });
-    app.use(middlewares.user);
-    app.use(middlewares.flash);
-    app.use('/profile', middlewares.isLoggedIn);
-    app.use('/profile', middlewares.csrf);
-    app.use('/login', middlewares.csrf);
-    app.use('/signup', middlewares.csrf);
-    app.use('/video', middlewares.csrf);
-    app.use(middlewares.requestLogger);
 
     /* Routes */
     app.get('/', controllers.index);
@@ -95,7 +96,7 @@ module.exports = function(container) {
     }));
     app.get('/search', controllers.videoSearch);
     if (!c.debug) {
-      app.get('*', function(req, res, next) {
+      app.get('/*', function(req, res, next) {
         return next(new c.errors.NotFound("page not found"));
       });
       app.use(middlewares.error);

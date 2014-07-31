@@ -265,7 +265,7 @@ module.exports = (container)->
 
     container.set 'User', container.share (c)->
         UserSchema = c.db.Schema
-            roles: {type: Array, default: ['member']}
+            role: {type: String, default: 'member'}
             username: {type: String, required: "username is required"}
             isAccountNonExpired: {type: Boolean, default: true}
             isEnabled: {type: Boolean, default: true}
@@ -299,6 +299,8 @@ module.exports = (container)->
             bcrypt.compareSync(password, this.local.password)
         UserSchema.methods.toString = ->
             this.username.toString()
+
+        UserSchema.methods.getRoleId = -> @role
 
         User = c.db.model('User', UserSchema)
         return User

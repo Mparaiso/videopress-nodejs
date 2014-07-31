@@ -486,9 +486,9 @@ module.exports = function(container) {
   return container.set('User', container.share(function(c) {
     var User, UserSchema;
     UserSchema = c.db.Schema({
-      roles: {
-        type: Array,
-        "default": ['member']
+      role: {
+        type: String,
+        "default": 'member'
       },
       username: {
         type: String,
@@ -550,6 +550,9 @@ module.exports = function(container) {
     };
     UserSchema.methods.toString = function() {
       return this.username.toString();
+    };
+    UserSchema.methods.getRoleId = function() {
+      return this.role;
     };
     User = c.db.model('User', UserSchema);
     return User;

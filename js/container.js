@@ -61,10 +61,64 @@ container.set('q', container.share(function(c) {
   return q;
 }));
 
+container.set('roles', {
+  MEMBER: "member",
+  ADMIN: "admin",
+  SUPER_ADMIN: "super_admin"
+});
+
+container.set('resources', {
+  VIDEO: 'video',
+  ROUTE: 'route',
+  PLAYLIST: 'playlist'
+});
+
+container.set('actions', {
+  LIST: 'list',
+  SEARCH: 'search',
+  CREATE: 'create',
+  DELETE: 'delete',
+  READ: 'read',
+  UPDATE: 'update'
+});
+
+container.set('routes', {
+  PUBLIC_INDEX: '/',
+  PUBLIC_VIDEO_READ: '/video/:videoId',
+  PUBLIC_PLAYLIST_READ: '/playlist/:playlistId',
+  PUBLIC_CATEGORY_READ: '/category/:categoryId/:categoryTitle?',
+  PROFILE_INDEX: '/profile',
+  PROFILE_VIDEO_CREATE: '/profile/video/new',
+  PROFILE_VIDEO_LIST: '/profile/video',
+  PROFILE_VIDEO_ACTIONS: '/profile/video/action',
+  PROFILE_VIDEO_UPDATE: '/profile/video/:videoId/update',
+  PROFILE_VIDEO_DELETE: '/profile/video/:videoId/delete',
+  PROFILE_PLAYLIST_LIST: '/profile/playlist',
+  PROFILE_PLAYLIST_UPDATE: '/profile/playlist/:playlistId/update',
+  PROFILE_PLAYLIST_DELETE: '/profile/playlist/:playlistId/delete',
+  PROFILE_PLAYLIST_CREATE: '/profile/playlist/new',
+  PROFILE_PLAYLIST_FROM_URL: '/profile/playlist/fromurl',
+  LOGOUT: '/profile/logout',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  SEARCH: '/search'
+});
+
 container.set('acl', container.share(function(c) {
   var Acl, acl;
-  Acl = require('virgen-acl');
-  return acl = new Acl;
+  Acl = require('virgen-acl').Acl;
+  acl = new Acl;
+  acl.addRole(c.roles.MEMBER);
+  acl.addRole(c.roles.ADMIN, c.roles.MEMBER);
+  acl.addRole(c.roles.SUPER_ADMIN, c.roles.ADMIN);
+  acl.addResource(c.resources.VIDEO);
+  acl.addResource(c.resources.ROUTE);
+  acl.addResource(c.resources.PLAYLIST);
+  acl.deny();
+  acl.allow(c.roles.ADMIN);
+  acl.allow(c.roles.MEMBER, c.resources.ROUTE, [c.routes.PROFILE_INDEX, c.routes.PROFILE_VIDEO_CREATE, c.routes.PROFILE_VIDEO_LIST, c.routes.PROFILE_VIDEO_ACTIONS, c.routes.PROFILE_VIDEO_UPDATE, c.routes.PROFILE_VIDEO_DELETE, c.routes.PROFILE_PLAYLIST_LIST, c.routes.PROFILE_PLAYLIST_UPDATE, c.routes.PROFILE_PLAYLIST_DELETE, c.routes.PROFILE_PLAYLIST_CREATE, c.routes.PROFILE_PLAYLIST_FROM_URL, c.routes.LOGOUT]);
+  acl.allow(null, c.resources.ROUTE, [c.routes.PUBLIC_INDEX, c.routes.PUBLIC_VIDEO_READ, c.routes.PUBLIC_PLAYLIST_READ, c.routes.PUBLIC_CATEGORY_READ, c.routes.LOGIN, c.routes.SIGNUP, c.routes.SEARCH]);
+  return acl;
 }));
 
 container.set("locals", container.share(function() {
@@ -179,33 +233,6 @@ container.set("playerFactory", container.share(function(c) {
   return new c.players.PlayerFactory([c.players.Youtube, c.players.Vimeo, c.players.Dailymotion]);
 }));
 
-container.set("errors", container.share(function() {
-  return {
-    NotFound: (function(_super) {
-      __extends(_Class, _super);
-
-      function _Class() {
-        _Class.__super__.constructor.apply(this, arguments);
-        this.status = 404;
-      }
-
-      return _Class;
-
-    })(Error),
-    Forbidden: (function(_super) {
-      __extends(_Class, _super);
-
-      function _Class() {
-        _Class.__super__.constructor.apply(this, arguments);
-        this.status = 500;
-      }
-
-      return _Class;
-
-    })(Error)
-  };
-}));
-
 container.set("monolog", container.share(function() {
   return require('monolog');
 }));
@@ -255,6 +282,38 @@ container.set("MongooseLogHandler", container.share(function(c) {
     return MongooseLogHandler;
 
   })(c.monolog.handler.AbstractProcessingHandler);
+}));
+
+container.set("errors", container.share(function() {
+  return {
+    NotFound: function(message) {
+      var e;
+      if (message == null) {
+        message = 'not found';
+      }
+      e = new Error(message);
+      e.status = 404;
+      return e;
+    },
+    Forbidden: function(message) {
+      var e;
+      if (message == null) {
+        message = 'forbidden';
+      }
+      e = new Error(message);
+      e.status = 403;
+      return e;
+    },
+    InternalServerError: function(message) {
+      var e;
+      if (message == null) {
+        message = 'iternal server error';
+      }
+      e = new Error(message);
+      e.status = 500;
+      return e;
+    }
+  };
 }));
 
 module.exports = container;
