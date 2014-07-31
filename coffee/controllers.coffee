@@ -1,4 +1,7 @@
-module.exports = (container)->     
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
+module.exports = (container)->
      container.set 'controllers', container.share (c)->
         async = require 'async'
         q = c.q

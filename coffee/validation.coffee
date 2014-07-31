@@ -1,3 +1,6 @@
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 module.exports = (container)->
     container.set 'validation', container.share ->
         validation = require 'mpm.validation'

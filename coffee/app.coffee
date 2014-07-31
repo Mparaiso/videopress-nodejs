@@ -1,3 +1,6 @@
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 module.exports = (container)->
 
     container.set "app", container.share (c)->
@@ -46,11 +49,11 @@ module.exports = (container)->
         app.param 'videoId', middlewares.video
         app.param 'playlistId', middlewares.playlist
     
-        app.use((req, res, next)->
+        app.use (req, res, next)->
             res.locals.originalUrl = req.originalUrl
             res.locals.config = c.config
             next()
-        )
+
         app.use middlewares.user
         app.use middlewares.flash
         app.use '/profile', middlewares.isLoggedIn # protect profile pages
@@ -89,9 +92,7 @@ module.exports = (container)->
             app.get '*', (req, res, next)->
                 next(new c.errors.NotFound("page not found"))
     
-            app.use(middlewares.error)
+            app.use middlewares.error
     
-        app.on 'error', (err)->
-            c.logger.error(err)
-    
+
         return app

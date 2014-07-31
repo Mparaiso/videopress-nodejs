@@ -1,3 +1,6 @@
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 mixins = exports
 ###
     route map mixin

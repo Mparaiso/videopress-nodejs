@@ -1,3 +1,6 @@
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 module.exports = (container)->
     container.set 'middlewares',container.share (c)->        
         q = c.q

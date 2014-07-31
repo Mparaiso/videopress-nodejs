@@ -1,4 +1,7 @@
-stores = exports 
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
+stores = exports
 express = require 'express'
 
 ###

@@ -1,3 +1,6 @@
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 util = require('util')
 _ = require('lodash')
 

@@ -1,5 +1,6 @@
-"use strict"
-
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 async = require 'async'
 bcrypt = require 'bcrypt-nodejs'
 _ = require 'lodash'

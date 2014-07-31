@@ -23,51 +23,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.coffee" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coffee/app.coffee">
+      <file leaf-file-name="makefile" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/makefile">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="34" selection-start="161" selection-end="161" vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="1734">
+            <state line="2" column="9" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="middlewares.coffee" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coffee/middlewares.coffee">
+      <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/virgen-acl/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="93" selection-end="93" vertical-scroll-proportion="0.052388288" vertical-offset="0" max-vertical-offset="1054">
-              <folding>
-                <element signature="e#142#202#0" expanded="false" />
-                <element signature="e#245#351#0" expanded="false" />
-                <element signature="e#412#776#0" expanded="false" />
-                <element signature="e#467#775#0" expanded="false" />
-                <element signature="e#596#775#0" expanded="false" />
-                <element signature="e#868#1182#0" expanded="false" />
-                <element signature="e#936#1158#0" expanded="false" />
-                <element signature="e#969#1064#0" expanded="false" />
-                <element signature="e#1107#1158#0" expanded="false" />
-                <element signature="e#1247#1773#0" expanded="false" />
-                <element signature="e#1412#1755#0" expanded="false" />
-                <element signature="e#1517#1643#0" expanded="false" />
-                <element signature="e#1694#1755#0" expanded="false" />
-                <element signature="e#1870#1990#0" expanded="false" />
-                <element signature="e#2114#2542#0" expanded="false" />
-                <element signature="e#2147#2542#0" expanded="false" />
-                <element signature="e#2261#2542#0" expanded="false" />
-                <element signature="e#2293#2343#0" expanded="false" />
-                <element signature="e#2404#2510#0" expanded="false" />
-                <element signature="e#2671#2913#0" expanded="false" />
-                <element signature="e#2712#2788#0" expanded="false" />
-                <element signature="e#2822#2894#0" expanded="false" />
-                <element signature="e#3179#3393#0" expanded="false" />
-                <element signature="e#3257#3374#0" expanded="false" />
-                <element signature="e#3494#3543#0" expanded="false" />
-                <element signature="e#3560#4073#0" expanded="false" />
-                <element signature="e#4091#4223#0" expanded="false" />
-                <element signature="e#4291#4492#0" expanded="false" />
-                <marker date="1406819045026" expanded="true" signature="93:5053" placeholder="..." />
-              </folding>
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="663">
+              <folding />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.markdown" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/virgen-acl/README.markdown">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="2907">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="script" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/script">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="153">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="0" selection-start="519" selection-end="519" vertical-scroll-proportion="0.5141129" vertical-offset="0" max-vertical-offset="496">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
           </provider>
         </entry>
       </file>
@@ -90,7 +93,6 @@
         <option value="$PROJECT_DIR$/makefile" />
         <option value="$PROJECT_DIR$/test/container.mixins.test.js" />
         <option value="$PROJECT_DIR$/test/parsers.test.js" />
-        <option value="$PROJECT_DIR$/coffee/players.coffee" />
         <option value="$PROJECT_DIR$/views/layout.twig" />
         <option value="$PROJECT_DIR$/node_modules/monolog/src/processor/ExpressProcessor.coffee" />
         <option value="$PROJECT_DIR$/temp/log.txt" />
@@ -99,12 +101,7 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/views/playlist.twig" />
         <option value="$PROJECT_DIR$/public/stylesheets/styles.css" />
-        <option value="$PROJECT_DIR$/coffee/parsers.coffee" />
-        <option value="$PROJECT_DIR$/coffee/validation.coffee" />
         <option value="$PROJECT_DIR$/views/index.twig" />
-        <option value="$PROJECT_DIR$/coffee/controllers.coffee" />
-        <option value="$PROJECT_DIR$/coffee/forms.coffee" />
-        <option value="$PROJECT_DIR$/coffee/database.coffee" />
         <option value="$PROJECT_DIR$/views/includes/pager.twig" />
         <option value="$PROJECT_DIR$/views/includes/playlist-list.twig" />
         <option value="$PROJECT_DIR$/views/includes/video-list.twig" />
@@ -118,20 +115,29 @@
         <option value="$PROJECT_DIR$/views/profile/video-create.twig" />
         <option value="$PROJECT_DIR$/views/profile/video-list.twig" />
         <option value="$PROJECT_DIR$/views/profile/video-update.twig" />
-        <option value="$PROJECT_DIR$/coffee/config.coffee" />
         <option value="$PROJECT_DIR$/views/top-nav.twig" />
         <option value="$PROJECT_DIR$/coffee/app.coffee" />
+        <option value="$PROJECT_DIR$/coffee/config.coffee" />
         <option value="$PROJECT_DIR$/coffee/container.coffee" />
+        <option value="$PROJECT_DIR$/coffee/controllers.coffee" />
+        <option value="$PROJECT_DIR$/coffee/database.coffee" />
+        <option value="$PROJECT_DIR$/coffee/forms.coffee" />
         <option value="$PROJECT_DIR$/coffee/middlewares.coffee" />
+        <option value="$PROJECT_DIR$/coffee/mixins.coffee" />
+        <option value="$PROJECT_DIR$/coffee/parsers.coffee" />
+        <option value="$PROJECT_DIR$/coffee/players.coffee" />
+        <option value="$PROJECT_DIR$/coffee/session-stores.coffee" />
+        <option value="$PROJECT_DIR$/coffee/validation.coffee" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-4" />
-    <option name="y" value="-4" />
-    <option name="width" value="1288" />
-    <option name="height" value="780" />
+    <option name="x" value="80" />
+    <option name="y" value="79" />
+    <option name="width" value="1130" />
+    <option name="height" value="652" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -187,7 +193,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgen-acl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mpm.video" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mpm.video" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -243,13 +267,13 @@
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1288" height="780" extended-state="6" />
+    <frame x="80" y="79" width="1130" height="652" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25099286" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2506812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -283,93 +307,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/container.mixins.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="23" selection-start="168" selection-end="168" vertical-scroll-proportion="0.13178295" vertical-offset="0" max-vertical-offset="1105">
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/container.db.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1479">
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/parsers.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="29" selection-start="340" selection-end="340" vertical-scroll-proportion="0.29651162" vertical-offset="0" max-vertical-offset="629" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/container.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="5" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="6341">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/players.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="32" selection-start="2533" selection-end="2533" vertical-scroll-proportion="0.011627907" vertical-offset="1116" max-vertical-offset="1632">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/processor/WebProcessor.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="26" selection-start="191" selection-end="191" vertical-scroll-proportion="0.16898608" vertical-offset="0" max-vertical-offset="527">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/handler/AbstractHandler.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="16" selection-start="1253" selection-end="1265" vertical-scroll-proportion="0.7248062" vertical-offset="0" max-vertical-offset="663">
-          <folding>
-            <element signature="e#106#169#0" expanded="false" />
-            <element signature="e#240#658#0" expanded="false" />
-            <element signature="e#706#828#0" expanded="false" />
-            <element signature="e#853#922#0" expanded="false" />
-            <element signature="e#924#1022#0" expanded="false" />
-            <element signature="e#1484#1582#0" expanded="false" />
-            <element signature="e#1502#1566#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/formatter/JSONFormatter.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="19" selection-start="71" selection-end="84" vertical-scroll-proportion="0.13178295" vertical-offset="0" max-vertical-offset="516">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/lib/processor/ExpressProcessor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="23" selection-start="900" selection-end="900" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1139">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/processor/ExpressProcessor.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="16" selection-start="532" selection-end="532" vertical-scroll-proportion="0.0" vertical-offset="249" max-vertical-offset="816">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/monolog.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="33" selection-start="171" selection-end="196" vertical-scroll-proportion="0.3624031" vertical-offset="0" max-vertical-offset="714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/monolog/src/Logger.coffee">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1700">
@@ -548,18 +485,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="25" selection-start="330" selection-end="344" vertical-scroll-proportion="0.50706434" vertical-offset="0" max-vertical-offset="7616">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/validation.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="25" selection-start="842" selection-end="842" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
-          <folding>
-            <marker date="1406750668188" expanded="true" signature="-1:-1" placeholder="PlaylistUrl: class PlaylistUrl extends validation.validators.Base&#10;&#10;            constructor:(_playlistParser)-&gt;&#10;                if not this instanceof PlaylistUrl&#10;                    return new PlaylistUrl(arguments...)&#10;                else&#10;                    @_playlistParser=_playlistParser&#10;                    super&#10;&#10;            validateSync:(value)-&gt;&#10;                if @_playlistParser.isValidUrl(value)&#10;                    return true&#10;                else&#10;                    @setMessage(&quot;url #{value} is not a valid playlist url&quot;)&#10;                    @setError(new Error(@getMessage))&#10;                    return&#10;&#10;            validate:(value,callback)-&gt;&#10;                process.nextTick =&gt;&#10;                    if @_playlistParser.isValidUrl(value)&#10;                        callback(null,true)&#10;                    else&#10;                        @setMessage(&quot;url #{value} is not a valid playlist url&quot;)&#10;                        @setError(new Error(@getMessage))&#10;                        callback(@getError())..." />
-            <marker date="1406750668188" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1406750668188" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1406750668188" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -765,76 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/includes/pager.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="105" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="374">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/database.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="232" column="0" selection-start="9916" selection-end="9916" vertical-scroll-proportion="0.1587057" vertical-offset="730" max-vertical-offset="1513">
-          <folding>
-            <element signature="e#184#410#0" expanded="false" />
-            <element signature="e#318#373#0" expanded="false" />
-            <element signature="e#466#595#0" expanded="false" />
-            <element signature="e#731#1048#0" expanded="false" />
-            <element signature="e#767#1004#1" expanded="false" />
-            <element signature="e#1110#2001#0" expanded="false" />
-            <element signature="e#1139#1305#0" expanded="false" />
-            <element signature="e#1315#1389#0" expanded="false" />
-            <element signature="e#1454#1763#0" expanded="false" />
-            <element signature="e#1488#1621#0" expanded="false" />
-            <element signature="e#2060#6257#0" expanded="false" />
-            <element signature="e#2098#2890#1" expanded="false" />
-            <element signature="e#2900#3110#0" expanded="false" />
-            <element signature="e#3186#3510#0" expanded="false" />
-            <element signature="e#3274#3390#0" expanded="false" />
-            <element signature="e#3447#3510#0" expanded="false" />
-            <element signature="e#3825#4003#0" expanded="false" />
-            <element signature="e#4090#4167#0" expanded="false" />
-            <element signature="e#4314#4611#0" expanded="false" />
-            <element signature="e#4359#4402#0" expanded="false" />
-            <element signature="e#4743#4914#0" expanded="false" />
-            <element signature="e#4977#5186#0" expanded="false" />
-            <element signature="e#5341#5499#0" expanded="false" />
-            <element signature="e#5716#6176#0" expanded="false" />
-            <element signature="e#5822#6152#0" expanded="false" />
-            <element signature="e#5952#6006#0" expanded="false" />
-            <element signature="e#6066#6152#0" expanded="false" />
-            <element signature="e#6376#6854#1" expanded="false" />
-            <element signature="e#6578#6658#0" expanded="false" />
-            <element signature="e#6912#7033#0" expanded="false" />
-            <element signature="e#7046#7816#0" expanded="false" />
-            <element signature="e#7159#7776#0" expanded="false" />
-            <element signature="e#7351#7465#0" expanded="false" />
-            <element signature="e#7418#7465#0" expanded="false" />
-            <element signature="e#7524#7748#0" expanded="false" />
-            <element signature="e#7907#8071#0" expanded="false" />
-            <element signature="e#7952#7995#0" expanded="false" />
-            <element signature="e#8152#8279#0" expanded="false" />
-            <element signature="e#8350#8418#0" expanded="false" />
-            <element signature="e#8431#9725#0" expanded="false" />
-            <element signature="e#8845#8901#0" expanded="false" />
-            <element signature="e#8922#9287#0" expanded="false" />
-            <element signature="e#9375#9484#0" expanded="false" />
-            <element signature="e#9505#9725#0" expanded="false" />
-            <element signature="e#9564#9722#0" expanded="false" />
-            <element signature="e#11033#11190#0" expanded="false" />
-            <element signature="e#11073#11112#1" expanded="false" />
-            <element signature="e#11248#12670#0" expanded="false" />
-            <element signature="e#11285#12221#1" expanded="false" />
-            <element signature="e#11754#11800#0" expanded="false" />
-            <element signature="e#11839#11938#0" expanded="false" />
-            <element signature="e#11976#12085#0" expanded="false" />
-            <element signature="e#12122#12221#0" expanded="false" />
-            <element signature="e#12231#12254#0" expanded="false" />
-            <element signature="e#12385#12407#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/playlist.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="23" selection-start="477" selection-end="477" vertical-scroll-proportion="0.2728732" vertical-offset="0" max-vertical-offset="1020">
@@ -905,20 +760,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/mixins.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="662">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/config.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="39" selection-start="636" selection-end="636" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/top-nav.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state line="32" column="28" selection-start="1464" selection-end="1464" vertical-scroll-proportion="0.35955057" vertical-offset="320" max-vertical-offset="969">
@@ -933,189 +774,364 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/container.coffee">
+    <entry file="file://$PROJECT_DIR$/views/404.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="0" selection-start="2483" selection-end="2483" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="1326">
-          <folding>
-            <element signature="e#1076#1153#0" expanded="false" />
-            <element signature="e#1201#1246#0" expanded="false" />
-            <element signature="e#1295#1545#2" expanded="false" />
-            <element signature="e#1406#1545#0" expanded="false" />
-            <element signature="e#1595#1699#0" expanded="false" />
-            <element signature="e#1754#1862#0" expanded="false" />
-            <element signature="e#1919#2336#0" expanded="false" />
-            <element signature="e#2533#4063#0" expanded="false" />
-            <element signature="e#2839#2961#0" expanded="false" />
-            <element signature="e#3034#3526#0" expanded="false" />
-            <element signature="e#3101#3526#0" expanded="false" />
-            <element signature="e#3286#3526#0" expanded="false" />
-            <element signature="e#3583#3705#0" expanded="false" />
-            <element signature="e#3809#4037#0" expanded="false" />
-            <element signature="e#3874#3949#0" expanded="false" />
-            <element signature="e#4258#4470#1" expanded="false" />
-            <element signature="e#4302#4361#0" expanded="false" />
-            <element signature="e#4330#4361#0" expanded="false" />
-            <element signature="e#4405#4464#0" expanded="false" />
-            <element signature="e#4433#4464#0" expanded="false" />
-            <element signature="e#4589#4941#0" expanded="false" />
-            <element signature="e#5005#5570#0" expanded="false" />
-            <element signature="e#5248#5570#0" expanded="false" />
-            <element signature="e#5349#5421#0" expanded="false" />
-            <element signature="e#5464#5570#0" expanded="false" />
-          </folding>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="534">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/forms.coffee">
+    <entry file="file://$PROJECT_DIR$/views/includes/pager.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="23" selection-start="3849" selection-end="3849" vertical-scroll-proportion="0.0" vertical-offset="544" max-vertical-offset="1309">
+        <state line="0" column="0" selection-start="0" selection-end="105" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/app.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1751">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/config.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/container.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1360">
           <folding>
-            <element signature="e#170#209#0" expanded="false" />
-            <element signature="e#254#892#0" expanded="false" />
-            <element signature="e#901#939#0" expanded="false" />
-            <element signature="e#1038#1206#0" expanded="false" />
-            <element signature="e#1051#1152#0" expanded="false" />
-            <element signature="e#1541#1579#0" expanded="false" />
-            <element signature="e#2381#2550#0" expanded="false" />
-            <element signature="e#2394#2512#0" expanded="false" />
-            <element signature="e#2911#3100#0" expanded="false" />
-            <element signature="e#3002#3086#0" expanded="false" />
-            <element signature="e#3583#3624#0" expanded="false" />
+            <element signature="e#1144#1221#0" expanded="false" />
+            <element signature="e#1269#1314#0" expanded="false" />
+            <element signature="e#1363#1613#0" expanded="false" />
+            <element signature="e#1474#1613#0" expanded="false" />
+            <element signature="e#1663#1767#0" expanded="false" />
+            <element signature="e#1822#1930#0" expanded="false" />
+            <element signature="e#1987#2404#0" expanded="false" />
+            <element signature="e#2601#4131#0" expanded="false" />
+            <element signature="e#2907#3029#0" expanded="false" />
+            <element signature="e#3102#3594#0" expanded="false" />
+            <element signature="e#3169#3594#0" expanded="false" />
+            <element signature="e#3354#3594#0" expanded="false" />
+            <element signature="e#3651#3773#0" expanded="false" />
+            <element signature="e#3877#4105#0" expanded="false" />
+            <element signature="e#3942#4017#0" expanded="false" />
+            <element signature="e#4326#4538#0" expanded="false" />
+            <element signature="e#4370#4429#0" expanded="false" />
+            <element signature="e#4398#4429#0" expanded="false" />
+            <element signature="e#4473#4532#0" expanded="false" />
+            <element signature="e#4501#4532#0" expanded="false" />
+            <element signature="e#4657#5009#0" expanded="false" />
+            <element signature="e#5073#5638#0" expanded="false" />
+            <element signature="e#5316#5638#0" expanded="false" />
+            <element signature="e#5417#5489#0" expanded="false" />
+            <element signature="e#5532#5638#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/controllers.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="33" selection-start="876" selection-end="876" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1853">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1904">
           <folding>
-            <element signature="e#173#210#0" expanded="false" />
-            <element signature="e#314#833#0" expanded="false" />
-            <element signature="e#1148#1195#0" expanded="false" />
-            <element signature="e#1296#1485#0" expanded="false" />
-            <element signature="e#1561#2017#0" expanded="false" />
-            <element signature="e#1628#1993#0" expanded="false" />
-            <element signature="e#1781#1927#0" expanded="false" />
-            <element signature="e#2035#2097#0" expanded="false" />
-            <element signature="e#2438#2542#0" expanded="false" />
-            <element signature="e#2650#2712#0" expanded="false" />
-            <element signature="e#2779#2936#0" expanded="false" />
-            <element signature="e#3049#3575#0" expanded="false" />
-            <element signature="e#3077#3423#0" expanded="false" />
-            <element signature="e#3585#3617#0" expanded="false" />
-            <element signature="e#3681#4208#0" expanded="false" />
-            <element signature="e#3822#4184#0" expanded="false" />
-            <element signature="e#3985#4121#0" expanded="false" />
-            <element signature="e#4281#4558#0" expanded="false" />
-            <element signature="e#4583#4705#0" expanded="false" />
-            <element signature="e#4769#5227#0" expanded="false" />
-            <element signature="e#4846#5203#0" expanded="false" />
-            <element signature="e#5035#5140#0" expanded="false" />
-            <element signature="e#5236#5298#0" expanded="false" />
-            <element signature="e#5362#5570#0" expanded="false" />
-            <element signature="e#5410#5570#0" expanded="false" />
-            <element signature="e#5493#5570#0" expanded="false" />
-            <element signature="e#5580#5620#0" expanded="false" />
-            <element signature="e#5682#5811#0" expanded="false" />
-            <element signature="e#5820#5856#0" expanded="false" />
-            <element signature="e#5960#6535#0" expanded="false" />
-            <element signature="e#6545#6581#0" expanded="false" />
-            <element signature="e#6648#6729#0" expanded="false" />
-            <element signature="e#6792#6920#0" expanded="false" />
-            <element signature="e#6992#7238#0" expanded="false" />
-            <element signature="e#7114#7177#0" expanded="false" />
-            <element signature="e#7302#7368#0" expanded="false" />
-            <element signature="e#7513#7817#0" expanded="false" />
-            <element signature="e#7932#8194#0" expanded="false" />
-            <element signature="e#7960#8128#0" expanded="false" />
-            <element signature="e#8004#8128#0" expanded="false" />
-            <element signature="e#8477#8841#0" expanded="false" />
-            <element signature="e#8606#8754#0" expanded="false" />
+            <element signature="e#249#286#0" expanded="false" />
+            <element signature="e#390#909#0" expanded="false" />
+            <element signature="e#1224#1271#0" expanded="false" />
+            <element signature="e#1372#1561#0" expanded="false" />
+            <element signature="e#1637#2093#0" expanded="false" />
+            <element signature="e#1704#2069#0" expanded="false" />
+            <element signature="e#1857#2003#0" expanded="false" />
+            <element signature="e#2111#2173#0" expanded="false" />
+            <element signature="e#2514#2618#0" expanded="false" />
+            <element signature="e#2726#2788#0" expanded="false" />
+            <element signature="e#2855#3012#0" expanded="false" />
+            <element signature="e#3125#3651#0" expanded="false" />
+            <element signature="e#3153#3499#0" expanded="false" />
+            <element signature="e#3661#3693#0" expanded="false" />
+            <element signature="e#3757#4284#0" expanded="false" />
+            <element signature="e#3898#4260#0" expanded="false" />
+            <element signature="e#4061#4197#0" expanded="false" />
+            <element signature="e#4357#4634#0" expanded="false" />
+            <element signature="e#4659#4781#0" expanded="false" />
+            <element signature="e#4845#5303#0" expanded="false" />
+            <element signature="e#4922#5279#0" expanded="false" />
+            <element signature="e#5111#5216#0" expanded="false" />
+            <element signature="e#5312#5374#0" expanded="false" />
+            <element signature="e#5438#5646#0" expanded="false" />
+            <element signature="e#5486#5646#0" expanded="false" />
+            <element signature="e#5569#5646#0" expanded="false" />
+            <element signature="e#5656#5696#0" expanded="false" />
+            <element signature="e#5758#5887#0" expanded="false" />
+            <element signature="e#5896#5932#0" expanded="false" />
+            <element signature="e#6036#6611#0" expanded="false" />
+            <element signature="e#6621#6657#0" expanded="false" />
+            <element signature="e#6724#6805#0" expanded="false" />
+            <element signature="e#6868#6996#0" expanded="false" />
+            <element signature="e#7068#7314#0" expanded="false" />
+            <element signature="e#7190#7253#0" expanded="false" />
+            <element signature="e#7378#7444#0" expanded="false" />
+            <element signature="e#7589#7893#0" expanded="false" />
+            <element signature="e#8008#8270#0" expanded="false" />
+            <element signature="e#8036#8204#0" expanded="false" />
+            <element signature="e#8080#8204#0" expanded="false" />
+            <element signature="e#8553#8917#0" expanded="false" />
+            <element signature="e#8682#8830#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/parsers.coffee">
+    <entry file="file://$PROJECT_DIR$/coffee/database.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="28" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2601">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530">
           <folding>
-            <element signature="e#652#804#0" expanded="false" />
-            <element signature="e#830#953#0" expanded="false" />
-            <element signature="e#977#1059#0" expanded="false" />
-            <element signature="e#1131#1266#0" expanded="false" />
-            <element signature="e#1566#1643#0" expanded="false" />
-            <element signature="e#1722#2905#0" expanded="false" />
-            <element signature="e#1774#2856#0" expanded="false" />
-            <element signature="e#1870#2047#0" expanded="false" />
-            <element signature="e#1937#2021#0" expanded="false" />
-            <element signature="e#2118#2856#0" expanded="false" />
-            <element signature="e#2159#2819#0" expanded="false" />
-            <element signature="e#2214#2778#1" expanded="false" />
-            <element signature="e#2429#2548#0" expanded="false" />
-            <element signature="e#2954#3011#0" expanded="false" />
-            <element signature="e#3048#3184#0" expanded="false" />
-            <element signature="e#3304#3321#0" expanded="false" />
-            <element signature="e#3357#3383#0" expanded="false" />
-            <element signature="e#3418#3520#0" expanded="false" />
-            <element signature="e#3454#3520#0" expanded="false" />
-            <element signature="e#3525#3560#0" expanded="false" />
-            <element signature="e#3609#3626#0" expanded="false" />
-            <element signature="e#3767#3795#0" expanded="false" />
-            <element signature="e#3922#3949#0" expanded="false" />
-            <element signature="e#4957#5033#0" expanded="false" />
-            <element signature="e#5323#6464#0" expanded="false" />
-            <element signature="e#5355#6377#0" expanded="false" />
-            <element signature="e#5410#5669#0" expanded="false" />
-            <element signature="e#5739#6377#0" expanded="false" />
-            <element signature="e#5790#6377#0" expanded="false" />
-            <element signature="e#5804#6376#0" expanded="false" />
-            <element signature="e#6235#6354#0" expanded="false" />
+            <element signature="e#251#477#0" expanded="false" />
+            <element signature="e#385#440#0" expanded="false" />
+            <element signature="e#533#662#0" expanded="false" />
+            <element signature="e#798#1115#0" expanded="false" />
+            <element signature="e#834#1071#1" expanded="false" />
+            <element signature="e#1177#2068#0" expanded="false" />
+            <element signature="e#1206#1372#0" expanded="false" />
+            <element signature="e#1382#1456#0" expanded="false" />
+            <element signature="e#1521#1830#0" expanded="false" />
+            <element signature="e#1555#1688#0" expanded="false" />
+            <element signature="e#2127#6324#0" expanded="false" />
+            <element signature="e#2165#2957#1" expanded="false" />
+            <element signature="e#2967#3177#0" expanded="false" />
+            <element signature="e#3253#3577#0" expanded="false" />
+            <element signature="e#3341#3457#0" expanded="false" />
+            <element signature="e#3514#3577#0" expanded="false" />
+            <element signature="e#3892#4070#0" expanded="false" />
+            <element signature="e#4157#4234#0" expanded="false" />
+            <element signature="e#4381#4678#0" expanded="false" />
+            <element signature="e#4426#4469#0" expanded="false" />
+            <element signature="e#4810#4981#0" expanded="false" />
+            <element signature="e#5044#5253#0" expanded="false" />
+            <element signature="e#5408#5566#0" expanded="false" />
+            <element signature="e#5783#6243#0" expanded="false" />
+            <element signature="e#5889#6219#0" expanded="false" />
+            <element signature="e#6019#6073#0" expanded="false" />
+            <element signature="e#6133#6219#0" expanded="false" />
+            <element signature="e#6443#6921#1" expanded="false" />
+            <element signature="e#6645#6725#0" expanded="false" />
+            <element signature="e#6979#7100#0" expanded="false" />
+            <element signature="e#7113#7883#0" expanded="false" />
+            <element signature="e#7226#7843#0" expanded="false" />
+            <element signature="e#7418#7532#0" expanded="false" />
+            <element signature="e#7485#7532#0" expanded="false" />
+            <element signature="e#7591#7815#0" expanded="false" />
+            <element signature="e#7974#8138#0" expanded="false" />
+            <element signature="e#8019#8062#0" expanded="false" />
+            <element signature="e#8219#8346#0" expanded="false" />
+            <element signature="e#8417#8485#0" expanded="false" />
+            <element signature="e#8498#9792#0" expanded="false" />
+            <element signature="e#8912#8968#0" expanded="false" />
+            <element signature="e#8989#9354#0" expanded="false" />
+            <element signature="e#9442#9551#0" expanded="false" />
+            <element signature="e#9572#9792#0" expanded="false" />
+            <element signature="e#9631#9789#0" expanded="false" />
+            <element signature="e#11100#11257#0" expanded="false" />
+            <element signature="e#11140#11179#1" expanded="false" />
+            <element signature="e#11315#12737#0" expanded="false" />
+            <element signature="e#11352#12288#1" expanded="false" />
+            <element signature="e#11821#11867#0" expanded="false" />
+            <element signature="e#11906#12005#0" expanded="false" />
+            <element signature="e#12043#12152#0" expanded="false" />
+            <element signature="e#12189#12288#0" expanded="false" />
+            <element signature="e#12298#12321#0" expanded="false" />
+            <element signature="e#12452#12474#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coffee/app.coffee">
+    <entry file="file://$PROJECT_DIR$/coffee/forms.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="34" selection-start="161" selection-end="161" vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="1734">
-          <folding />
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1360">
+          <folding>
+            <element signature="e#251#290#0" expanded="false" />
+            <element signature="e#335#973#0" expanded="false" />
+            <element signature="e#982#1020#0" expanded="false" />
+            <element signature="e#1119#1287#0" expanded="false" />
+            <element signature="e#1132#1233#0" expanded="false" />
+            <element signature="e#1622#1660#0" expanded="false" />
+            <element signature="e#2462#2631#0" expanded="false" />
+            <element signature="e#2475#2593#0" expanded="false" />
+            <element signature="e#2992#3181#0" expanded="false" />
+            <element signature="e#3083#3167#0" expanded="false" />
+            <element signature="e#3664#3705#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coffee/middlewares.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="93" selection-end="93" vertical-scroll-proportion="0.052388288" vertical-offset="0" max-vertical-offset="1054">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
           <folding>
-            <element signature="e#142#202#0" expanded="false" />
-            <element signature="e#245#351#0" expanded="false" />
-            <element signature="e#412#776#0" expanded="false" />
-            <element signature="e#467#775#0" expanded="false" />
-            <element signature="e#596#775#0" expanded="false" />
-            <element signature="e#868#1182#0" expanded="false" />
-            <element signature="e#936#1158#0" expanded="false" />
-            <element signature="e#969#1064#0" expanded="false" />
-            <element signature="e#1107#1158#0" expanded="false" />
-            <element signature="e#1247#1773#0" expanded="false" />
-            <element signature="e#1412#1755#0" expanded="false" />
-            <element signature="e#1517#1643#0" expanded="false" />
-            <element signature="e#1694#1755#0" expanded="false" />
-            <element signature="e#1870#1990#0" expanded="false" />
-            <element signature="e#2114#2542#0" expanded="false" />
-            <element signature="e#2147#2542#0" expanded="false" />
-            <element signature="e#2261#2542#0" expanded="false" />
-            <element signature="e#2293#2343#0" expanded="false" />
-            <element signature="e#2404#2510#0" expanded="false" />
-            <element signature="e#2671#2913#0" expanded="false" />
-            <element signature="e#2712#2788#0" expanded="false" />
-            <element signature="e#2822#2894#0" expanded="false" />
-            <element signature="e#3179#3393#0" expanded="false" />
-            <element signature="e#3257#3374#0" expanded="false" />
-            <element signature="e#3494#3543#0" expanded="false" />
-            <element signature="e#3560#4073#0" expanded="false" />
-            <element signature="e#4091#4223#0" expanded="false" />
-            <element signature="e#4291#4492#0" expanded="false" />
-            <marker date="1406819045026" expanded="true" signature="93:5053" placeholder="..." />
+            <element signature="e#223#283#0" expanded="false" />
+            <element signature="e#326#432#0" expanded="false" />
+            <element signature="e#493#857#0" expanded="false" />
+            <element signature="e#548#856#0" expanded="false" />
+            <element signature="e#677#856#0" expanded="false" />
+            <element signature="e#949#1263#0" expanded="false" />
+            <element signature="e#1017#1239#0" expanded="false" />
+            <element signature="e#1050#1145#0" expanded="false" />
+            <element signature="e#1188#1239#0" expanded="false" />
+            <element signature="e#1328#1854#0" expanded="false" />
+            <element signature="e#1493#1836#0" expanded="false" />
+            <element signature="e#1598#1724#0" expanded="false" />
+            <element signature="e#1775#1836#0" expanded="false" />
+            <element signature="e#1951#2071#0" expanded="false" />
+            <element signature="e#2195#2623#0" expanded="false" />
+            <element signature="e#2228#2623#0" expanded="false" />
+            <element signature="e#2342#2623#0" expanded="false" />
+            <element signature="e#2374#2424#0" expanded="false" />
+            <element signature="e#2485#2591#0" expanded="false" />
+            <element signature="e#2752#2994#0" expanded="false" />
+            <element signature="e#2793#2869#0" expanded="false" />
+            <element signature="e#2903#2975#0" expanded="false" />
+            <element signature="e#3260#3474#0" expanded="false" />
+            <element signature="e#3338#3455#0" expanded="false" />
+            <element signature="e#3575#3624#0" expanded="false" />
+            <element signature="e#3641#4154#0" expanded="false" />
+            <element signature="e#4172#4304#0" expanded="false" />
+            <element signature="e#4372#4573#0" expanded="false" />
+            <element signature="e#4682#5106#0" expanded="false" />
+            <element signature="e#4720#5087#0" expanded="false" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/mixins.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/parsers.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2635">
+          <folding>
+            <element signature="e#720#872#0" expanded="false" />
+            <element signature="e#898#1021#0" expanded="false" />
+            <element signature="e#1045#1127#0" expanded="false" />
+            <element signature="e#1199#1334#0" expanded="false" />
+            <element signature="e#1634#1711#0" expanded="false" />
+            <element signature="e#1790#2973#0" expanded="false" />
+            <element signature="e#1842#2924#0" expanded="false" />
+            <element signature="e#1938#2115#0" expanded="false" />
+            <element signature="e#2005#2089#0" expanded="false" />
+            <element signature="e#2186#2924#0" expanded="false" />
+            <element signature="e#2227#2887#0" expanded="false" />
+            <element signature="e#2282#2846#1" expanded="false" />
+            <element signature="e#2497#2616#0" expanded="false" />
+            <element signature="e#3022#3079#0" expanded="false" />
+            <element signature="e#3116#3252#0" expanded="false" />
+            <element signature="e#3372#3389#0" expanded="false" />
+            <element signature="e#3425#3451#0" expanded="false" />
+            <element signature="e#3486#3588#0" expanded="false" />
+            <element signature="e#3522#3588#0" expanded="false" />
+            <element signature="e#3593#3628#0" expanded="false" />
+            <element signature="e#3677#3694#0" expanded="false" />
+            <element signature="e#3835#3863#0" expanded="false" />
+            <element signature="e#3990#4017#0" expanded="false" />
+            <element signature="e#5025#5101#0" expanded="false" />
+            <element signature="e#5391#6532#0" expanded="false" />
+            <element signature="e#5423#6445#0" expanded="false" />
+            <element signature="e#5478#5737#0" expanded="false" />
+            <element signature="e#5807#6445#0" expanded="false" />
+            <element signature="e#5858#6445#0" expanded="false" />
+            <element signature="e#5872#6444#0" expanded="false" />
+            <element signature="e#6303#6422#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/players.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1683">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/session-stores.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coffee/validation.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="3" selection-start="80" selection-end="80" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="663">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/forms.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4199">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/session-stores.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1445">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1904">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="9" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/virgen-acl/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="663">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/virgen-acl/README.markdown">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2907">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="521">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="519" selection-end="519" vertical-scroll-proportion="0.5141129" vertical-offset="0" max-vertical-offset="496">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
       </provider>
     </entry>
   </component>

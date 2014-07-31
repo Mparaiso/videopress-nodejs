@@ -1,4 +1,6 @@
-"use strict"
+###
+    Copyright © 2014 mparaiso <mparaiso@online.fr>. All Rights Reserved.
+###
 duration = require('mpm.duration')
 request = require('request')
 querystring=require('querystring')
