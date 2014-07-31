@@ -1,36 +1,50 @@
 {% extends 'layout.twig' %}
 {% block profile_content %}
-	<h2>Manage Videos</h2>
-	{% if videos %}
-	<table class="table">
-		<thead>
-			<tr>
-			<th></th>
-			<th>Title</th>
-			<th>Actions</th>
-		</tr>
-		</thead>
-		
-		{% for video in videos %}
-			<tr>
-				<td>
-					<a href="/video/{{video.id}}">
-					<img width="160px" src="{{video.thumbnail}}" alt="{{video.title}}">
-					</a>
-				</td>
-				<td>
-					<a href="/video/{{video.id}}">{{video.title}}</a>
-				</td>
-				<td>
-					<a href="/video/{{video.id}}">View</a> 
-					<a href="/profile/video/{{video.id}}/update">Update</a> 
-					<form class="inline" action="/profile/video/{{video.id}}/remove" method="POST">
-						<input type="submit" value="Remove" class="inline link btn-link">
-						<input type="hidden" name="_csrf" value="{{_csrf}}">
-					</form>
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
-	{% endif %}
+    <h2>Manage Videos</h2>
+    {% if videos %}
+        <form class="form form-inline" action="/profile/video/action" method="POST">
+            <input type="hidden" name="_csrf" value="{{ _csrf }}">
+
+            <div class="form-group">
+                <select name="action" class="form-control inline">
+                    <option value=""></option>
+                    <option value="remove">remove</option>
+                </select>
+                <input type="reset" class=" btn btn-default"/>
+                <input type="submit" class="btn btn-default">
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th></th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                {% for video in videos %}
+                    <tr>
+                        <td>
+                            <a href="/video/{{ video.id }}">
+                                <img width="160px" src="{{ video.thumbnail }}" alt="{{ video.title }}">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/video/{{ video.id }}">{{ video.title }}</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="id" value="{{ video.id }}"/>
+                        </td>
+                        <td>
+                            <a href="/video/{{ video.id }}">View</a>
+                            <a href="/profile/video/{{ video.id }}/update">Update</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+
+    {% endif %}
 {% endblock %}

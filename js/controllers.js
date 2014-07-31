@@ -79,9 +79,9 @@ module.exports = function(container) {
      * /profile/playlist/:playlistId/update
      */
     controllers.playlistUpdate = function(req, res, next) {
-      return q(res.locals.playlist).then(function(playlist) {
+      return q([res.locals.playlist, c.Video.findByOwnerId(req.user.id)]).spread(function(playlist, videos) {
         var form;
-        form = c.forms.Playlist().setModel(playlist);
+        form = c.forms.Playlist(videos).setModel(playlist);
         if (req.method === "POST" && form.bind(req.body) && form.validateSync()) {
           return c.Playlist.persist(playlist).then(function() {
             return res.redirect('/playlist/'.concat(playlist.id));
@@ -105,10 +105,6 @@ module.exports = function(container) {
         return res.redirect(redirect);
       }), next);
     };
-
-    /*
-     * PLAYLIST
-     */
     controllers.playlistById = function(req, res, next) {
       return q().then(function() {
         var playlist, video;
@@ -201,14 +197,14 @@ module.exports = function(container) {
     /*
      * /profile/videoRemove/:videoId/remove
      */
-    controllers.videoRemove = function(req, res, next) {
+    controllers.videoDelete = function(req, res, next) {
       return res.locals.video.remove(function(err) {
         if (err) {
           err.status = 500;
           return next(err);
         } else {
           req.flash('success', 'video removed');
-          return res.redirect('/profile/video');
+          return res.redirect('back');
         }
       });
     };
@@ -287,7 +283,8 @@ module.exports = function(container) {
         return res.redirect('/');
       });
     };
-    controllers.profile = function(req, res, ext) {
+    controllers.profile = {};
+    controllers.profile.index = function(req, res, next) {
       res.locals._redirect = req.originalUrl;
       return q.all([q.ninvoke(c.Video, 'findByOwnerId', req.user.id), q.ninvoke(c.Playlist, 'findByOwnerId', req.user.id)]).spread(function(videos, playlists) {
         return res.render('profile/index', {
@@ -299,6 +296,39 @@ module.exports = function(container) {
           status: 500
         }));
       });
+    };
+    controllers.profile.video = {};
+    controllers.profile.video.actions = function(req, res, next) {
+      return q().then(function() {
+        if (req.method === "POST") {
+          switch (req.body.action) {
+            case "remove":
+              return c.Video.removeMultiple(req.body.id);
+          }
+        }
+      }).then(function() {
+        return res.redirect('back');
+      })["catch"](next);
+    };
+    controllers.profile.playlist = {};
+    controllers.profile.playlist.fromUrl = function(req, res, next) {
+      return c.Category.listAll().then(function(categories) {
+        return [{}, c.forms.PlaylistFromUrl(categories)];
+      }).spread(function(model, form) {
+        form.setModel(model);
+        if (req.method === "POST" && form.bind(req.body) && form.validateSync()) {
+          return c.Playlist.fromUrl(model.url, {
+            owner: req.user,
+            category: model.category
+          }).then(function(playlist) {
+            return res.redirect('/playlist/' + playlist.id);
+          });
+        } else {
+          return res.render('profile/playlist-fromurl', {
+            form: form
+          });
+        }
+      })["catch"](next);
     };
     return controllers;
   }));

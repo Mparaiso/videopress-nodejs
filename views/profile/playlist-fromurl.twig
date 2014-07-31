@@ -1,0 +1,33 @@
+{% extends 'layout.twig' %}
+{% block profile_content %}
+    <h1>Import a playlist</h1>
+    <form action="" role='form' class="form-horizontal col-md-6" method="POST">
+        <fieldset>
+            {% for field in form.getFields() %}
+                {% if field.hasError() %}
+                    <div class="form-group text-danger">
+                        {{ field.getError() }}
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    {{ field.toHTML() }}
+                </div>
+            {% endfor %}
+            <div class="form-group text-muted  text-small">
+                supported :
+                <ul class="list">
+                    <li>Youtube (ex:
+                        https://www.youtube.com/watch?v=53EVBPVJpZw&list=PLqhVB9XFOQlIlMCPEqrKvODvCIDpbS1ic)
+                    </li>
+                    <li>Youtube share url (ex: http://youtu.be/53EVBPVJpZw?list=PLqhVB9XFOQlIlMCPEqrKvODvCIDpbS1ic )
+                    </li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <input type="reset" class="btn btn-default">
+                <input type="submit" class="btn btn-default">
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

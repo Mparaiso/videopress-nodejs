@@ -2,6 +2,7 @@ module.exports = (container)->
     container.set 'middlewares',container.share (c)->        
         Rest = require 'mpm.express.rest'
         q = require('q')
+
         
         ### 
         # MIDDLEWARES 
@@ -24,21 +25,17 @@ module.exports = (container)->
                         next())
         # sets res.locals.video
         middlewares.video =(req,res,next,id)->
-            c.Video.findById(id)
-            .select('title private description duration thumbnail provider owner publishedAt originalId category categoryId')
-            .populate('owner category')
-            .exec (err,video)->
-                if err
-                    err.status = 500
-                    next(err)
-                else if not video
+            c.Video.findOneById(id)
+            .then (video)->
+                if not video
                     err = new Error('Video not found')
                     err.status = 404
-                    next(err)
+                    err
                 else 
-                    res.locals.video = video 
+                    res.locals.video = video
                     next()
-        
+            .catch next
+
         middlewares.playlist = (req,res,next,id)->
             c.Playlist.findById(id)
                 .where({private:false})
@@ -56,7 +53,7 @@ module.exports = (container)->
         
         # list categories
         middlewares.categories=((req,res,next)->
-            res.locals.container.Category.whereVideoExist()
+            c.Category.whereVideoExist()
             .then((categories)->res.locals.categories=categories;next() , 
             next))
         

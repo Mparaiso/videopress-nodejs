@@ -96,6 +96,33 @@ module.exports = function(container) {
         }
       });
     };
+    forms.PlaylistFromUrl = function(_categories) {
+      if (_categories == null) {
+        _categories = [];
+      }
+      _categories = _categories.map(function(category) {
+        return {
+          key: category.title,
+          value: category.id
+        };
+      });
+      _categories.unshift({
+        key: 'choose a category'
+      });
+      return form.create('playlist').add('url', 'text', {
+        validators: [form.validation.Required(), c.validation.PlaylistUrl(c.playlistParser)],
+        attributes: {
+          "class": 'form-control'
+        }
+      }).add('category', 'select', {
+        choices: _categories,
+        validators: form.validation.Required(),
+        attributes: {
+          'required': 'required',
+          "class": 'form-control'
+        }
+      });
+    };
     forms.Video = function(categories) {
       var categoryTransform, _categories;
       if (categories == null) {
@@ -144,7 +171,21 @@ module.exports = function(container) {
     /*
         Playlist form
      */
-    forms.Playlist = function() {
+    forms.Playlist = function(_videos) {
+      var _videoTransform;
+      if (_videos == null) {
+        _videos = [];
+      }
+      _videoTransform = {
+        from: function(videos) {
+          return videos.map(function(v) {
+            return v.id;
+          });
+        },
+        to: function(ids) {
+          return ids;
+        }
+      };
       return form.create('playlist').add('title', 'text', {
         validators: form.validation.Required(),
         attributes: {
@@ -158,7 +199,27 @@ module.exports = function(container) {
           required: true,
           "class": 'form-control'
         }
+      }).add('videos', 'select', {
+        choices: _videos.map(function(v) {
+          return {
+            key: v.title,
+            value: v.id
+          };
+        }),
+        transform: _videoTransform,
+        validators: form.validation.Required(),
+        attributes: {
+          multiple: true,
+          size: 10,
+          "class": 'form-control'
+        }
+      }).add('help', 'label', {
+        attributes: {
+          value: 'ctrl+click to select videos',
+          "class": 'text-muted'
+        }
       }).add('video_urls', 'textarea', {
+        label: 'copy and paste videos urls',
         validators: form.validation.Required(),
         attributes: {
           "class": 'form-control',

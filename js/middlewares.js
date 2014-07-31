@@ -27,19 +27,17 @@ module.exports = function(container) {
       });
     };
     middlewares.video = function(req, res, next, id) {
-      return c.Video.findById(id).select('title private description duration thumbnail provider owner publishedAt originalId category categoryId').populate('owner category').exec(function(err, video) {
-        if (err) {
-          err.status = 500;
-          return next(err);
-        } else if (!video) {
+      return c.Video.findOneById(id).then(function(video) {
+        var err;
+        if (!video) {
           err = new Error('Video not found');
           err.status = 404;
-          return next(err);
+          return err;
         } else {
           res.locals.video = video;
           return next();
         }
-      });
+      })["catch"](next);
     };
     middlewares.playlist = function(req, res, next, id) {
       return c.Playlist.findById(id).where({
@@ -59,7 +57,7 @@ module.exports = function(container) {
       });
     };
     middlewares.categories = (function(req, res, next) {
-      return res.locals.container.Category.whereVideoExist().then(function(categories) {
+      return c.Category.whereVideoExist().then(function(categories) {
         res.locals.categories = categories;
         return next();
       }, next);

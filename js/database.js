@@ -87,6 +87,9 @@ module.exports = function(container) {
         }).exec();
       });
     };
+    CategorySchema.statics.listAll = function() {
+      return c.q(Category.find().exec());
+    };
     CategorySchema.methods.toString = function() {
       return this.title;
     };
@@ -196,6 +199,21 @@ module.exports = function(container) {
         return c.q(query.exec());
       }
     };
+    VideoSchema.statics.removeMultiple = function(idList, where) {
+      if (idList == null) {
+        idList = [];
+      }
+      if (where == null) {
+        where = {};
+      }
+
+      /* remove multiple videos in id list , constrained by owner if necessary */
+      return c.q(this.remove(_.extend(where, {
+        _id: {
+          $in: idList
+        }
+      })).exec());
+    };
     VideoSchema.statics.list = function(query, callback, q) {
       if (query instanceof Function) {
         callback = query;
@@ -228,6 +246,9 @@ module.exports = function(container) {
       });
       query = this.find(where).limit(c.item_per_page).skip(skip).sort(sort).populate('owner');
       return c.q(query.exec());
+    };
+    VideoSchema.statics.findOneById = function(id) {
+      return c.q(Video.findById(id).select('title private description duration thumbnail provider owner publishedAt originalId category categoryId').populate('owner category').exec());
     };
     VideoSchema.statics.persist = function(video) {
       return c.q(video.save());
@@ -264,9 +285,9 @@ module.exports = function(container) {
             return null;
           };
         })(this)))["catch"](function() {
-          return next();
-        }).done(function() {
-          return next();
+          return next().done(function() {
+            return next();
+          });
         });
       } else {
         return next();
@@ -276,19 +297,18 @@ module.exports = function(container) {
     return Video;
   }));
   container.set("Playlist", container.share(function(c) {
-    var Playlist, PlaylistSchema;
+    var Playlist, PlaylistSchema, q;
+    q = c.q;
     PlaylistSchema = c.db.Schema({
       title: {
         type: String,
-        required: true
+        required: "title is required"
       },
       owner: {
         type: c.db.Schema.Types.ObjectId,
         ref: 'User'
       },
-      thumbnail: {
-        type: String
-      },
+      thumbnail: String,
       description: String,
       videos: [
         {
@@ -330,9 +350,9 @@ module.exports = function(container) {
           });
         })).then(function(videos) {
           var _ref;
-          self.videos = c._(videos).compact().pluck('id').value();
+          self.videos = _(videos).compact().pluck('id').value();
           self.thumbnail = (_ref = videos[0]) != null ? _ref.thumbnail : void 0;
-          self.video_urls = c._.pluck(videos, 'url').join("\r\n");
+          self.video_urls = _.pluck(videos, 'url').join("\r\n");
           return next();
         })["catch"](next);
       } else {
@@ -363,6 +383,45 @@ module.exports = function(container) {
         return q;
       }
     };
+    PlaylistSchema.statics.fromUrl = function(url, params) {
+
+      /* @TODO fix playlist videos order in case videos already exist */
+      return c.q.ninvoke(c.playlistParser, 'parse', url).then(function(playlist) {
+        return [
+          playlist, c.Video.find({
+            originalId: {
+              $in: _.pluck(playlist.videos, 'originalId')
+            },
+            owner: params.owner
+          }).select('id originalId').exec()
+        ];
+      }).spread(function(playlist, alreadyExistingVideos) {
+
+        /* create videos that are not already owned by user */
+        var alreadyExistingOriginalIds;
+        alreadyExistingOriginalIds = _.pluck(alreadyExistingVideos, 'originalId');
+        return [playlist, alreadyExistingVideos].concat(playlist.videos.filter(function(vid) {
+          return alreadyExistingOriginalIds.indexOf(vid.originalId) < 0;
+        }).map(function(video) {
+          return c.Video.create(_.extend(video, {
+            owner: params.owner,
+            category: params.category
+          }));
+        }));
+      }).spread((function(_this) {
+        return function() {
+          var alreadyExistingVideos, playlist, videos, _ref;
+          playlist = arguments[0], alreadyExistingVideos = arguments[1], videos = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
+
+          /* create playlist ,the id list is the concatenation of already existing videos and newly created videos */
+          return c.q(_this.create(_.extend(playlist, {
+            thumbnail: (_ref = videos[0]) != null ? _ref.thumbnail : void 0,
+            owner: params.owner,
+            videos: _.pluck(videos, 'id').concat(_.pluck(alreadyExistingVideos, 'id'))
+          })));
+        };
+      })(this));
+    };
     PlaylistSchema.statics.persist = function() {
       var options, playlist, _ref;
       playlist = arguments[0], options = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -373,6 +432,41 @@ module.exports = function(container) {
     };
     PlaylistSchema.methods.getFirstVideo = function() {
       return this.videos[0];
+    };
+    PlaylistSchema.methods.hasNextVideo = function(video) {
+      var _ref;
+      if ((0 <= (_ref = this.videos.indexOf(this.videos.filter(function(vid) {
+        return vid.id === video.id;
+      })[0])) && _ref < this.videos.length - 1)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    PlaylistSchema.methods.hasPreviousVideo = function(video) {
+      if (this.videos.indexOf(this.videos.filter(function(vid) {
+        return vid.originalId === video.originalId;
+      })[0]) > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    PlaylistSchema.methods.getPreviousVideo = function(video) {
+      return this.videos[this.videos.indexOf(this.videos.filter(function(vid) {
+        return vid.id === video.id;
+      })[0]) - 1];
+    };
+    PlaylistSchema.methods.getNextVideo = function(video) {
+      return this.videos[this.videos.indexOf(this.videos.filter(function(vid) {
+        return vid.id === video.id;
+      })[0]) + 1];
+    };
+    PlaylistSchema.methods.getNextVideoId = function(video) {
+      return this.getNextVideo(video).id;
+    };
+    PlaylistSchema.methods.getPreviousVideoId = function(video) {
+      return this.getPreviousVideo(video).id;
     };
     Playlist = c.db.model('Playlist', PlaylistSchema);
     return Playlist;

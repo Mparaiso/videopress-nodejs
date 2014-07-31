@@ -4,7 +4,10 @@
 
 body {
     font-family: "PT sans", sans-serif;
-    font-size: 1.6em;
+    font-size: 1.5em;
+}
+.text-small{
+    font-size:0.8em;
 }
 
 .video {
@@ -40,6 +43,9 @@ footer{
 }
 .inline{
     display: inline;
+}
+.no-top{
+    margin-top:0!important;
 }
 /**
  * TYPOGRAPHY

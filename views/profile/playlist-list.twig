@@ -16,10 +16,10 @@
 		{%for playlist in playlists %}
 		<tr style="vertical-align:middle;">
 			<td><a href="/playlist/{{playlist.id}}">
-				<img src="{{playlist.thumbnail}}" class="col-md-6" alt="{{playlist.title}}">
+				<img src="{{playlist.thumbnail}}" class="thumb" alt="{{playlist.title}}">
 			</a></td>
 			<td>{{playlist.title}}</td>
-			<td>{{playlist.description}}</td>
+			<td>{{playlist.description.slice(0,100)}}</td>
 			<td>{{playlist.videos.length}} videos</td>
             <td>
                 <a href="/profile/playlist/{{playlist.id}}/update">Edit</a> | 

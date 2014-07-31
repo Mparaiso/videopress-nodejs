@@ -14,8 +14,8 @@
 		<ul class="nav-pills nav"
 			<li><a class="btn btn-link" href="/profile/video/{{video.id}}/update">update</a></li>
 			<li>
-                <form action="/profile/video/{{video.id}}/remove" method="POST">
-                    <input type="submit" value="remove" class="btn btn-link" />
+                <form action="/profile/video/{{video.id}}/delete" method="POST">
+                    <input type="submit" value="delete" class="btn btn-link" />
                     <input type="hidden" name="_csrf" value="{{_csrf}}" />
                 </form>
             </li>

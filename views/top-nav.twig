@@ -1,52 +1,51 @@
 {# TOP NAV #}
 <nav class="navbar" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-            
-			<a class="navbar-brand" href="/"> 
-<img src="{{logopath}}"  width="24" alt="logo" />
-                {{title}}
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/">
+                <img src="{{ logopath }}" width="24" alt="logo"/>
+                {{ title }}
             </a>
-		</div>
-		<div class="navbar-collapse collapse">
-			<ul class="navbar-nav nav navbar-right">
-				<li>
-					<form class="navbar-form" action="/search" role="form">
-						<div class="form-group">
-								<div class="input-group">
-									<input required type="search" name="q" class="form-control" style="width:430px">
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav nav navbar-right">
+                <li>
+                    <form class="navbar-form" action="/search" role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input required type="search" name="q" class="form-control" style="width:430px">
 									<span class="input-group-btn" style="width:inherit;">
 										<button class='btn btn-default' type="submit">
-											<span class="glyphicon glyphicon-search"></span> 
-											Search
-										</button>
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
 									</span>
-								</div>
-						</div>
-					</form>
-				</li>
-				{% if user %}
-                <li class="divider"></li>
-                <li><a href="/profile/video/new">Add a video</a></li>
-                <li><a href="/profile/">Dashboard</a></li>
-                <li>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+                {% if user %}
+                    <li class="divider"></li>
+                    <li><a href="/profile/video/new">Add a video</a></li>
+                    <li><a href="/profile/">Dashboard</a></li>
+                    <li>
 					<span class="navbar-text">
-						Welcome back <a href="/profile">{{user.username}}</a> | 
+						Welcome back <a href="/profile">{{ user.username }}</a> |
 						<a href="/logout">Log out</a>
 					</span>
-				</li>
-				{% else %}
-				<li><a href="/login">Log in</a></li>
-				<li><a href="/signup">Join</a></li>
-				{% endif %}
-			</ul>
-		</div>
-	</div>
+                    </li>
+                {% else %}
+                    <li><a href="/login">Log in</a></li>
+                    <li><a href="/signup">Join</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </nav>
 {# END TOP MENU #}

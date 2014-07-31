@@ -1,29 +1,54 @@
 {# a video from a playlist , with other videos from the same playlist the right hand  #}
 {% extends 'layout.twig' %}
-{% block title %} {{title}} -- {%if video %}{{video.title}} {%endif%}{%endblock%}
+{% block title %} {{ title }} -- {% if video %}{{ video.title }} {% endif %}{% endblock %}
 {% block content %}
-<section class="row">
-    <article class="col-md-8">
-    {% if video %}
-	        {%include 'includes/video-read.twig'%}
-    {% else %}
-        <h2>No Video Found for that playlist</h2>
-    {% endif %}
-    </article>
-	<aside class="col-md-4">
-		<h4>{{playlist.title}} {% if playlist.owner.id == user.id %} <small><a  href="/profile/playlist/{{playlist.id}}/update">(edit)</a></small>{% endif %}</h4>
-        
-		{% for item in playlist.videos %}
-		<div class='row'>
-			<div class="col-md-6">
-				<a href="/playlist/{{playlist.id}}?videoId={{item.id}}">
-					<img width="100%" class="thumbnail" src="{{item.thumbnail}}" alt="{{item.title}}"/>
-				</a>
-			</div>
-			<div class="col-md-6">{{item.title}}</div>
-			<div>&nbsp;</div>
-		</div>
-		{% endfor %}
-	</aside>
-</section>
+    <section class="row">
+        <article class="col-md-8">
+            {% if video %}
+                {% include 'includes/video-read.twig' %}
+            {% else %}
+                <h2>No Video Found for that playlist</h2>
+            {% endif %}
+        </article>
+        <aside class="col-md-4">
+            <h4 class="no-top">{{ playlist.title }} {% if playlist.owner.id == user.id %}
+                    <small><a
+                            href="/profile/playlist/{{ playlist
+                            .id }}/update">(edit)</a></small>{% endif %}</h4>
+            {% if video %}
+                <form class="form">
+                    <div class="form-group">
+                        {% if playlist.hasPreviousVideo(video) %}
+                            <a class="btn btn-default"
+                                    {# title="{{ playlist.getPreviousVideo(video)['title'] }}" #}
+                               href="/playlist/{{ playlist.id }}?videoId={{ playlist.getPreviousVideoId(video) }}">
+                                Previous
+                            </a>
+                        {% endif %}
+                        {% if playlist.hasNextVideo(video) %}
+                            <a class="btn btn-default"
+                                    {# title="{{ playlist.getNextVideo(video)['title'] }}" #}
+                               href="/playlist/{{ playlist.id }}?videoId={{ playlist.getNextVideoId(video) }}">
+                                Next
+                            </a>
+                        {% endif %}
+                    </div>
+                </form>
+            {% endif %}
+            {% for item in playlist.videos %}
+                <div class='row'>
+                    <div class="col-md-6">
+                        <a href="/playlist/{{ playlist.id }}?videoId={{ item.id }}">
+                            <img width="100%"
+                                 class="thumbnail {% if video && item.id == video.id %} active {%endif%}"
+                                 src="{{ item.thumbnail }}" alt="{{ item.title
+                            }}"/>
+                        </a>
+                    </div>
+                    <div class="col-md-6">{{ item.title }}</div>
+                    <div>&nbsp;</div>
+                </div>
+            {% endfor %}
+        </aside>
+    </section>
 {% endblock %}

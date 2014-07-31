@@ -29,6 +29,8 @@ container.register(require('./forms'));
 
 container.register(require('./players'));
 
+container.register(require('./validation'));
+
 container.set("mixins", container.share(function() {
   return require('./mixins');
 }));
@@ -58,12 +60,19 @@ container.set('q', container.share(function(c) {
   return q;
 }));
 
+container.set('acl', container.share(function(c) {
+  var Acl, acl;
+  Acl = require('virgen-acl');
+  return acl = new Acl;
+}));
+
 container.set("app", container.share(function(container) {
   var app, controllers, init, middlewares, sessionOptions, _;
   init = false;
   _ = container._;
   app = container.express();
   app.disable('x-powered-by');
+  app.enable('trust proxy');
   middlewares = container.middlewares;
   controllers = container.controllers;
   app.use(function(req, res, next) {
@@ -124,10 +133,16 @@ container.set("app", container.share(function(container) {
   app.use('/video', middlewares.csrf);
   app.use(function(req, res, next) {
     res.once('finish', function() {
-      return container.logger.info({
+      var message;
+      message = {
         request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error', "err"]),
         response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])
-      });
+      };
+      if (res.statusCode >= 400) {
+        return container.logger.error(message);
+      } else {
+        return container.logger.info(message);
+      }
     });
     return next();
   });
@@ -145,18 +160,21 @@ container.set("app", container.share(function(container) {
       get: [middlewares.categories, controllers.categoryById]
     },
     "/profile": {
-      all: controllers.profile,
+      all: controllers.profile.index,
       "/video/new": {
         all: controllers.videoCreate
       },
       "/video": {
         all: controllers.videoList
       },
+      "/video/action": {
+        post: controllers.profile.video.actions
+      },
       "/video/:videoId/update": {
         all: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoUpdate]
       },
-      '/video/:videoId/remove': {
-        post: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoRemove]
+      "/video/:videoId/delete": {
+        post: [middlewares.belongsToUser(container.Video, 'video'), controllers.videoDelete]
       },
       '/playlist': {
         get: controllers.playlistList
@@ -169,6 +187,9 @@ container.set("app", container.share(function(container) {
       },
       '/playlist/new': {
         all: controllers.playlistCreate
+      },
+      '/playlist/fromurl': {
+        all: controllers.profile.playlist.fromUrl
       }
     },
     "/login": {
@@ -267,6 +288,10 @@ container.set("videoParser", container.share(function(c) {
   dailymotionParser = new parsers.Dailymotion();
   videoParserChain = new parsers.Chain([youtubeVideoParser, vimeoVideoParser, dailymotionParser, youtubeShortParser]);
   return videoParserChain;
+}));
+
+container.set("playlistParser", container.share(function(c) {
+  return new c.parsers.Chain([new c.parsers.YoutubePlaylist(c.config.youtube_apikey, c.q, c._)]);
 }));
 
 container.set("passport", container.share(function() {

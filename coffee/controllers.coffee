@@ -48,9 +48,9 @@ module.exports = (container)->
         # /profile/playlist/:playlistId/update
         ###
         controllers.playlistUpdate= (req,res,next)->
-            q(res.locals.playlist)
-            .then (playlist)->
-                form = c.forms.Playlist().setModel(playlist)
+            q([res.locals.playlist,c.Video.findByOwnerId(req.user.id)])
+            .spread (playlist,videos)->
+                form = c.forms.Playlist(videos).setModel(playlist)
                 if req.method is "POST" and form.bind(req.body) and form.validateSync()
                     c.Playlist.persist(playlist)
                     .then -> res.redirect('/playlist/'.concat(playlist.id))
@@ -63,10 +63,7 @@ module.exports = (container)->
             redirect = req.body._redirect or '/profile/playlist'
             q.ninvoke(res.locals.playlist,'remove')
             .then( (->res.redirect(redirect)) ,next)
-        ###
-        # PLAYLIST
-        ###
-        
+
         # /playlist/:playlistId/video/:videoId
         controllers.playlistById = (req,res,next)->
             q().then ->
@@ -119,12 +116,13 @@ module.exports = (container)->
         ###
         # /profile/videoRemove/:videoId/remove
         ###
-        controllers.videoRemove = (req,res,next)->
+        controllers.videoDelete = (req,res,next)->
             res.locals.video.remove (err)->
                 if err then err.status = 500 ; next(err)
                 else 
                     req.flash('success','video removed')
-                    res.redirect('/profile/video')
+                    res.redirect('back')
+
         ###
         # /profile/video
         ###
@@ -171,10 +169,39 @@ module.exports = (container)->
             req.session.destroy(->res.redirect('/'))
         
         # show current user profile
-        controllers.profile = (req,res,ext)->
+        controllers.profile = {}
+
+        controllers.profile.index = (req,res,next)->
             res.locals._redirect = req.originalUrl
             q.all([q.ninvoke(c.Video,'findByOwnerId',req.user.id),q.ninvoke(c.Playlist,'findByOwnerId',req.user.id)])
             .spread((videos,playlists)->res.render('profile/index',{videos,playlists}))
             .catch((err)->next(_.extend(err,{status:500})))
-        
+
+        controllers.profile.video = {}
+
+        controllers.profile.video.actions = (req,res,next)->
+            q().then ->
+                if req.method is "POST"
+                    switch req.body.action
+                        when "remove"
+                            c.Video.removeMultiple(req.body.id)
+            .then -> res.redirect('back')
+            .catch next
+
+        controllers.profile.playlist = {}
+
+        controllers.profile.playlist.fromUrl = (req,res,next)->
+            c.Category.listAll()
+            .then (categories)->
+                [{},c.forms.PlaylistFromUrl(categories)]
+            .spread (model,form)->
+                form.setModel(model)
+                if req.method is "POST" and form.bind(req.body) and form.validateSync()
+                    c.Playlist.fromUrl(model.url,{owner:req.user,category:model.category})
+                    .then (playlist)-> res.redirect('/playlist/'+playlist.id)
+                else
+                    res.render('profile/playlist-fromurl',{form})
+            .catch next
+
+
         return controllers

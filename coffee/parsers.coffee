@@ -1,8 +1,8 @@
 "use strict"
-util = require('util')
 duration = require('mpm.duration')
-_ = require('lodash')
 request = require('request')
+querystring=require('querystring')
+url=require('url')
 parsers =  exports
 
 ###
@@ -172,6 +172,30 @@ class parsers.Dailymotion extends parsers.Base
         else
             callback(new Error("#{url} is not a valid dailymotion url"))
 
+class parsers.YoutubePlaylist extends parsers.Base
+
+    ###*
+    * @param {String} api_key
+    * @param {Object} promise
+    * @param {Object} underscore
+    ###
+    constructor:(@api_key,@q,@_)->
+
+    isValidUrl:(urlString)->
+        url.parse(urlString).host && url.parse(urlString).host.match(/^((http|https):\/\/)?(www\.)?(youtu\.be|youtube)/i)
+
+    parse:(urlString,callback)->
+        _id=null
+        @q(@isValidUrl(urlString))
+        .then (isValidUrl)=>
+            if not isValidUrl then new parsers.NotValidYoutubePlaylistUrlError else
+                _id = querystring.parse(url.parse(urlString).query).list
+                @q.nfcall(request,{json:true,url:"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=#{_id}&key=#{@api_key}"})
+        .spread (response,body)=> [@q.nfcall(request,{json:true,url:"https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=#{_id}&key=#{@api_key}"}),@_(body.items).map((item)->{meta:item,originalId:item.snippet.resourceId.videoId,provider:"youtube",title:item.snippet.title,description:item.snippet.description,publishedAt:new Date(item.snippet.publishedAt),thumbnail:item.snippet.thumbnails.medium.url}).value()]
+        .spread (response,videos)=> callback(null,@_(response[1].items[0].snippet).pick(['title','description']).extend({videos,originalId:_id}).value())
+        .catch callback
+
+
 ###
 # Chain of responsability , allows getting videos from multiple video apis
 ###
@@ -193,3 +217,8 @@ class parsers.Chain extends parsers.Base
 
     _find:(url)-> @_parsers.filter((parser)-> parser.isValidUrl(url))[0]
 
+
+
+
+class parsers.NotValidYoutubePlaylistUrlError extends Error
+    message:'not a valid youtube playlist'
