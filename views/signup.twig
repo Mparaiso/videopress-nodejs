@@ -2,6 +2,7 @@
 {% block content %}
     <div class="jumbotron">
         <h1>Sign Up !</h1>
+
         <div class="row">
             <form method="post" role="form"
                   class="form-horizontal col-md-4"
@@ -9,13 +10,14 @@
                 {% for field in form.getFields() %}
                     <div class="form-group">
                         {% if field.hasError() %}
-                            <p class="text-danger">{{field.getError()}}</p>
+                            <p class="text-danger">{{ field.getError() }}</p>
                         {% endif %}
                         {% autoescape false %}
                         {{ field.toHTML() }}
                         {% endautoescape %}
                     </div>
                 {% endfor %}
+                <input name="_csrf" type="hidden" value="{{ _csrf }}"/>
             </form>
         </div>
     </div>

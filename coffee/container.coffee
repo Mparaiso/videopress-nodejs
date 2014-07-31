@@ -39,9 +39,10 @@ container.set 'q', container.share (c)->
         q.longStackSupport = true
     return q
 container.set 'roles',
-    MEMBER:"member"
-    ADMIN:"admin"
-    SUPER_ADMIN:"super_admin"
+    MEMBER:'member'
+    MODERATOR:'moderator'
+    ADMIN:'administrator'
+    SUPER_ADMIN:"super_administrator"
 
 container.set 'resources',
     VIDEO:'video'
@@ -81,14 +82,15 @@ container.set 'acl', container.share (c)->
     Acl = require('virgen-acl').Acl
     acl = new Acl
     acl.addRole(c.roles.MEMBER)
-    acl.addRole(c.roles.ADMIN,c.roles.MEMBER)
+    acl.addRole(c.roles.MODERATOR,c.roles.MEMBER)
+    acl.addRole(c.roles.ADMIN,c.roles.MODERATOR)
     acl.addRole(c.roles.SUPER_ADMIN,c.roles.ADMIN)
     acl.addResource(c.resources.VIDEO)
     acl.addResource(c.resources.ROUTE)
     acl.addResource(c.resources.PLAYLIST)
     # access rules (LIFO)
     acl.deny()
-    acl.allow(c.roles.ADMIN)
+    acl.allow(c.roles.SUPER_ADMIN)
     acl.allow(c.roles.MEMBER,c.resources.ROUTE,[
         c.routes.PROFILE_INDEX
         c.routes.PROFILE_VIDEO_CREATE
