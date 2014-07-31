@@ -80,26 +80,6 @@ module.exports = function(container) {
     };
 
     /*
-     * /profile/playlist/:playlistId/update
-     */
-    controllers.playlistUpdate = function(req, res, next) {
-      return q([res.locals.playlist, c.Video.findByOwnerId(req.user.id)]).spread(function(playlist, videos) {
-        var form;
-        form = c.forms.Playlist(videos).setModel(playlist);
-        if (req.method === "POST" && form.bind(req.body) && form.validateSync()) {
-          return c.Playlist.persist(playlist).then(function() {
-            return res.redirect('/playlist/'.concat(playlist.id));
-          });
-        } else {
-          return res.render('profile/playlist-update', {
-            form: form,
-            playlist: playlist
-          });
-        }
-      })["catch"](next);
-    };
-
-    /*
      * /profile/playlist/:playlistId/delete
      */
     controllers.playlistRemove = function(req, res, next) {
@@ -333,6 +313,10 @@ module.exports = function(container) {
           });
         }
       })["catch"](next);
+    };
+    controllers.profile.playlist.update = function(req, res, next) {
+      req.flash('info', 'Updating playlists has been momentarily deactivaed, sorry for any inconvenience');
+      return res.redirect('back');
     };
     return controllers;
   }));

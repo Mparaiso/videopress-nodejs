@@ -65,31 +65,28 @@ module.exports = (container)->
         app.param 'videoId', middlewares.video
         app.param 'playlistId', middlewares.playlist
 
-
-
-
         ### Routes ###
-        app.get  '/',controllers.index
-        app.get  '/video/:videoId',controllers.videoById
-        app.get  '/playlist/:playlistId',controllers.playlistById
-        app.get  '/category/:categoryId/:categoryTitle?',middlewares.categories, controllers.categoryById
-        app.get  '/profile', controllers.profile.index
-        app.all  '/profile/video/new',controllers.videoCreate
-        app.all  '/profile/video',controllers.videoList
-        app.post '/profile/video/action',controllers.profile.video.actions
-        app.all  '/profile/video/:videoId/update',middlewares.belongsToUser(c.Video, 'video'),controllers.videoUpdate
-        app.post '/profile/video/:videoId/delete',middlewares.belongsToUser(c.Video, 'video'),controllers.videoDelete
-        app.get  '/profile/playlist', controllers.playlistList
-        app.all  '/profile/playlist/:playlistId/update',middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.playlistUpdate
-        app.post '/profile/playlist/:playlistId/delete',middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.playlistRemove
-        app.all  '/profile/playlist/new', controllers.playlistCreate
-        app.all  '/profile/playlist/fromurl',controllers.profile.playlist.fromUrl
-        app.get  '/profile/logout', controllers.logout #erase user credentials
-        app.get  '/login',controllers.login
-        app.post '/login', c.passport.authenticate('local-login', {successRedirect: '/profile',failureRedirect: '/login',failureFlash: true})
-        app.get  '/signup', controllers.signup
-        app.post '/signup',controllers.signupPost, c.passport.authenticate('local-signup', {successRedirect: '/profile',failureRedirect: '/signup',failureFlash: true})
-        app.get  '/search', controllers.videoSearch #search videos by title
+        app.get  c.routes.PUBLIC_INDEX,controllers.index
+        app.get  c.routes.PUBLIC_VIDEO_READ,controllers.videoById
+        app.get  c.routes.PUBLIC_PLAYLIST_READ,controllers.playlistById
+        app.get  c.routes.PUBLIC_CATEGORY_READ,middlewares.categories, controllers.categoryById
+        app.get  c.routes.PROFILE_INDEX, controllers.profile.index
+        app.all  c.routes.PROFILE_VIDEO_CREATE,controllers.videoCreate
+        app.all  c.routes.PROFILE_VIDEO_LIST,controllers.videoList
+        app.post c.routes.PROFILE_VIDEO_ACTIONS,controllers.profile.video.actions
+        app.all  c.routes.PROFILE_VIDEO_UPDATE,middlewares.belongsToUser(c.Video, 'video'),controllers.videoUpdate
+        app.post c.routes.PROFILE_VIDEO_DELETE,middlewares.belongsToUser(c.Video, 'video'),controllers.videoDelete
+        app.get  c.routes.PROFILE_PLAYLIST_LIST, controllers.playlistList
+        app.all  c.routes.PROFILE_PLAYLIST_UPDATE,middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.profile.playlist.update
+        app.post c.routes.PROFILE_PLAYLIST_DELETE,middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.playlistRemove
+        app.all  c.routes.PROFILE_PLAYLIST_CREATE, controllers.playlistCreate
+        app.all  c.routes.PROFILE_PLAYLIST_FROM_URL,controllers.profile.playlist.fromUrl
+        app.get  c.routes.LOGOUT, controllers.logout #erase user credentials
+        app.get  c.routes.LOGIN,controllers.login
+        app.post c.routes.LOGIN, c.passport.authenticate('local-login', {successRedirect: '/profile',failureRedirect: '/login',failureFlash: true})
+        app.get  c.routes.SIGNUP, controllers.signup
+        app.post c.routes.SIGNUP,controllers.signupPost, c.passport.authenticate('local-signup', {successRedirect: '/profile',failureRedirect: '/signup',failureFlash: true})
+        app.get  c.routes.SEARCH, controllers.videoSearch #search videos by title
     
         if not c.debug
             #middleware for errors if not debug

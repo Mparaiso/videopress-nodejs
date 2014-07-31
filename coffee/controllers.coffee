@@ -47,18 +47,7 @@ module.exports = (container)->
                 else res.render('profile/playlist-create',{form})
             .catch next
         
-        ###
-        # /profile/playlist/:playlistId/update
-        ###
-        controllers.playlistUpdate= (req,res,next)->
-            q([res.locals.playlist,c.Video.findByOwnerId(req.user.id)])
-            .spread (playlist,videos)->
-                form = c.forms.Playlist(videos).setModel(playlist)
-                if req.method is "POST" and form.bind(req.body) and form.validateSync()
-                    c.Playlist.persist(playlist)
-                    .then -> res.redirect('/playlist/'.concat(playlist.id))
-                else res.render('profile/playlist-update',{form,playlist})
-            .catch next
+
         ###
         # /profile/playlist/:playlistId/delete
         ###
@@ -206,5 +195,15 @@ module.exports = (container)->
                     res.render('profile/playlist-fromurl',{form})
             .catch next
 
-
+        controllers.profile.playlist.update= (req,res,next)->
+            req.flash('info','Updating playlists has been momentarily deactivaed, sorry for any inconvenience')
+            res.redirect('back')
+#             q([res.locals.playlist,c.Video.findByOwnerId(req.user.id)])
+#             .spread (playlist,videos)->
+#                     form = c.forms.Playlist(videos).setModel(playlist)
+#                     if req.method is "POST" and form.bind(req.body) and form.validateSync()
+#                         c.Playlist.persist(playlist)
+#                         .then -> res.redirect('/playlist/'.concat(playlist.id))
+#                     else res.render('profile/playlist-update',{form,playlist})
+#             .catch next
         return controllers
