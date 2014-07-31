@@ -65,7 +65,7 @@ module.exports = (container)->
     container.set "Video", container.share (c)->
         VideoSchema = c.db.Schema
             url: {type: String},
-            owner: {type: c.db.Schema.Types.ObjectId, ref: 'User'},
+            owner: {type: c.db.Schema.Types.ObjectId, ref: 'User',required:'Owner is required'},
             title: {type: String, required: "title is required"},
             description: {type: String},
             private: {type: Boolean, default: false},
@@ -75,8 +75,8 @@ module.exports = (container)->
             created_at: {type: Date, 'default': Date.now},
             updated_at: {type: Date, 'default': Date.now},
             publishedAt: { type: Date, 'default': Date.now, required: "Must be a valid date for publishedAt"},
-            originalId: String,
-            provider: String,
+            originalId: {type:String,required:"originalId is required"},
+            provider: {type:String,required:"provider is required"},
             thumbnail: String,
             meta: Object,
             viewCount: {type: Number, default: 0}

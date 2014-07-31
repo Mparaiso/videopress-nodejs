@@ -107,7 +107,8 @@ module.exports = function(container) {
       },
       owner: {
         type: c.db.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: 'Owner is required'
       },
       title: {
         type: String,
@@ -139,8 +140,14 @@ module.exports = function(container) {
         'default': Date.now,
         required: "Must be a valid date for publishedAt"
       },
-      originalId: String,
-      provider: String,
+      originalId: {
+        type: String,
+        required: "originalId is required"
+      },
+      provider: {
+        type: String,
+        required: "provider is required"
+      },
       thumbnail: String,
       meta: Object,
       viewCount: {

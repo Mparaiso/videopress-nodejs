@@ -193,7 +193,7 @@ class parsers.YoutubePlaylist extends parsers.Base
             if not isValidUrl then new parsers.NotValidYoutubePlaylistUrlError else
                 _id = querystring.parse(url.parse(urlString).query).list
                 @q.nfcall(request,{json:true,url:"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=#{_id}&key=#{@api_key}"})
-        .spread (response,body)=> [@q.nfcall(request,{json:true,url:"https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=#{_id}&key=#{@api_key}"}),@_(body.items).map((item)->{meta:item,originalId:item.snippet.resourceId.videoId,provider:"youtube",title:item.snippet.title,description:item.snippet.description,publishedAt:new Date(item.snippet.publishedAt),thumbnail:item.snippet.thumbnails.medium.url}).value()]
+        .spread (response,body)=> [@q.nfcall(request,{json:true,url:"https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=#{_id}&key=#{@api_key}"}),@_(body.items).map((item)->{url:"https://youtu.be/#{item.snippet.resourceId.videoId}",meta:item,originalId:item.snippet.resourceId.videoId,provider:"youtube",title:item.snippet.title,description:item.snippet.description,publishedAt:new Date(item.snippet.publishedAt),thumbnail:item.snippet.thumbnails.medium.url}).value()]
         .spread (response,videos)=> callback(null,@_(response[1].items[0].snippet).pick(['title','description']).extend({videos,originalId:_id}).value())
         .catch callback
 

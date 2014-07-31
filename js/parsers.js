@@ -377,6 +377,7 @@ parsers.YoutubePlaylist = (function(_super) {
             url: "https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=" + _id + "&key=" + _this.api_key
           }), _this._(body.items).map(function(item) {
             return {
+              url: "https://youtu.be/" + item.snippet.resourceId.videoId,
               meta: item,
               originalId: item.snippet.resourceId.videoId,
               provider: "youtube",
