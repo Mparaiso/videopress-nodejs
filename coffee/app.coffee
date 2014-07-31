@@ -30,28 +30,22 @@ module.exports = (container)->
         app.use(c.express.static(c.path.join(__dirname, "..", "public"), c.config.static))
         app.use(c.express.cookieParser(c.config.session.secret))
         app.use(c.express.session(c._.extend({}, c.config.session, {store: c.sessionStore})))
+        app.use require('connect-flash')()
+        app.use c.express.bodyParser()
+        app.use c.passport.initialize()
+        app.use c.passport.session()
+        app.use c.express.compress()
         app.use c.express.csrf()
-        app.use(require('connect-flash')())
-        app.use(c.express.bodyParser())
-        app.use(c.passport.initialize())
-        app.use(c.passport.session())
-        app.use(c.express.compress())
-    
+
         if c.debug
             app.enable('verbose errors') unless process.env.NODE_ENV is "testing"
             app.use(c.express.logger("dev"))
         else
             app.disable("verbose errors")
             app.on 'error', (err)->
-                c.logger.error(err)
+                c.logger.error({error:err,message:err.message})
 
         app.enable('verbose errors')
-
-        app.use middlewares.requestLogger # log every regquests
-        app.use middlewares.firewall #use acl to check if current user can access route
-
-        app.param 'videoId', middlewares.video
-        app.param 'playlistId', middlewares.playlist
 
         app.use (req,res,next)->
             #set various params on res.locals
@@ -64,6 +58,14 @@ module.exports = (container)->
             res.locals._csrf = req.csrfToken()
             res.locals.flash = req.flash()
             next()
+
+        app.use middlewares.requestLogger # log every regquests
+        app.use middlewares.firewall #use acl to check if current user can access route
+
+        app.param 'videoId', middlewares.video
+        app.param 'playlistId', middlewares.playlist
+
+
 
 
         ### Routes ###

@@ -85,15 +85,18 @@ module.exports = (container)->
         ###
         middlewares.error = (err, req, res,next)->
                 c.logger.error(err)
-                switch String(err.status)
-                    when '404'
+                switch err.status
+                    when 404
+                        res.status(404)
                         res.render('404')
                     else
+                        res.status(500)
                         res.render('500')
+
         middlewares.requestLogger = (req, res, next)->
             # log every request/response
             res.once 'finish', ->
-                message = {request: _.pick(req,['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error',"err"]), response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])}
+                message = {request: _.pick(req,['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error',"err",'cookies','session']), response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])}
                 if res.statusCode >= 400
                     container.logger.error(message)
                 else

@@ -95,10 +95,12 @@ module.exports = function(container) {
      */
     middlewares.error = function(err, req, res, next) {
       c.logger.error(err);
-      switch (String(err.status)) {
-        case '404':
+      switch (err.status) {
+        case 404:
+          res.status(404);
           return res.render('404');
         default:
+          res.status(500);
           return res.render('500');
       }
     };
@@ -106,7 +108,7 @@ module.exports = function(container) {
       res.once('finish', function() {
         var message;
         message = {
-          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error', "err"]),
+          request: _.pick(req, ['headers', 'trailers', 'method', 'url', 'statusCode', 'ip', 'port', 'user', 'error', "err", 'cookies', 'session']),
           response: _.pick(res, ['statusCode', 'trailers', 'headers', 'error', "err"])
         };
         if (res.statusCode >= 400) {

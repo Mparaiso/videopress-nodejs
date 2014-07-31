@@ -31,12 +31,12 @@ module.exports = function(container) {
     app.use(c.express.session(c._.extend({}, c.config.session, {
       store: c.sessionStore
     })));
-    app.use(c.express.csrf());
     app.use(require('connect-flash')());
     app.use(c.express.bodyParser());
     app.use(c.passport.initialize());
     app.use(c.passport.session());
     app.use(c.express.compress());
+    app.use(c.express.csrf());
     if (c.debug) {
       if (process.env.NODE_ENV !== "testing") {
         app.enable('verbose errors');
@@ -45,14 +45,13 @@ module.exports = function(container) {
     } else {
       app.disable("verbose errors");
       app.on('error', function(err) {
-        return c.logger.error(err);
+        return c.logger.error({
+          error: err,
+          message: err.message
+        });
       });
     }
     app.enable('verbose errors');
-    app.use(middlewares.requestLogger);
-    app.use(middlewares.firewall);
-    app.param('videoId', middlewares.video);
-    app.param('playlistId', middlewares.playlist);
     app.use(function(req, res, next) {
       if (req.isAuthenticated()) {
         res.locals.isAuthenticated = true;
@@ -64,6 +63,10 @@ module.exports = function(container) {
       res.locals.flash = req.flash();
       return next();
     });
+    app.use(middlewares.requestLogger);
+    app.use(middlewares.firewall);
+    app.param('videoId', middlewares.video);
+    app.param('playlistId', middlewares.playlist);
 
     /* Routes */
     app.get('/', controllers.index);
