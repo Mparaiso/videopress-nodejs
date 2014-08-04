@@ -265,15 +265,15 @@ module.exports = (container)->
 
     container.set 'User', container.share (c)->
         UserSchema = c.db.Schema
-            role: {type: String, default: 'member'}
-            username: {type: String, required: "username is required"}
+            role: {type: String, default: c.roles.MEMBER}
+            username: {type: String,'unique', required: "username is required",validate:(u)->u.match(/^\w{5,50}$/)}
             isAccountNonExpired: {type: Boolean, default: true}
             isEnabled: {type: Boolean, default: true}
             isCredentialsNonExpired: {type: Boolean, default: true}
             isAccountNonLocked: {type: Boolean, default: true}
             created_at: {type: Date, default: Date.now, required: true}
             local:
-                email: String
+                email:{type: String,'unique','required',validate:(u)->u.match(/\w{3,100}\@\w{3,200}\.\w{2,20}/)}
                 password: String
             facebook:
                 id: String

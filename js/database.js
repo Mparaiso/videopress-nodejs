@@ -495,11 +495,15 @@ module.exports = function(container) {
     UserSchema = c.db.Schema({
       role: {
         type: String,
-        "default": 'member'
+        "default": c.roles.MEMBER
       },
       username: {
         type: String,
-        required: "username is required"
+        'unique': 'unique',
+        required: "username is required",
+        validate: function(u) {
+          return u.match(/^\w{5,50}$/);
+        }
       },
       isAccountNonExpired: {
         type: Boolean,
@@ -523,7 +527,14 @@ module.exports = function(container) {
         required: true
       },
       local: {
-        email: String,
+        email: {
+          type: String,
+          'unique': 'unique',
+          'required': 'required',
+          validate: function(u) {
+            return u.match(/\w{3,100}\@\w{3,200}\.\w{2,20}/);
+          }
+        },
         password: String
       },
       facebook: {

@@ -194,6 +194,9 @@ module.exports = (container)->
                 else
                     res.render('profile/playlist-fromurl',{form})
             .catch next
+        controllers.profile.playlist.create = (req,res,next)->
+            req.flash('info','creating playlists has been momentarily deactivaed, please use "import playlist" sorry for any inconvenience')
+            res.redirect('back')
 
         controllers.profile.playlist.update= (req,res,next)->
             req.flash('info','Updating playlists has been momentarily deactivaed, sorry for any inconvenience')
@@ -206,4 +209,7 @@ module.exports = (container)->
 #                         .then -> res.redirect('/playlist/'.concat(playlist.id))
 #                     else res.render('profile/playlist-update',{form,playlist})
 #             .catch next
+        controllers.administration = {}
+        controllers.administration.index = (req,res,next)->
+
         return controllers

@@ -4,9 +4,19 @@
 #}
 {% extends 'layout.twig' %}
 {% block profile_content %}
-<h3 style="margin-top:0px;">{{user.username}} <small class='text-muted'>Your profile.</small></h3>
-<h4 class="text-muted uppercase">PLAYLISTS</h4>
-{% include '../includes/playlist-list.twig' with {row_length:4} %}
-<h4 class="text-muted uppercase">VIDEOS</h4>
-{% include '../includes/video-list.twig' with {row_length:4} %}
+    <h3 style="margin-top:0px;">{{ user.username }}
+        <small class='text-muted'>Your profile.</small>
+    </h3>
+    <h4 class="text-muted uppercase">PLAYLISTS</h4>
+    {% if playlists.length>0 %}
+        {% include '../includes/playlist-list.twig' with {row_length:4} %}
+    {% else %}
+        <p class="muted">No playlist found</p>
+    {% endif %}
+    <h4 class="text-muted uppercase">VIDEOS</h4>
+    {% if videos.length>0 %}
+        {% include '../includes/video-list.twig' with {row_length:4} %}
+    {% else %}
+        <p class="muted">No video found</p>
+    {% endif %}
 {% endblock %}

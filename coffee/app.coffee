@@ -26,7 +26,7 @@ module.exports = (container)->
                 c.Playlist
                 init = true
             next()
-    
+
         app.use(c.express.static(c.path.join(__dirname, "..", "public"), c.config.static))
         app.use(c.express.cookieParser(c.config.session.secret))
         app.use(c.express.session(c._.extend({}, c.config.session, {store: c.sessionStore})))
@@ -61,6 +61,10 @@ module.exports = (container)->
 
         app.use middlewares.requestLogger # log every regquests
         app.use middlewares.firewall #use acl to check if current user can access route
+        app.use (req,res,next)->
+            c.acl.query (req.isAuthenticated() and req.user), c.resources.ADMIN_TOOLS,c.actions.USE, (err,isGranted)->
+                if isGranted is true then res.locals.isGrantedAdminToolsUse = true
+                next()
 
         app.param 'videoId', middlewares.video
         app.param 'playlistId', middlewares.playlist
@@ -79,7 +83,7 @@ module.exports = (container)->
         app.get  c.routes.PROFILE_PLAYLIST_LIST, controllers.playlistList
         app.all  c.routes.PROFILE_PLAYLIST_UPDATE,middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.profile.playlist.update
         app.post c.routes.PROFILE_PLAYLIST_DELETE,middlewares.belongsToUser(c.Playlist, 'playlist'),controllers.playlistRemove
-        app.all  c.routes.PROFILE_PLAYLIST_CREATE, controllers.playlistCreate
+        app.all  c.routes.PROFILE_PLAYLIST_CREATE, controllers.profile.playlist.create
         app.all  c.routes.PROFILE_PLAYLIST_FROM_URL,controllers.profile.playlist.fromUrl
         app.get  c.routes.LOGOUT, controllers.logout #erase user credentials
         app.get  c.routes.LOGIN,controllers.login
@@ -87,13 +91,13 @@ module.exports = (container)->
         app.get  c.routes.SIGNUP, controllers.signup
         app.post c.routes.SIGNUP,controllers.signupPost, c.passport.authenticate('local-signup', {successRedirect: '/profile',failureRedirect: '/signup',failureFlash: true})
         app.get  c.routes.SEARCH, controllers.videoSearch #search videos by title
-    
+
         if not c.debug
             #middleware for errors if not debug
             app.get '/*', (req, res, next)->
                 next(new c.errors.NotFound("page not found"))
-    
+
             app.use middlewares.error
-    
+
 
         return app

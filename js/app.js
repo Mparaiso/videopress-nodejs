@@ -65,6 +65,14 @@ module.exports = function(container) {
     });
     app.use(middlewares.requestLogger);
     app.use(middlewares.firewall);
+    app.use(function(req, res, next) {
+      return c.acl.query(req.isAuthenticated() && req.user, c.resources.ADMIN_TOOLS, c.actions.USE, function(err, isGranted) {
+        if (isGranted === true) {
+          res.locals.isGrantedAdminToolsUse = true;
+        }
+        return next();
+      });
+    });
     app.param('videoId', middlewares.video);
     app.param('playlistId', middlewares.playlist);
 
@@ -82,7 +90,7 @@ module.exports = function(container) {
     app.get(c.routes.PROFILE_PLAYLIST_LIST, controllers.playlistList);
     app.all(c.routes.PROFILE_PLAYLIST_UPDATE, middlewares.belongsToUser(c.Playlist, 'playlist'), controllers.profile.playlist.update);
     app.post(c.routes.PROFILE_PLAYLIST_DELETE, middlewares.belongsToUser(c.Playlist, 'playlist'), controllers.playlistRemove);
-    app.all(c.routes.PROFILE_PLAYLIST_CREATE, controllers.playlistCreate);
+    app.all(c.routes.PROFILE_PLAYLIST_CREATE, controllers.profile.playlist.create);
     app.all(c.routes.PROFILE_PLAYLIST_FROM_URL, controllers.profile.playlist.fromUrl);
     app.get(c.routes.LOGOUT, controllers.logout);
     app.get(c.routes.LOGIN, controllers.login);

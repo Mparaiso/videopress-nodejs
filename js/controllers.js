@@ -314,10 +314,16 @@ module.exports = function(container) {
         }
       })["catch"](next);
     };
+    controllers.profile.playlist.create = function(req, res, next) {
+      req.flash('info', 'creating playlists has been momentarily deactivaed, please use "import playlist" sorry for any inconvenience');
+      return res.redirect('back');
+    };
     controllers.profile.playlist.update = function(req, res, next) {
       req.flash('info', 'Updating playlists has been momentarily deactivaed, sorry for any inconvenience');
       return res.redirect('back');
     };
+    controllers.administration = {};
+    controllers.administration.index = function(req, res, next) {};
     return controllers;
   }));
 };

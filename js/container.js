@@ -71,7 +71,8 @@ container.set('roles', {
 container.set('resources', {
   VIDEO: 'video',
   ROUTE: 'route',
-  PLAYLIST: 'playlist'
+  PLAYLIST: 'playlist',
+  ADMIN_TOOLS: 'admin_tools'
 });
 
 container.set('actions', {
@@ -80,7 +81,8 @@ container.set('actions', {
   CREATE: 'create',
   DELETE: 'delete',
   READ: 'read',
-  UPDATE: 'update'
+  UPDATE: 'update',
+  USE: 'use'
 });
 
 container.set('routes', {
@@ -116,6 +118,7 @@ container.set('acl', container.share(function(c) {
   acl.addResource(c.resources.VIDEO);
   acl.addResource(c.resources.ROUTE);
   acl.addResource(c.resources.PLAYLIST);
+  acl.addResource(c.resources.ADMIN_TOOLS);
   acl.deny();
   acl.allow(c.roles.SUPER_ADMIN);
   acl.allow(c.roles.MEMBER, c.resources.ROUTE, [c.routes.PROFILE_INDEX, c.routes.PROFILE_VIDEO_CREATE, c.routes.PROFILE_VIDEO_LIST, c.routes.PROFILE_VIDEO_ACTIONS, c.routes.PROFILE_VIDEO_UPDATE, c.routes.PROFILE_VIDEO_DELETE, c.routes.PROFILE_PLAYLIST_LIST, c.routes.PROFILE_PLAYLIST_UPDATE, c.routes.PROFILE_PLAYLIST_DELETE, c.routes.PROFILE_PLAYLIST_CREATE, c.routes.PROFILE_PLAYLIST_FROM_URL, c.routes.LOGOUT]);

@@ -4,22 +4,27 @@
 #}
 {% extends '../layout.twig' %}
 {% block content %}
-<div class="row">
-	<div class="col-md-3">
-		<div class="list-group">
-            <a href="/profile" class="list-group-item">Dashboard</a>
-			<div class="list-group-item text-muted uppercase" ><strong>VIDEOS</strong></div>
-			<a href="/profile/video" class="list-group-item">Manage Videos</a>
-			<a href="/profile/video/new" class="list-group-item">Add a video</a>
-			<div class="list-group-item text-muted"><strong>PLAYLISTS</strong></div>
-			<a href="/profile/playlist" class="list-group-item">Manage Playlists</a>
-			<a href="/profile/playlist/new" class="list-group-item">Add a playlist</a>
-			<a href="/profile/playlist/fromurl" class="list-group-item">Import a playlist</a>
-		</div>
-	</div>
-	<div class="col-md-9">
-		{% block profile_content %}
-		{% endblock %}
-	</div>
-</div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="/profile" class="list-group-item">Dashboard</a>
+
+                <div class="list-group-item text-muted uppercase"><strong>VIDEOS</strong></div>
+                <a href="/profile/video" class="list-group-item">Manage Videos</a>
+                <a href="/profile/video/new" class="list-group-item">Add a video</a>
+
+                <div class="list-group-item text-muted"><strong>PLAYLISTS</strong></div>
+                <a href="/profile/playlist" class="list-group-item">Manage Playlists</a>
+                <a href="/profile/playlist/new" class="list-group-item">Add a playlist</a>
+                <a href="/profile/playlist/fromurl" class="list-group-item">Import a playlist</a>
+                {% if isGrantedAdminToolsUse == true %}
+                    <div class="list-group-item text-muted"><strong>Administration Tools</strong></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% block profile_content %}
+            {% endblock %}
+        </div>
+    </div>
 {% endblock %}

@@ -48,6 +48,7 @@ container.set 'resources',
     VIDEO:'video'
     ROUTE:'route'
     PLAYLIST:'playlist'
+    ADMIN_TOOLS:'admin_tools'
 
 container.set 'actions',
     LIST:'list'
@@ -56,6 +57,7 @@ container.set 'actions',
     DELETE:'delete'
     READ:'read'
     UPDATE:'update'
+    USE:'use'
     
 container.set 'routes',
     PUBLIC_INDEX:'/'
@@ -88,6 +90,7 @@ container.set 'acl', container.share (c)->
     acl.addResource(c.resources.VIDEO)
     acl.addResource(c.resources.ROUTE)
     acl.addResource(c.resources.PLAYLIST)
+    acl.addResource(c.resources.ADMIN_TOOLS)
     # access rules (LIFO)
     acl.deny()
     acl.allow(c.roles.SUPER_ADMIN)
