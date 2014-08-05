@@ -13,7 +13,7 @@
                 </li>
                 {% for category in categories %}
                     <li class="truncate">
-                        <p><a href="/category/{{ category.id }}/{{ category.title }}">{{ category.title }}</a>
+                        <p><a href="/category/{{ category.id }}/{{ category.title|url_encode }}">{{ category.title }}</a>
                         </p>
                     </li>
 
